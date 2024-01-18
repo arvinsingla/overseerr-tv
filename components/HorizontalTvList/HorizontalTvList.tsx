@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, FlatList, TouchableOpacity, Animated, Text } from 'react-native';
+import React from 'react';
+import { View, StyleSheet, FlatList, Text } from 'react-native';
 import { TvResult } from '../../lib/OverseerrClient';
 import MediaListItem from '../MediaListItem/MediaListItem';
 
@@ -7,11 +7,9 @@ interface HorizontalTvListProps {
   title: String
   tv: TvResult[]
   onPress: (item: TvResult) => void
-  onFocus: (itemId: number) => void
-  focusId: number | null
 }
 
-const HorizontalTvList: React.FC<HorizontalTvListProps> = ({ tv, title, onPress, onFocus, focusId }) => {
+const HorizontalTvList: React.FC<HorizontalTvListProps> = ({ tv, title, onPress }) => {
   const handlePress = (item: TvResult) => {
     onPress(item)
   }
@@ -27,19 +25,9 @@ const HorizontalTvList: React.FC<HorizontalTvListProps> = ({ tv, title, onPress,
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => {
           return (
-            <TouchableOpacity
-              activeOpacity={1}
-              onFocus={() => onFocus(item.id)}
-              onPress={() => handlePress(item)}
-              style={styles.item}
-              tvParallaxProperties={{
-                enabled: true,
-                magnification: 1.1,
-                tiltAngle: 0
-              }}
-            >
-              <MediaListItem media={item} isFocused={focusId === item.id} />
-            </TouchableOpacity>
+            <View style={styles.item}>
+              <MediaListItem media={item} onPress={onPress} />
+            </View>
           )
         }}
       />

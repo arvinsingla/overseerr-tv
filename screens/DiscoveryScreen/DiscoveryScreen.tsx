@@ -5,17 +5,10 @@ import HorizontalMovieList from '../../components/HorizontalMovieList/Horizontal
 import { MovieResult, TvResult } from '../../lib/OverseerrClient'
 import useAppStore from "../../lib/store";
 import HorizontalTvList from "../../components/HorizontalTvList/HorizontalTvList";
-import { useState } from "react";
-import { debounce } from "ts-debounce";
 
 function DiscoveryScreen(): JSX.Element {
-  const [focusedItem, setFocusedItem] = useState<number | null>(null)
   const navigation = useNavigation()
   const { client } = useAppStore()
-  const handleFocus = (item: number | null) => {
-    setFocusedItem(item)
-  }
-  const debouncedHandleFocus = debounce(handleFocus, 300);
 
   const handlePress = (item: MovieResult | TvResult) => {
     navigation.navigate('Request', { item })
@@ -53,8 +46,6 @@ function DiscoveryScreen(): JSX.Element {
                 title="Popular Movies"
                 movies={popularMoviesData?.results || []}
                 onPress={handlePress}
-                onFocus={debouncedHandleFocus}
-                focusId={focusedItem}
               />
             </View>
           }
@@ -64,8 +55,6 @@ function DiscoveryScreen(): JSX.Element {
                 title="Upcoming Movies"
                 movies={upcomingMoviesData?.results || []}
                 onPress={handlePress}
-                onFocus={debouncedHandleFocus}
-                focusId={focusedItem}
               />
             </View>
           }
@@ -75,8 +64,6 @@ function DiscoveryScreen(): JSX.Element {
                 title="Popular Series"
                 tv={popularTvData?.results || []}
                 onPress={handlePress}
-                onFocus={debouncedHandleFocus}
-                focusId={focusedItem}
               />
             </View>
           }
@@ -86,8 +73,6 @@ function DiscoveryScreen(): JSX.Element {
                 title="Upcoming Series"
                 tv={upcomingTvData?.results || []}
                 onPress={handlePress}
-                onFocus={debouncedHandleFocus}
-                focusId={focusedItem}
               />   
             </View>
           }

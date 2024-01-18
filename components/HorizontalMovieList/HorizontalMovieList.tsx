@@ -7,11 +7,9 @@ interface HorizontalMovieListProps {
   title: String
   movies: MovieResult[]
   onPress: (item: MovieResult) => void
-  onFocus: (itemId: number) => void
-  focusId: number | null
 }
 
-const HorizontalMovieList: React.FC<HorizontalMovieListProps> = ({ movies, title, onPress, onFocus, focusId }) => {
+const HorizontalMovieList: React.FC<HorizontalMovieListProps> = ({ movies, title, onPress }) => {
   return (
     <View>
       <Text style={styles.title}>{title}</Text>
@@ -23,19 +21,9 @@ const HorizontalMovieList: React.FC<HorizontalMovieListProps> = ({ movies, title
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => {
           return (
-            <TouchableOpacity
-              activeOpacity={1}
-              onFocus={() => onFocus(item.id)}
-              onPress={() => onPress(item)}
-              style={styles.item}
-              tvParallaxProperties={{
-                enabled: true,
-                magnification: 1.1,
-                tiltAngle: 0
-              }}
-            >
-              <MediaListItem media={item} isFocused={focusId === item.id} />
-            </TouchableOpacity>
+            <View style={styles.item}>
+              <MediaListItem media={item} onPress={onPress} />
+            </View>
           )
         }}
       />
@@ -54,7 +42,6 @@ const styles = StyleSheet.create({
   },
   item: {
     marginRight: 30,
-    opacity: 0.8
   }
 });
 

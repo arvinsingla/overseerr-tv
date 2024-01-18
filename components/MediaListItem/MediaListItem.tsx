@@ -1,25 +1,33 @@
-import React, { useEffect } from 'react'
-import { View, Text, Image, StyleSheet, Animated } from 'react-native'
+import React, { useState } from 'react'
+import { View, Text, Image, StyleSheet, Animated, TouchableOpacity } from 'react-native'
 import { MovieResult, TvResult } from '../../lib/OverseerrClient'
 import MediaPill, { MediaPillType } from '../MediaPill/MediaPill'
 import { trunc } from '../../lib/utils'
 interface MediaListItemProps {
   media: MovieResult | TvResult
-  isFocused: Boolean
+  onPress: (media: any) => void
 }
 
 const TMDB_IMAGE_URL = 'https://image.tmdb.org/t/p/w500/'
 
-const MediaListItem: React.FC<MediaListItemProps> = ({ media, isFocused }) => {
+const MediaListItem: React.FC<MediaListItemProps> = ({ media, onPress }) => {
+  const [isFocused, setIsFocused] = useState<boolean>(false)
   const { mediaType, posterPath, mediaInfo } = media
   const title: string = 'title' in media ? media.title : media.name ?? ''
   const mediaDate: string = 'releaseDate' in media ? media.releaseDate : media.firstAirDate ?? ''
 
   return (
-    <Animated.View
-      style={[
-        styles.container,
-      ]}
+    <TouchableOpacity
+      activeOpacity={1}
+      onFocus={() => setIsFocused(true)}
+      onBlur={() => setIsFocused(false)}
+      onPress={() => onPress(media)}
+      style={styles.container}
+      tvParallaxProperties={{
+        enabled: true,
+        magnification: 1.1,
+        tiltAngle: 0
+      }}
     >
       <Image
         source={{ uri: `${TMDB_IMAGE_URL}${posterPath}` }}
@@ -42,7 +50,7 @@ const MediaListItem: React.FC<MediaListItemProps> = ({ media, isFocused }) => {
           <Text style={styles.infoDescription}>{trunc(media.overview ?? '', 120, true)}</Text>
         </View>
       }
-    </Animated.View>
+    </TouchableOpacity>
   )
 }
 
@@ -58,7 +66,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: 300,
     height: 400,
-
   },
   poster: {
     position: 'absolute',
