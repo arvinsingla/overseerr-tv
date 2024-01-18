@@ -7,11 +7,11 @@ interface HorizontalTvListProps {
   title: String
   tv: TvResult[]
   onPress: (item: TvResult) => void
+  onFocus: (itemId: number) => void
+  focusId: number | null
 }
 
-const HorizontalTvList: React.FC<HorizontalTvListProps> = ({ tv, title, onPress }) => {
-  const [focusedItem, setFocusedItem] = useState<Number | null>(null)
-
+const HorizontalTvList: React.FC<HorizontalTvListProps> = ({ tv, title, onPress, onFocus, focusId }) => {
   const handlePress = (item: TvResult) => {
     onPress(item)
   }
@@ -29,14 +29,16 @@ const HorizontalTvList: React.FC<HorizontalTvListProps> = ({ tv, title, onPress 
           return (
             <TouchableOpacity
               activeOpacity={1}
-              onFocus={() => setFocusedItem(item.id)}
+              onFocus={() => onFocus(item.id)}
               onPress={() => handlePress(item)}
               style={styles.item}
               tvParallaxProperties={{
-                enabled: false
+                enabled: true,
+                magnification: 1.1,
+                tiltAngle: 0
               }}
             >
-              <MediaListItem media={item} isFocused={focusedItem === item.id} />
+              <MediaListItem media={item} isFocused={focusId === item.id} />
             </TouchableOpacity>
           )
         }}

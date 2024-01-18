@@ -32,7 +32,7 @@ const style = StyleSheet.create({
         justifyContent: 'space-between',
     },
     headerText: {
-        fontSize: 80,
+        fontSize: 60,
         flexGrow: 1
     }
 })

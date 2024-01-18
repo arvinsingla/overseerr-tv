@@ -6,7 +6,7 @@ import DiscoveryScreen from './screens/DiscoveryScreen/DiscoveryScreen'
 import SettingsScreen from './screens/SettingsScreen/SettingsScreen'
 import RequestScreen from './screens/RequestScreen/RequestScreen'
 import Header from './components/Header/Header'
-import { MovieResult, OverseerrClient, TvResult } from './lib/OverseerrClient'
+import { MovieResult, TvResult } from './lib/OverseerrClient'
 
 declare global {
   namespace ReactNavigation {
@@ -33,14 +33,15 @@ function App(): JSX.Element {
         <Stack.Navigator
           initialRouteName={hasServerSettings ? 'Discovery' : 'Settings'}
           screenOptions={{
-            headerTitle: (props) => <Header {...props} />
+            headerTitle: (props) => <Header {...props} />,
+            headerStyle: {
+              backgroundColor: '#f4511e',
+            },
+            headerTintColor: '#fff',
           }}
         >
           <Stack.Group>
-            <Stack.Screen
-              name="Discovery"
-              component={DiscoveryScreen}
-            />
+            <Stack.Screen name="Discovery" component={DiscoveryScreen} />
           </Stack.Group>
           <Stack.Group screenOptions={{ presentation: 'fullScreenModal'}}>
             <Stack.Screen name="Request" component={RequestScreen} />
