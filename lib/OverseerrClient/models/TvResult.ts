@@ -4,8 +4,8 @@
 /* eslint-disable */
 import type { MediaInfo } from './MediaInfo';
 export type TvResult = {
-    id?: number;
-    mediaType?: string;
+    id: number;
+    mediaType: string;
     popularity?: number;
     posterPath?: string;
     backdropPath?: string;

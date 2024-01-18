@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import useAppStore from '../../lib/store';
-import { View, Text, TextInput } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { View, Text, TextInput, StyleSheet, SafeAreaView, Alert } from "react-native";
 import TvButton from '../../components/TvButton/TvButton'
 import { OverseerrClient } from '../../lib/OverseerrClient';
 
@@ -12,24 +11,21 @@ function SettingsScreen(): JSX.Element {
   const [key, setKey] = useState<string>(apiKey)
   const [address, setAddress] = useState<string>(apiAddress)
   const [isValid, setIsValid] = useState<boolean>(false)
-  const [errorText, setErrorText] = useState<string>()
 
   async function test() {
     // Test the API
-    console.log('The test button was pressed')
-    // setErrorText('Could not reach the API')
     const overseerrClient = new OverseerrClient({
-      BASE: `http://${address}/api/v1`,
+      BASE: `http://${address}:5055/api/v1`,
       HEADERS: {
         'X-Api-Key': key
       }
     })
     try {
-      await overseerrClient.public.getStatus()
-      setErrorText('')
+      await overseerrClient.settings.getSettingsAbout()
       setIsValid(true)
+      Alert.alert('Successfully connected ✅')
     } catch (e) {
-      setErrorText('Unable to communicate with the Overseerr API')
+      Alert.alert('Oops... Something went wrong connecting to Overseerr. Please check your settings and try again')
     }
   }
 
@@ -40,18 +36,53 @@ function SettingsScreen(): JSX.Element {
   }
 
   return (
-      <SafeAreaView>
+    <SafeAreaView>
+      <View style={style.wrapper}>
         <View>
-            <TextInput value={key} onChangeText={setKey} />
-            <TextInput value={address} onChangeText={setAddress} />
-            <TvButton disabled={!key && !address} onPress={test} title="Test" />
-            <TvButton disabled={!isValid} onPress={save} title="Save" />
-            {errorText &&
-              <Text>{errorText}</Text>
-            }
+          <Text style={style.label}>API Key:</Text>
+          <TextInput
+            value={key}
+            onChangeText={setKey}
+            style={style.input}
+            placeholder='API Key from Overseerr'
+          />
+          <Text style={style.label}>Server IP Address:</Text>
+          <TextInput
+            value={address}
+            onChangeText={setAddress}
+            style={style.input}
+            placeholder='IP Address (e.g. 192.168.10.100)'
+            keyboardType='numeric'
+          />
         </View>
-      </SafeAreaView>
+        <View style={style.buttonRow}>
+          <TvButton disabled={!key && !address} onPress={test} title="Test" />
+          <TvButton disabled={!isValid} onPress={save} title="Save" />
+        </View>
+      </View>
+    </SafeAreaView>
   );
 }
+
+const style = StyleSheet.create({
+  wrapper: {
+    paddingTop: 40,
+  },
+  label: {
+    fontSize: 38,
+    lineHeight: 66,
+  },
+  input: {
+    marginBottom: 20,
+    fontSize: 38,
+    height: 68,
+  },
+  buttonRow: {
+    marginTop: 40,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-around'
+  }
+})
 
 export default SettingsScreen

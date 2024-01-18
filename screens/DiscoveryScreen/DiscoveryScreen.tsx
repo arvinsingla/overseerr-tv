@@ -1,59 +1,92 @@
-import { View, Text } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { View, ScrollView, StyleSheet, SafeAreaView, Text } from "react-native";
 import { useQuery } from '@tanstack/react-query'
-import {
-    Colors,
-  } from 'react-native/Libraries/NewAppScreen';
+import { useNavigation } from "@react-navigation/native";
 import HorizontalMovieList from '../../components/HorizontalMovieList/HorizontalMovieList'
-import { OverseerrClient } from '../../lib/OverseerrClient'
+import { MovieResult, TvResult } from '../../lib/OverseerrClient'
 import useAppStore from "../../lib/store";
+import HorizontalTvList from "../../components/HorizontalTvList/HorizontalTvList";
 
 function DiscoveryScreen(): JSX.Element {
-  const { apiKey, apiAddress} = useAppStore()
-  // const overseerrClient = new OverseerrClient({
-  //   BASE: `http://${apiAddress}/api/v1`,
-  //   HEADERS: {
-  //     'X-Api-Key': apiKey
-  //   }
-  // })
-  const overseerrClient = new OverseerrClient({
-    BASE: 'http://192.168.10.15:5055/api/v1',
-    HEADERS: {
-      'X-Api-Key': 'MTY3OTk0NDc3NDcxOWM1YWQyOWE0LWY3MDItNGRiYi1hOTliLWI0ZjNjZTM0MDVlOCk='
-    }
+  const navigation = useNavigation()
+  const { client } = useAppStore()
+
+  const handlePress = (item: MovieResult | TvResult) => {
+    navigation.navigate('Request', { item })
+  }
+
+  if (!client) {
+    return (<Text>Overseerr Client not instantiated</Text>)
+  }
+
+  const {error: popularMoviesError, isPending: popularMoviesPending, isSuccess: popularMoviesSuccess, data: popularMoviesData } = useQuery({
+    queryKey: ['popular-movies'],
+    queryFn: () => client.search.getDiscoverMovies()
   })
-    // const isDarkMode = useColorScheme() === 'dark';
-    // const backgroundStyle = {
-    //   backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-    // };
-  const {error: discoverMoviesError, isPending: discoverMoviesPending, isSuccess: discoverMoviesSuccess, data: discoverMoviesData } = useQuery({
-    queryKey: ['discover-movies'],
-    queryFn: () => overseerrClient.search.getDiscoverMovies()
+  const {error: popularTvError, isPending: popularTvPending, isSuccess: popularTvSuccess, data: popularTvData } = useQuery({
+    queryKey: ['popular-tv'],
+    queryFn: () => client.search.getDiscoverTv()
+  })
+
+  const {error: upcomingMoviesError, isPending: upcomingMoviesPending, isSuccess: upcomingMoviesSuccess, data: upcomingMoviesData } = useQuery({
+    queryKey: ['upcoming-movies'],
+    queryFn: () => client.search.getDiscoverMoviesUpcoming()
+  })
+
+  const {error: upcomingTvError, isPending: upcomingTvPending, isSuccess: upcomingTvSuccess, data: upcomingTvData } = useQuery({
+    queryKey: ['upcoming-tv'],
+    queryFn: () => client.search.getDiscoverTvUpcoming()
   })
 
   return (
       <SafeAreaView>
-        <View>
-            {discoverMoviesSuccess ? <HorizontalMovieList movies={discoverMoviesData?.results || []} /> : null}
-            {discoverMoviesPending ? <Text>Nothing to show you</Text> : null }
-        </View>
+        <ScrollView style={style.wrapper}>
+          {popularMoviesSuccess &&
+            <View style={style.list}>
+              <HorizontalMovieList
+                title="Popular Movies"
+                movies={popularMoviesData?.results || []}
+                onPress={handlePress}
+              />
+            </View>
+          }
+          {upcomingMoviesSuccess &&
+            <View style={style.list}>
+              <HorizontalMovieList
+                title="Upcoming Movies"
+                movies={upcomingMoviesData?.results || []}
+                onPress={handlePress}
+              />
+            </View>
+          }
+          {popularTvSuccess &&
+            <View style={style.list}>
+              <HorizontalTvList
+                title="Popular Series"
+                tv={popularTvData?.results || []}
+                onPress={handlePress}
+              />
+            </View>
+          }
+          {upcomingTvSuccess &&
+            <View style={style.list}>
+              <HorizontalTvList
+                title="Upcoming Series"
+                tv={upcomingTvData?.results || []}
+                onPress={handlePress} />
+            </View>
+          }
+        </ScrollView>
       </SafeAreaView>
   );
 }
 
-export default DiscoveryScreen
+const style = StyleSheet.create({
+  wrapper: {
+    overflow: 'visible'
+  },
+  list: {
+    marginBottom: 30
+  }
+})
 
-// return (
-//   <QueryClientProvider client={queryClient}>
-//     <SafeAreaView style={backgroundStyle}>
-//       <View
-//           style={{
-//             backgroundColor: isDarkMode ? Colors.black : Colors.white,
-//           }}
-//         >
-//           {discoverMoviesSuccess ? <HorizontalMovieList movies={discoverMoviesData?.results || []} /> : null}
-//           {discoverMoviesPending ? <Text>Nothing to show you</Text> : null }
-//       </View>
-//     </SafeAreaView>
-//   </QueryClientProvider>
-// );
+export default DiscoveryScreen

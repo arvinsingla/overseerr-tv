@@ -141,7 +141,6 @@ export class SearchService {
         totalResults?: number;
         results?: Array<MovieResult>;
     }> {
-        console.log('inside SearchService', this.httpRequest.request)
         return this.httpRequest.request({
             method: 'GET',
             url: '/discover/movies',

@@ -1,19 +1,18 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, FlatList, Text, TouchableHighlight, TouchableOpacity } from 'react-native';
-import { MovieResult } from '../../lib/OverseerrClient';
+import { View, StyleSheet, FlatList, TouchableOpacity, Animated, Text } from 'react-native';
+import { TvResult } from '../../lib/OverseerrClient';
 import MediaListItem from '../MediaListItem/MediaListItem';
 
-interface HorizontalMovieListProps {
+interface HorizontalTvListProps {
   title: String
-  movies: MovieResult[]
-  onPress: (item: MovieResult) => void
+  tv: TvResult[]
+  onPress: (item: TvResult) => void
 }
 
-const HorizontalMovieList: React.FC<HorizontalMovieListProps> = ({ movies, title, onPress }) => {
+const HorizontalTvList: React.FC<HorizontalTvListProps> = ({ tv, title, onPress }) => {
   const [focusedItem, setFocusedItem] = useState<Number | null>(null)
 
-  console.log('focusedItem', focusedItem)
-  const handlePress = (item: MovieResult) => {
+  const handlePress = (item: TvResult) => {
     onPress(item)
   }
 
@@ -24,7 +23,7 @@ const HorizontalMovieList: React.FC<HorizontalMovieListProps> = ({ movies, title
         horizontal
         showsHorizontalScrollIndicator={false}
         style={styles.list}
-        data={movies}
+        data={tv}
         keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => {
           return (
@@ -56,9 +55,8 @@ const styles = StyleSheet.create({
     marginTop: 30
   },
   item: {
-    marginRight: 30,
-    opacity: 0.8
+    paddingRight: 30
   }
 });
 
-export default HorizontalMovieList;
+export default HorizontalTvList;
