@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
   },
   list: {
     overflow: 'visible',
-    marginTop: 30
+    marginTop: 10
   },
   item: {
     paddingRight: 30

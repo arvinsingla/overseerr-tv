@@ -1,27 +1,28 @@
-import { View, Text, StyleSheet} from 'react-native'
+import { StyleSheet, SafeAreaView, Image} from 'react-native'
 import TvButton from "../TvButton/TvButton";
 import { useNavigation } from '@react-navigation/native';
+import { NativeStackHeaderProps } from '@react-navigation/native-stack';
 
 interface HeaderProps {
-    children: string;
-    tintColor?: string | undefined;
+    header: NativeStackHeaderProps
 }
 
-const Header: React.FC<HeaderProps> = ({ children: title }) => {
+const Header: React.FC<HeaderProps> = ({ header}) => {
     const navigation = useNavigation()
-    const isSettingsPage = title === "Settings"
+    const { route } = header
+    const isSettingsPage = route.name === "Settings"
 
     function onPress() {
         navigation.navigate('Settings')
     }
 
     return(
-        <View style={style.wrapper}>
-            <Text style={style.headerText}>{title}</Text>
+        <SafeAreaView style={style.wrapper}>
+            <Image source={require('./img/logo.png')} />
             {!isSettingsPage &&
                 <TvButton title="Settings" onPress={onPress} />
             }
-        </View>
+        </SafeAreaView>
     )
 }
 
@@ -30,10 +31,18 @@ const style = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
+        verticalAlign: 'middle',
+        width: '100%',
+        height: 200,
+        backgroundColor: '#1E2836',
+        paddingTop: 10,
+        paddingBottom: 10,
+        paddingLeft: 80,
+        paddingRight: 80,
     },
     headerText: {
         fontSize: 60,
-        flexGrow: 1
+        color: '#ffffff'
     }
 })
 

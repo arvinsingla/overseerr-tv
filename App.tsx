@@ -1,3 +1,4 @@
+import { Text, View } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
@@ -33,11 +34,7 @@ function App(): JSX.Element {
         <Stack.Navigator
           initialRouteName={hasServerSettings ? 'Discovery' : 'Settings'}
           screenOptions={{
-            headerTitle: (props) => <Header {...props} />,
-            headerStyle: {
-              backgroundColor: '#f4511e',
-            },
-            headerTintColor: '#fff',
+            header: (props) => <Header header={props} />
           }}
         >
           <Stack.Group>
