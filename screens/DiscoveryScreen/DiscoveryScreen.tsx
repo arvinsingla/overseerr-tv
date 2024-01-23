@@ -10,8 +10,11 @@ function DiscoveryScreen(): JSX.Element {
   const navigation = useNavigation()
   const { client } = useAppStore()
 
-  const handlePress = (item: MovieResult | TvResult) => {
-    navigation.navigate('Request', { item })
+  const handlePressMovie = (item: MovieResult) => {
+    navigation.navigate('Movie', { item })
+  }
+  const handlePressTv = (item: TvResult) => {
+    navigation.navigate('Tv', { item })
   }
 
   if (!client) {
@@ -45,7 +48,7 @@ function DiscoveryScreen(): JSX.Element {
               <HorizontalMovieList
                 title="Popular Movies"
                 movies={popularMoviesData?.results || []}
-                onPress={handlePress}
+                onPress={handlePressMovie}
               />
             </View>
           }
@@ -54,7 +57,7 @@ function DiscoveryScreen(): JSX.Element {
               <HorizontalMovieList
                 title="Upcoming Movies"
                 movies={upcomingMoviesData?.results || []}
-                onPress={handlePress}
+                onPress={handlePressMovie}
               />
             </View>
           }
@@ -63,7 +66,7 @@ function DiscoveryScreen(): JSX.Element {
               <HorizontalTvList
                 title="Popular Series"
                 tv={popularTvData?.results || []}
-                onPress={handlePress}
+                onPress={handlePressTv}
               />
             </View>
           }
@@ -72,7 +75,7 @@ function DiscoveryScreen(): JSX.Element {
               <HorizontalTvList
                 title="Upcoming Series"
                 tv={upcomingTvData?.results || []}
-                onPress={handlePress}
+                onPress={handlePressTv}
               />   
             </View>
           }

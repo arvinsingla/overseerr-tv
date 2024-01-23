@@ -5,8 +5,9 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import useAppStore from './lib/store'
 import DiscoveryScreen from './screens/DiscoveryScreen/DiscoveryScreen'
 import SettingsScreen from './screens/SettingsScreen/SettingsScreen'
-import RequestScreen from './screens/RequestScreen/RequestScreen'
 import Header from './components/Header/Header'
+import MovieScreen from './screens/MovieScreen/MovieScreen'
+import TvScreen from './screens/TvScreen/TvScreen'
 import { MovieResult, TvResult } from './lib/OverseerrClient'
 
 declare global {
@@ -18,7 +19,8 @@ declare global {
 export type RootStackParamList = {
   Discovery: undefined
   Settings: undefined
-  Request: { item: MovieResult | TvResult }
+  Movie: { item: MovieResult }
+  Tv: { item: TvResult }
 }
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
@@ -39,9 +41,10 @@ function App(): JSX.Element {
         >
           <Stack.Group>
             <Stack.Screen name="Discovery" component={DiscoveryScreen} />
+            <Stack.Screen name="Movie" component={MovieScreen} />
+            <Stack.Screen name="Tv" component={TvScreen} />
           </Stack.Group>
-          <Stack.Group screenOptions={{ presentation: 'fullScreenModal'}}>
-            <Stack.Screen name="Request" component={RequestScreen} />
+          <Stack.Group screenOptions={{ presentation: 'modal' }}>
             <Stack.Screen name="Settings" component={SettingsScreen} />
           </Stack.Group>
         </Stack.Navigator>

@@ -1,14 +1,14 @@
 import React, { useState } from 'react'
 import { View, Text, Image, StyleSheet, Animated, TouchableOpacity } from 'react-native'
 import { MovieResult, TvResult } from '../../lib/OverseerrClient'
-import MediaPill, { MediaPillType } from '../MediaPill/MediaPill'
+import MediaPill from '../MediaPill/MediaPill'
+import { MediaType } from '../../lib/types'
+import { TMDB_IMAGE_URL } from '../../lib/constants'
 import { trunc } from '../../lib/utils'
 interface MediaListItemProps {
   media: MovieResult | TvResult
   onPress: (media: any) => void
 }
-
-const TMDB_IMAGE_URL = 'https://image.tmdb.org/t/p/w500/'
 
 const MediaListItem: React.FC<MediaListItemProps> = ({ media, onPress }) => {
   const [isFocused, setIsFocused] = useState<boolean>(false)
@@ -36,7 +36,7 @@ const MediaListItem: React.FC<MediaListItemProps> = ({ media, onPress }) => {
           { opacity: isFocused ? 0.3 : 1 }
         ]} />
       <View style={styles.header}>
-        <MediaPill type={mediaType as MediaPillType} />
+        <MediaPill type={mediaType as MediaType} />
         {mediaInfo?.status === 5 &&
           <View style={styles.availability}>
             <Text>A</Text>

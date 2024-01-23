@@ -32,7 +32,7 @@ function SettingsScreen(): JSX.Element {
   function save() {
     setApiKey(key)
     setApiAddress(address)
-    navigation.navigate('Discovery')
+    navigation.goBack()
   }
 
   return (

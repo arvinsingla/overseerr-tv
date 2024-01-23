@@ -1,21 +1,17 @@
 import Pill, { PillColor } from '../Pill/Pill';
-
-export enum MediaPillType {
-    'movie' = 'movie',
-    'tv' = 'tv',
-}
+import { MediaType } from '../../lib/types'
 
 interface MediaPillProps {
-    type: MediaPillType
+    type: MediaType
 }
 
 const MediaPill: React.FC<MediaPillProps> = ({ type }) => {
     let mediaPillColor: PillColor
     switch (type) {
-        case MediaPillType.movie:
+        case MediaType.movie:
             mediaPillColor = PillColor.blue
             break
-        case MediaPillType.tv:
+        case MediaType.tv:
             mediaPillColor = PillColor.purple
             break            
     }   
