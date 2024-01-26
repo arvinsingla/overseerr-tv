@@ -30,10 +30,12 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movie, mediaInfo, onRequest
         voteAverage,
     } = movie
     const directors = credits?.crew?.filter((crew) => crew.job === DIRECTOR_KEY).map((director) => director.name)
+    const cast = credits?.cast ? credits?.cast.slice(0, 4).map(member => member.name) : []
     const movieData = []
     const mediaStatus = mediaInfo?.status
 
     if (directors?.length) movieData.push({ title: 'Director(s)', value: directors.join(', ')})
+    if (cast?.length) movieData.push({ title: 'Cast', value: cast.join('\n')})
     if (originalLanguage) movieData.push({ title: 'Original Language', value: languageMap[originalLanguage]})
     if (status) movieData.push({ title: 'Status', value: status})
     if (voteAverage) movieData.push({ title: 'TMDB Score', value: voteAverage.toFixed(1)})
@@ -185,7 +187,8 @@ const style = StyleSheet.create({
         padding: 20,
     },
     contentRightItemText: {
-        fontSize: 25
+        fontSize: 25,
+        textAlign: 'right',
     }
 })
 
