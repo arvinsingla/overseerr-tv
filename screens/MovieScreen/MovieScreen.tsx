@@ -1,9 +1,11 @@
-import { View, Text, SafeAreaView, StyleSheet } from "react-native";
+import { SafeAreaView, StyleSheet, ScrollView, ActivityIndicator } from "react-native";
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useQuery } from "@tanstack/react-query";
 import { RootStackParamList } from '../../App';
 import useAppStore from '../../lib/store';
 import MovieDetails from "../../components/MovieDetails/MovieDetails";
+import HorizontalMovieList from "../../components/HorizontalMovieList/HorizontalMovieList";
+import { MovieResult } from "../../lib/OverseerrClient";
 
 type MovieScreenRouteProp = RouteProp<RootStackParamList, 'Movie'>;
 
@@ -18,22 +20,37 @@ function MovieScreen(): JSX.Element {
     queryFn: () => client?.movies.getMovie(item.id)
   })
 
+  const { error: similarError, isPending: similarIsPending, isSuccess: similarIsSuccess, data: similarData } = useQuery({
+    queryKey: ['movieSimilar', item.id],
+    queryFn: () => client?.movies.getMovieSimilar(item.id)
+  })
+
   const submitRequest = async () => {
     // await client?.request.postRequest({
     //   mediaId: item.id,
     //   mediaType: 'movie'
     // })
-    navigation.navigate('Discovery')
+    // console.log('Requested')
+    // navigation.navigate('Discovery')
+  }
+
+  const onMoviePress = (item: MovieResult) => {
+    navigation.navigate('Movie', { item })
   }
 
   return (
     <SafeAreaView>
-      {isPending &&
-        <View><Text>Fetching data</Text></View>
-      }
-      {isSuccess && data &&
-        <MovieDetails movie={data} onRequest={submitRequest} />
-      }
+      <ScrollView style={{ overflow:'visible'}}>
+        {isPending &&
+          <ActivityIndicator size="large" />
+        }
+        {isSuccess && data &&
+          <MovieDetails movie={data} mediaInfo={item.mediaInfo} onRequest={submitRequest} />
+        }
+        {similarIsSuccess && similarData?.results &&
+          <HorizontalMovieList title="Similar Movies" movies={similarData.results} onPress={onMoviePress} />
+        }
+      </ScrollView>
     </SafeAreaView>
   );
 }

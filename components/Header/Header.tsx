@@ -19,9 +19,9 @@ const Header: React.FC<HeaderProps> = ({ header}) => {
     return(
         <SafeAreaView style={style.wrapper}>
             <Image source={require('./img/logo.png')} />
-            {!isSettingsPage &&
+            {/* {!isSettingsPage &&
                 <TvButton title="Settings" onPress={onPress} />
-            }
+            } */}
         </SafeAreaView>
     )
 }
