@@ -1,15 +1,14 @@
 import { View, ScrollView, StyleSheet, SafeAreaView, Text } from "react-native";
 import { useQuery } from '@tanstack/react-query'
 import { useNavigation } from "@react-navigation/native";
-import HorizontalMovieList from '../../components/HorizontalMovieList/HorizontalMovieList'
 import { MovieResult, TvResult } from '../../lib/OverseerrClient'
 import useAppStore from "../../lib/store";
-import HorizontalTvList from "../../components/HorizontalTvList/HorizontalTvList";
 import HorizontalCategoryList, { Category } from "../../components/HorizontalCategoryList/HorizontalCategoryList";
 import { studios, networks } from '../../lib/maps'
 import movieGenres from '../../lib/movieGenres.json'
 import tvGenres from '../../lib/tvGenres.json'
-import { MediaType } from "../../lib/types";
+import MovieList from "../../components/MovieList/MovieList";
+import TvList from "../../components/TvList/TvList";
 
 function DiscoveryScreen(): JSX.Element {
   const navigation = useNavigation()
@@ -22,14 +21,16 @@ function DiscoveryScreen(): JSX.Element {
     navigation.navigate('Tv', { item })
   }
   const handlePressTvGenre = (category: Category) => {
-    navigation.navigate('Genre', { type: MediaType.tv, category})
+    navigation.navigate('TvGenre', { category })
   }
   const handlePressNetwork = (category: Category) => {
+    navigation.navigate('Network', { category })
   }
   const handlePressMovieGenre = (category: Category) => {
-    navigation.navigate('Genre', { type: MediaType.movie, category})
+    navigation.navigate('MovieGenre', { category })
   }
   const handlePressStudio = (category: Category) => {
+    navigation.navigate('Studio', { category })
   }
 
   if (!client) {
@@ -60,51 +61,59 @@ function DiscoveryScreen(): JSX.Element {
         <ScrollView style={style.wrapper}>
           {popularMoviesSuccess &&
             <View style={style.list}>
-              <HorizontalMovieList
-                title="Popular Movies"
+              <Text style={style.title}>Popular Movies</Text>
+              <MovieList
                 movies={popularMoviesData?.results || []}
                 onPress={handlePressMovie}
+                isHorizontal={true}
               />
             </View>
           }
           <View style={style.list}>
-            <HorizontalCategoryList categories={movieGenres} title="Movie Genres" onPress={handlePressMovieGenre} />
+            <Text style={style.title}>Movie Genres</Text>
+            <HorizontalCategoryList categories={movieGenres} onPress={handlePressMovieGenre} />
           </View>
           {upcomingMoviesSuccess &&
             <View style={style.list}>
-              <HorizontalMovieList
-                title="Upcoming Movies"
+              <Text style={style.title}>Upcoming Movies</Text>
+              <MovieList
                 movies={upcomingMoviesData?.results || []}
                 onPress={handlePressMovie}
+                isHorizontal={true}
               />
             </View>
           }
           <View style={style.list}>
-            <HorizontalCategoryList categories={studios} title="Studios" isLogo={true} onPress={handlePressStudio} />
+            <Text style={style.title}>Studios</Text>
+            <HorizontalCategoryList categories={studios} isLogo={true} onPress={handlePressStudio} />
           </View>
           {popularTvSuccess &&
             <View style={style.list}>
-              <HorizontalTvList
-                title="Popular Series"
+              <Text style={style.title}>Popular Series</Text>
+              <TvList
                 tv={popularTvData?.results || []}
                 onPress={handlePressTv}
+                isHorizontal={true}
               />
             </View>
           }
           <View style={style.list}>
-            <HorizontalCategoryList categories={tvGenres} title="Series Genres"  onPress={handlePressTvGenre} />
+            <Text style={style.title}>Series Genres</Text>
+            <HorizontalCategoryList categories={tvGenres} onPress={handlePressTvGenre} />
           </View>
           {upcomingTvSuccess &&
             <View style={style.list}>
-              <HorizontalTvList
-                title="Upcoming Series"
+              <Text style={style.title}>Upcoming Series</Text>
+              <TvList
                 tv={upcomingTvData?.results || []}
                 onPress={handlePressTv}
+                isHorizontal={true}
               />   
             </View>
           }
           <View style={style.list}>
-            <HorizontalCategoryList categories={networks} title="Networks" isLogo={true} onPress={handlePressNetwork} />
+            <Text style={style.title}>Networks</Text>
+            <HorizontalCategoryList categories={networks} isLogo={true} onPress={handlePressNetwork} />
           </View>
         </ScrollView>
       </SafeAreaView>
@@ -117,7 +126,12 @@ const style = StyleSheet.create({
   },
   list: {
     marginBottom: 30
-  }
+  },
+  title: {
+    fontSize: 38,
+    lineHeight: 66,
+    marginBottom: 20,
+  },
 })
 
 export default DiscoveryScreen

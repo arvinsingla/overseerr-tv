@@ -1,46 +1,42 @@
 import { Image, Text, View, StyleSheet, Pressable} from "react-native"
 import TvButton from "../TvButton/TvButton"
-import { MediaInfo, MovieDetails as MovieDetailsType } from "../../lib/OverseerrClient"
+import { MediaInfo, TvDetails as TvDetailsType } from "../../lib/OverseerrClient"
 import { TMDB_IMAGE_URL } from "../../lib/constants"
-import { formatDollars, trunc } from "../../lib/utils"
 import { languageMap } from "../../lib/maps"
 import StatusPill from "../StatusPill/StatusPill"
 
 const DIRECTOR_KEY = 'Director'
-interface MovieDetailsProps {
-    movie: MovieDetailsType
+interface TvDetailsProps {
+    tv: TvDetailsType
     mediaInfo: MediaInfo | undefined
     onRequest: () => void
 }
 
-const MovieDetails: React.FC<MovieDetailsProps> = ({ movie, mediaInfo, onRequest }) => {
+const TvDetails: React.FC<TvDetailsProps> = ({ tv, mediaInfo, onRequest }) => {
     const {
-        budget,
         credits,
         genres,
         originalLanguage,
         overview,
         posterPath,
-        releaseDate,
-        revenue,
-        runtime,
         status,
         tagline,
-        title,
+        name,
         voteAverage,
-    } = movie
+        numberOfEpisodes,
+        numberOfSeason,
+    } = tv
     const directors = credits?.crew?.filter((crew) => crew.job === DIRECTOR_KEY).map((director) => director.name)
     const cast = credits?.cast ? credits?.cast.slice(0, 4).map(member => member.name) : []
-    const movieData = []
+    const tvData = []
     const mediaStatus = mediaInfo?.status
 
-    if (directors?.length) movieData.push({ title: 'Director(s)', value: directors.join(', ')})
-    if (cast?.length) movieData.push({ title: 'Cast', value: cast.join('\n')})
-    if (originalLanguage) movieData.push({ title: 'Original Language', value: languageMap[originalLanguage]})
-    if (status) movieData.push({ title: 'Status', value: status})
-    if (voteAverage) movieData.push({ title: 'TMDB Score', value: voteAverage.toFixed(1)})
-    if (revenue) movieData.push({ title: 'Revenue', value: formatDollars(revenue)})
-    if (budget) movieData.push({ title: 'Budget', value: formatDollars(budget)})
+    if (directors?.length) tvData.push({ title: 'Director(s)', value: directors.join(', ')})
+    if (cast?.length) tvData.push({ title: 'Cast', value: cast.join('\n')})
+    if (originalLanguage) tvData.push({ title: 'Original Language', value: languageMap[originalLanguage]})
+    if (numberOfEpisodes) tvData.push({ title: 'Number of Episodes', value: numberOfEpisodes})
+    if (numberOfSeason) tvData.push({ title: 'Number of Seasons', value: numberOfSeason})
+    if (voteAverage) tvData.push({ title: 'TMDB Score', value: voteAverage.toFixed(1)})
 
     return(
         <View style={style.content}>
@@ -51,16 +47,9 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movie, mediaInfo, onRequest
                         {mediaStatus && <StatusPill status={mediaStatus} />}
                         <View style={style.HeaderDetailsTitle}>
                             <Text>
-                                <Text style={style.headerDetailsTitleMain}>{title}</Text>
-                                {releaseDate ? <Text style={style.headerDetailsTitleDate}> ({trunc(releaseDate ?? '', 4)})</Text> : null}
+                                <Text style={style.headerDetailsTitleMain}>{name}</Text>
                             </Text>
                         </View>
-                        {runtime ?
-                            <View>
-                                <Text style={style.HeaderDetailsSubtitleText}>{runtime} minutes</Text>
-                            </View>
-                            : null
-                        }
                         {genres?.length ?
                             <View>
                                 <Text style={style.HeaderDetailsSubtitleText}>{genres?.map((item) => item.name).join(', ')}</Text>
@@ -83,10 +72,10 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movie, mediaInfo, onRequest
                         <TvButton title="Request" onPress={onRequest} />
                     </View>
                 }
-                {movieData.length &&
+                {tvData.length &&
                     <View style={style.contentRightTable}>
-                        {movieData.map((data, index) => {
-                            const isLastItem = index === movieData.length - 1
+                        {tvData.map((data, index) => {
+                            const isLastItem = index === tvData.length - 1
                             return (
                                 <View key={index} style={[style.contentRightItem, { borderBottomWidth: isLastItem ? 0 : 1 }]}>
                                     <Text style={[style.bold, style.contentRightItemText]}>{data.title}:</Text>
@@ -192,4 +181,4 @@ const style = StyleSheet.create({
     }
 })
 
-export default MovieDetails
+export default TvDetails

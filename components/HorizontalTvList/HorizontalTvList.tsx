@@ -10,10 +10,6 @@ interface HorizontalTvListProps {
 }
 
 const HorizontalTvList: React.FC<HorizontalTvListProps> = ({ tv, title, onPress }) => {
-  const handlePress = (item: TvResult) => {
-    onPress(item)
-  }
-
   return (
     <View>
       <Text style={styles.title}>{title}</Text>

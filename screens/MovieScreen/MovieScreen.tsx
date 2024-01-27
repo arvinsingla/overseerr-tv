@@ -1,10 +1,10 @@
-import { SafeAreaView, StyleSheet, ScrollView, ActivityIndicator } from "react-native";
+import { SafeAreaView, StyleSheet, ScrollView, ActivityIndicator, Text, View } from "react-native";
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useQuery } from "@tanstack/react-query";
 import { RootStackParamList } from '../../App';
 import useAppStore from '../../lib/store';
 import MovieDetails from "../../components/MovieDetails/MovieDetails";
-import HorizontalMovieList from "../../components/HorizontalMovieList/HorizontalMovieList";
+import MovieList from "../../components/MovieList/MovieList";
 import { MovieResult } from "../../lib/OverseerrClient";
 
 type MovieScreenRouteProp = RouteProp<RootStackParamList, 'Movie'>;
@@ -48,13 +48,22 @@ function MovieScreen(): JSX.Element {
           <MovieDetails movie={data} mediaInfo={item.mediaInfo} onRequest={submitRequest} />
         }
         {similarIsSuccess && similarData?.results &&
-          <HorizontalMovieList title="Similar Movies" movies={similarData.results} onPress={onMoviePress} />
+          <View>
+            <Text style={style.title}>Similar Movies</Text>
+            <MovieList movies={similarData.results} isHorizontal={true} onPress={onMoviePress} />
+          </View>
         }
       </ScrollView>
     </SafeAreaView>
   );
 }
 
-const style = StyleSheet.create({})
+const style = StyleSheet.create({
+  title: {
+    fontSize: 38,
+    lineHeight: 66,
+    marginBottom: 20,
+  },
+})
 
 export default MovieScreen

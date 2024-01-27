@@ -9,8 +9,10 @@ import MovieScreen from './screens/MovieScreen/MovieScreen'
 import TvScreen from './screens/TvScreen/TvScreen'
 import { MovieResult, TvResult } from './lib/OverseerrClient'
 import { Category } from './components/HorizontalCategoryList/HorizontalCategoryList'
-import { MediaType } from './lib/types'
-import GenreScreen from './screens/GenreScreen/GenreScreen'
+import MovieGenreScreen from './screens/MovieGenreScreen/MovieGenreScreen'
+import TvGenreScreen from './screens/TvGenreScreen/TvGenreScreen'
+import StudioScreen from './screens/StudioScreen/StudioScreen'
+import NetworkScreen from './screens/NetworkScreen/NetworkScreen'
 
 declare global {
   namespace ReactNavigation {
@@ -23,7 +25,10 @@ export type RootStackParamList = {
   Settings: undefined
   Movie: { item: MovieResult }
   Tv: { item: TvResult }
-  Genre: { type: MediaType, category: Category}
+  MovieGenre: { category: Category}
+  TvGenre: { category: Category}
+  Network: { category: Category}
+  Studio: { category: Category}
 }
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
@@ -46,7 +51,10 @@ function App(): JSX.Element {
             <Stack.Screen name="Discovery" component={DiscoveryScreen} />
             <Stack.Screen name="Movie" component={MovieScreen} />
             <Stack.Screen name="Tv" component={TvScreen} />
-            <Stack.Screen name="Genre" component={GenreScreen} />
+            <Stack.Screen name="MovieGenre" component={MovieGenreScreen} />
+            <Stack.Screen name="TvGenre" component={TvGenreScreen} />
+            <Stack.Screen name="Studio" component={StudioScreen} />
+            <Stack.Screen name="Network" component={NetworkScreen} />
           </Stack.Group>
           <Stack.Group screenOptions={{ presentation: 'modal' }}>
             <Stack.Screen name="Settings" component={SettingsScreen} />
