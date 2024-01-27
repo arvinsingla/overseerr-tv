@@ -5,6 +5,10 @@ import HorizontalMovieList from '../../components/HorizontalMovieList/Horizontal
 import { MovieResult, TvResult } from '../../lib/OverseerrClient'
 import useAppStore from "../../lib/store";
 import HorizontalTvList from "../../components/HorizontalTvList/HorizontalTvList";
+import HorizontalCategoryList from "../../components/HorizontalCategoryList/HorizontalCategoryList";
+import { studios, networks } from '../../lib/maps'
+import movieGenres from '../../lib/movieGenres.json'
+import tvGenres from '../../lib/tvGenres.json'
 
 function DiscoveryScreen(): JSX.Element {
   const navigation = useNavigation()
@@ -52,6 +56,9 @@ function DiscoveryScreen(): JSX.Element {
               />
             </View>
           }
+          <View style={style.list}>
+            <HorizontalCategoryList categories={movieGenres} title="Movie Genres" onPress={() => {}} />
+          </View>
           {upcomingMoviesSuccess &&
             <View style={style.list}>
               <HorizontalMovieList
@@ -61,6 +68,9 @@ function DiscoveryScreen(): JSX.Element {
               />
             </View>
           }
+          <View style={style.list}>
+            <HorizontalCategoryList categories={studios} title="Studios" isLogo={true} onPress={() => {}} />
+          </View>
           {popularTvSuccess &&
             <View style={style.list}>
               <HorizontalTvList
@@ -70,6 +80,9 @@ function DiscoveryScreen(): JSX.Element {
               />
             </View>
           }
+          <View style={style.list}>
+            <HorizontalCategoryList categories={tvGenres} title="Series Genres"  onPress={() => {}} />
+          </View>
           {upcomingTvSuccess &&
             <View style={style.list}>
               <HorizontalTvList
@@ -79,6 +92,9 @@ function DiscoveryScreen(): JSX.Element {
               />   
             </View>
           }
+          <View style={style.list}>
+            <HorizontalCategoryList categories={networks} title="Networks" isLogo={true} onPress={() => {}} />
+          </View>
         </ScrollView>
       </SafeAreaView>
   );
