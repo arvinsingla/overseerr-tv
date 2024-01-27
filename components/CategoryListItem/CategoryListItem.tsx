@@ -6,7 +6,7 @@ import { Category } from '../HorizontalCategoryList/HorizontalCategoryList'
 interface CategoryListItemProps {
   category: Category,
   isLogo?: boolean,
-  onPress: (id: number) => void
+  onPress: (category: Category) => void
 }
 
 const CategoryListItem: React.FC<CategoryListItemProps> = ({ category, onPress, isLogo = false }) => {
@@ -16,7 +16,7 @@ const CategoryListItem: React.FC<CategoryListItemProps> = ({ category, onPress, 
   return (
     <TouchableOpacity
       activeOpacity={1}
-      onPress={() => onPress(id)}
+      onPress={() => onPress(category)}
       style={styles.container}
       tvParallaxProperties={{
         enabled: true,

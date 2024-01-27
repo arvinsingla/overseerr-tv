@@ -12,7 +12,7 @@ interface HorizontalCategoryListProps {
   title: string
   isLogo?: boolean
   categories: Category[]
-  onPress: (id: number) => void
+  onPress: (category: Category) => void
 }
 
 const HorizontalCategoryList: React.FC<HorizontalCategoryListProps> = ({ categories, title, onPress, isLogo = false }) => {

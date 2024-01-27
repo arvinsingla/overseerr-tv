@@ -5,10 +5,11 @@ import HorizontalMovieList from '../../components/HorizontalMovieList/Horizontal
 import { MovieResult, TvResult } from '../../lib/OverseerrClient'
 import useAppStore from "../../lib/store";
 import HorizontalTvList from "../../components/HorizontalTvList/HorizontalTvList";
-import HorizontalCategoryList from "../../components/HorizontalCategoryList/HorizontalCategoryList";
+import HorizontalCategoryList, { Category } from "../../components/HorizontalCategoryList/HorizontalCategoryList";
 import { studios, networks } from '../../lib/maps'
 import movieGenres from '../../lib/movieGenres.json'
 import tvGenres from '../../lib/tvGenres.json'
+import { MediaType } from "../../lib/types";
 
 function DiscoveryScreen(): JSX.Element {
   const navigation = useNavigation()
@@ -19,6 +20,16 @@ function DiscoveryScreen(): JSX.Element {
   }
   const handlePressTv = (item: TvResult) => {
     navigation.navigate('Tv', { item })
+  }
+  const handlePressTvGenre = (category: Category) => {
+    navigation.navigate('Genre', { type: MediaType.tv, category})
+  }
+  const handlePressNetwork = (category: Category) => {
+  }
+  const handlePressMovieGenre = (category: Category) => {
+    navigation.navigate('Genre', { type: MediaType.movie, category})
+  }
+  const handlePressStudio = (category: Category) => {
   }
 
   if (!client) {
@@ -57,7 +68,7 @@ function DiscoveryScreen(): JSX.Element {
             </View>
           }
           <View style={style.list}>
-            <HorizontalCategoryList categories={movieGenres} title="Movie Genres" onPress={() => {}} />
+            <HorizontalCategoryList categories={movieGenres} title="Movie Genres" onPress={handlePressMovieGenre} />
           </View>
           {upcomingMoviesSuccess &&
             <View style={style.list}>
@@ -69,7 +80,7 @@ function DiscoveryScreen(): JSX.Element {
             </View>
           }
           <View style={style.list}>
-            <HorizontalCategoryList categories={studios} title="Studios" isLogo={true} onPress={() => {}} />
+            <HorizontalCategoryList categories={studios} title="Studios" isLogo={true} onPress={handlePressStudio} />
           </View>
           {popularTvSuccess &&
             <View style={style.list}>
@@ -81,7 +92,7 @@ function DiscoveryScreen(): JSX.Element {
             </View>
           }
           <View style={style.list}>
-            <HorizontalCategoryList categories={tvGenres} title="Series Genres"  onPress={() => {}} />
+            <HorizontalCategoryList categories={tvGenres} title="Series Genres"  onPress={handlePressTvGenre} />
           </View>
           {upcomingTvSuccess &&
             <View style={style.list}>
@@ -93,7 +104,7 @@ function DiscoveryScreen(): JSX.Element {
             </View>
           }
           <View style={style.list}>
-            <HorizontalCategoryList categories={networks} title="Networks" isLogo={true} onPress={() => {}} />
+            <HorizontalCategoryList categories={networks} title="Networks" isLogo={true} onPress={handlePressNetwork} />
           </View>
         </ScrollView>
       </SafeAreaView>
