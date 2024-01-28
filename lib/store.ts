@@ -1,13 +1,17 @@
 import { create } from 'zustand'
 import { Settings } from 'react-native'
-import { OverseerrClient, User } from './OverseerrClient'
+import { OverseerrClient, RadarrSettings, SonarrSettings, User } from './OverseerrClient'
 
 interface AppState {
     user: User | null
+    radarr: RadarrSettings[]
+    sonarr: SonarrSettings[]
     apiKey: string
     apiAddress: string
     client: OverseerrClient | null
     setUser: (user: User) => void
+    setRadarr: (settings: RadarrSettings[]) => void
+    setSonarr: (settings: SonarrSettings[]) => void
     setApiKey: (key: string) => void
     setApiAddress: (address: string) => void
     setOverseerClient: (key?: string, address?: string) => void
@@ -29,6 +33,8 @@ const instantiateClient = (apiKey?: string, apiAddress?: string): OverseerrClien
 
 const useAppStore = create<AppState>()((set) => ({
     user: null,
+    radarr: [],
+    sonarr: [],
     apiKey: Settings.get('apiKey'),
     apiAddress: Settings.get('apiAddress'),
     client: instantiateClient(),
@@ -46,7 +52,13 @@ const useAppStore = create<AppState>()((set) => ({
     },
     setUser: (user) => {
       set(() => ({ user }))
-    }
+    },
+    setRadarr: (settings) => {
+      set(() => ({ radarr: settings }))
+    },
+    setSonarr: (settings) => {
+      set(() => ({ sonarr: settings }))
+    },
 }))
 
 export default useAppStore

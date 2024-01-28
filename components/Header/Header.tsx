@@ -11,7 +11,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ header}) => {
     const navigation = useNavigation()
-    const { client, setUser } = useAppStore()
+    const { client, setUser, setRadarr, setSonarr } = useAppStore()
     const { route } = header
     const isSettingsPage = route.name === "Settings"
 
@@ -19,16 +19,16 @@ const Header: React.FC<HeaderProps> = ({ header}) => {
         return null
     }
 
-    const {error, isPending, isSuccess, data } = useQuery({
+    const {data: userData } = useQuery({
         queryKey: ['user'],
         queryFn: () => client.auth.getAuthMe()
     })
 
     useEffect(() => {
-        if (data) {
-            setUser(data)
+        if (userData) {
+            setUser(userData)
         }
-    }, [data]);
+    }, [userData]);
 
     function onPress() {
         navigation.navigate('Settings')
@@ -48,9 +48,9 @@ const Header: React.FC<HeaderProps> = ({ header}) => {
                     style={{ opacity: 1 }}
                     onPress={onPress}
                 >
-                    {data?.avatar &&
+                    {userData?.avatar &&
                         <Image
-                            source={{ uri: data.avatar}}
+                            source={{ uri: userData.avatar}}
                             style={style.avatar}
                         />
                     }

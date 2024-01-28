@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, ScrollView, ActivityIndicator, Text, View } from "react-native";
+import { SafeAreaView, StyleSheet, ScrollView, ActivityIndicator, Text, View, Alert } from "react-native";
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useQuery } from "@tanstack/react-query";
 import { RootStackParamList } from '../../App';
@@ -10,60 +10,102 @@ import { MovieResult } from "../../lib/OverseerrClient";
 type MovieScreenRouteProp = RouteProp<RootStackParamList, 'Movie'>;
 
 function MovieScreen(): JSX.Element {
-  const route = useRoute<MovieScreenRouteProp>()
-  const navigation = useNavigation()
-  const { client } = useAppStore()
-  const { item } = route.params
+	const route = useRoute<MovieScreenRouteProp>()
+	const navigation = useNavigation()
+	const { client } = useAppStore()
+	const { item } = route.params
+	let canRequest = false
 
-  const {error, isPending, isSuccess, data } = useQuery({
-    queryKey: ['movie', item.id],
-    queryFn: () => client?.movies.getMovie(item.id)
-  })
+	const { isPending, isSuccess, data, refetch} = useQuery({
+		queryKey: ['movie', item.id],
+		queryFn: () => client?.movies.getMovie(item.id),
+		refetchInterval: 10000
+	})
 
-  const { error: similarError, isPending: similarIsPending, isSuccess: similarIsSuccess, data: similarData } = useQuery({
-    queryKey: ['movieSimilar', item.id],
-    queryFn: () => client?.movies.getMovieSimilar(item.id)
-  })
+	const { isSuccess: similarIsSuccess, data: similarData } = useQuery({
+		queryKey: ['movieSimilar', item.id],
+		queryFn: () => client?.movies.getMovieSimilar(item.id)
+	})
 
-  const submitRequest = async () => {
-    // await client?.request.postRequest({
-    //   mediaId: item.id,
-    //   mediaType: 'movie'
-    // })
-    // console.log('Requested')
-    // navigation.navigate('Discovery')
-  }
+	const { data: radarrData } = useQuery({
+		queryKey: ['radarr'],
+		queryFn: () => client?.service.getServiceRadarr(),
+	})
 
-  const onMoviePress = (item: MovieResult) => {
-    navigation.navigate('Movie', { item })
-  }
+	if (data?.mediaInfo?.status === 1 || data?.mediaInfo?.status === undefined) {
+		if (radarrData?.length) {
+			canRequest = true
+		}
+	}
 
-  return (
-    <SafeAreaView>
-      <ScrollView style={{ overflow:'visible'}}>
-        {isPending &&
-          <ActivityIndicator size="large" />
-        }
-        {isSuccess && data &&
-          <MovieDetails movie={data} mediaInfo={item.mediaInfo} onRequest={submitRequest} />
-        }
-        {similarIsSuccess && similarData?.results &&
-          <View>
-            <Text style={style.title}>Similar Movies</Text>
-            <MovieList movies={similarData.results} isHorizontal={true} onPress={onMoviePress} />
-          </View>
-        }
-      </ScrollView>
-    </SafeAreaView>
-  );
+	const submitRequest = () => {
+		Alert.alert(
+			`Submit request`,
+			`Do you want to submit a request for "${data?.title}"`,
+			[
+				{
+					text: 'Request',
+					onPress: async () => {
+						try {
+							await client?.request.postRequest({
+								mediaType: 'movie',
+								mediaId: item.id,
+							})
+							await refetch()
+						} catch (e) {
+							Alert.alert(`Error`, `There was an error submitting your request`)
+						}
+					},
+					style: 'default',
+					isPreferred: true
+				},
+				{
+					text: 'Cancel',
+					style: 'cancel'
+				}
+			],
+		)
+	}
+
+	const onMoviePress = (item: MovieResult) => {
+		navigation.navigate('Movie', { item })
+	}
+
+	return (
+		<SafeAreaView>
+			<ScrollView style={{ overflow: 'visible' }}>
+				{isPending &&
+					<ActivityIndicator size="large" style={{ paddingTop: 30 }} />
+				}
+				{isSuccess && data &&
+					<MovieDetails
+						movie={data}
+						mediaInfo={item.mediaInfo}
+						canRequest={canRequest}
+						onRequest={submitRequest}
+					/>
+				}
+				{similarIsSuccess && similarData?.results &&
+					<View>
+						<Text style={style.title}>Similar Movies</Text>
+						<MovieList
+							movies={similarData.results}
+							isHorizontal={true}
+							onPress={onMoviePress}
+						/>
+					</View>
+				}
+			</ScrollView>
+		</SafeAreaView>
+	);
 }
 
 const style = StyleSheet.create({
-  title: {
-    fontSize: 38,
-    lineHeight: 66,
-    marginBottom: 20,
-  },
+	title: {
+		fontSize: 38,
+		lineHeight: 66,
+		marginBottom: 20,
+	},
 })
 
 export default MovieScreen
