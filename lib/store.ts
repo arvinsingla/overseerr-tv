@@ -1,11 +1,13 @@
 import { create } from 'zustand'
 import { Settings } from 'react-native'
-import { OverseerrClient } from './OverseerrClient'
+import { OverseerrClient, User } from './OverseerrClient'
 
 interface AppState {
+    user: User | null
     apiKey: string
     apiAddress: string
     client: OverseerrClient | null
+    setUser: (user: User) => void
     setApiKey: (key: string) => void
     setApiAddress: (address: string) => void
     setOverseerClient: (key?: string, address?: string) => void
@@ -26,20 +28,24 @@ const instantiateClient = (apiKey?: string, apiAddress?: string): OverseerrClien
 }
 
 const useAppStore = create<AppState>()((set) => ({
+    user: null,
     apiKey: Settings.get('apiKey'),
     apiAddress: Settings.get('apiAddress'),
     client: instantiateClient(),
     setApiKey: (key) => {
       Settings.set({ apiKey: key })
-      set((state) => ({ apiKey: key}))
+      set(() => ({ apiKey: key}))
     },
     setApiAddress: (address) => {
       Settings.set({ apiAddress: address})
-      set((state) => ({ apiAddress: address}))
+      set(() => ({ apiAddress: address}))
     },
     setOverseerClient: () => {
       const client = instantiateClient()
       Settings.set({ client })
+    },
+    setUser: (user) => {
+      set(() => ({ user }))
     }
 }))
 

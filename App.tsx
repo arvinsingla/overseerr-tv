@@ -37,6 +37,7 @@ const queryClient = new QueryClient()
 function App(): JSX.Element {
   const { apiKey, apiAddress, setOverseerClient } = useAppStore()
   const hasServerSettings = apiKey && apiAddress
+  // Instantiate the Overseerr client in the store
   setOverseerClient()
   return (
     <QueryClientProvider client={queryClient}>
