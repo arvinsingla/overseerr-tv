@@ -39,7 +39,7 @@ const MediaListItem: React.FC<MediaListItemProps> = ({ media, onPress }) => {
         <MediaPill type={mediaType as MediaType} />
         {mediaInfo?.status === 5 &&
           <View style={styles.availability}>
-            <Text>A</Text>
+            <Image source={require('./img/green-check.png')} style={{ width: 25, height: 15}} />
           </View>
         }
       </View>
@@ -85,7 +85,10 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(74,222,128,.8)',
     borderWidth: 3,
     width: 35,
-    alignContent: 'center'
+		justifyContent: 'center',
+		alignItems: 'center',
+		display: 'flex',
+		flexDirection: 'row',
   },
   info: {
     padding: 10,
