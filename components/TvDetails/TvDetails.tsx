@@ -1,6 +1,6 @@
 import { Image, Text, View, StyleSheet, Pressable} from "react-native"
 import TvButton from "../TvButton/TvButton"
-import { MediaInfo, TvDetails as TvDetailsType } from "../../lib/OverseerrClient"
+import { TvDetails as TvDetailsType } from "../../lib/OverseerrClient"
 import { TMDB_IMAGE_URL } from "../../lib/constants"
 import { languageMap } from "../../lib/maps"
 import StatusPill from "../StatusPill/StatusPill"
@@ -8,11 +8,10 @@ import StatusPill from "../StatusPill/StatusPill"
 const DIRECTOR_KEY = 'Director'
 interface TvDetailsProps {
     tv: TvDetailsType
-    mediaInfo: MediaInfo | undefined
     onRequest: () => void
 }
 
-const TvDetails: React.FC<TvDetailsProps> = ({ tv, mediaInfo, onRequest }) => {
+const TvDetails: React.FC<TvDetailsProps> = ({ tv, onRequest }) => {
     const {
         credits,
         genres,
@@ -25,6 +24,7 @@ const TvDetails: React.FC<TvDetailsProps> = ({ tv, mediaInfo, onRequest }) => {
         voteAverage,
         numberOfEpisodes,
         numberOfSeason,
+				mediaInfo
     } = tv
     const directors = credits?.crew?.filter((crew) => crew.job === DIRECTOR_KEY).map((director) => director.name)
     const cast = credits?.cast ? credits?.cast.slice(0, 4).map(member => member.name) : []
@@ -64,7 +64,7 @@ const TvDetails: React.FC<TvDetailsProps> = ({ tv, mediaInfo, onRequest }) => {
                         <Text style={{ fontSize: 40, fontWeight: 'bold' }}>Overview</Text>
                         <Text style={style.contentLeftOverview}>{overview}</Text>
                     </>
-                } 
+                }
             </View>
             <View style={style.contentRight}>
                 {!mediaStatus &&

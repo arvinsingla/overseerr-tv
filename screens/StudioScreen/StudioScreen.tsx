@@ -1,11 +1,11 @@
-import { Image, SafeAreaView, View } from "react-native";
+import { ActivityIndicator, Image, SafeAreaView, View } from "react-native";
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useQuery } from "@tanstack/react-query";
 import { RootStackParamList } from '../../App';
 import useAppStore from '../../lib/store';
 import MovieList from "../../components/MovieList/MovieList";
 import { MovieResult } from "../../lib/OverseerrClient";
-import { TMDB_IMAGE_URL } from "../../lib/constants";
+import { DEFAULT_REFETCH_INTERVAL, TMDB_IMAGE_URL } from "../../lib/constants";
 
 type StudioScreenRouteProp = RouteProp<RootStackParamList, 'MovieGenre'>;
 
@@ -17,7 +17,8 @@ function StudioScreen(): JSX.Element {
 
   const {error, isPending, isSuccess, data } = useQuery({
     queryKey: ['studio-movies', category.id],
-    queryFn: () => client?.search.getDiscoverMoviesStudio(category.id.toString())
+    queryFn: () => client?.search.getDiscoverMoviesStudio(category.id.toString()),
+		refetchInterval: DEFAULT_REFETCH_INTERVAL,
   })
 
   const onPress = (item: MovieResult) => {
@@ -40,6 +41,9 @@ function StudioScreen(): JSX.Element {
 
   return(
     <SafeAreaView>
+			{isPending &&
+				<ActivityIndicator size="large" style={{ paddingTop: 30 }} />
+			}
       {isSuccess && data?.results?.length &&
         <MovieList
           movies={data?.results}
@@ -48,7 +52,7 @@ function StudioScreen(): JSX.Element {
         />
       }
     </SafeAreaView>
-  ) 
+  )
 }
 
 export default StudioScreen

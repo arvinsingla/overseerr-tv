@@ -5,6 +5,7 @@ import { MovieResult, TvResult } from '../../lib/OverseerrClient'
 import useAppStore from "../../lib/store";
 import HorizontalCategoryList, { Category } from "../../components/HorizontalCategoryList/HorizontalCategoryList";
 import { studios, networks } from '../../lib/maps'
+import { DEFAULT_REFETCH_INTERVAL } from "../../lib/constants";
 import movieGenres from '../../lib/movieGenres.json'
 import tvGenres from '../../lib/tvGenres.json'
 import MovieList from "../../components/MovieList/MovieList";
@@ -39,21 +40,25 @@ function DiscoveryScreen(): JSX.Element {
 
   const {error: popularMoviesError, isPending: popularMoviesPending, isSuccess: popularMoviesSuccess, data: popularMoviesData } = useQuery({
     queryKey: ['popular-movies'],
-    queryFn: () => client.search.getDiscoverMovies()
+    queryFn: () => client.search.getDiscoverMovies(),
+		refetchInterval: DEFAULT_REFETCH_INTERVAL
   })
   const {error: popularTvError, isPending: popularTvPending, isSuccess: popularTvSuccess, data: popularTvData } = useQuery({
     queryKey: ['popular-tv'],
-    queryFn: () => client.search.getDiscoverTv()
+    queryFn: () => client.search.getDiscoverTv(),
+		refetchInterval: DEFAULT_REFETCH_INTERVAL
   })
 
   const {error: upcomingMoviesError, isPending: upcomingMoviesPending, isSuccess: upcomingMoviesSuccess, data: upcomingMoviesData } = useQuery({
     queryKey: ['upcoming-movies'],
-    queryFn: () => client.search.getDiscoverMoviesUpcoming()
+    queryFn: () => client.search.getDiscoverMoviesUpcoming(),
+		refetchInterval: DEFAULT_REFETCH_INTERVAL
   })
 
   const {error: upcomingTvError, isPending: upcomingTvPending, isSuccess: upcomingTvSuccess, data: upcomingTvData } = useQuery({
     queryKey: ['upcoming-tv'],
-    queryFn: () => client.search.getDiscoverTvUpcoming()
+    queryFn: () => client.search.getDiscoverTvUpcoming(),
+		refetchInterval: DEFAULT_REFETCH_INTERVAL
   })
 
   return (
@@ -108,7 +113,7 @@ function DiscoveryScreen(): JSX.Element {
                 tv={upcomingTvData?.results || []}
                 onPress={handlePressTv}
                 isHorizontal={true}
-              />   
+              />
             </View>
           }
           <View style={style.list}>

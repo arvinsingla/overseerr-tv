@@ -1,10 +1,10 @@
-import { Image, SafeAreaView, View } from "react-native";
+import { ActivityIndicator, Image, SafeAreaView, View } from "react-native";
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useQuery } from "@tanstack/react-query";
 import { RootStackParamList } from '../../App';
 import useAppStore from '../../lib/store';
 import { TvResult } from "../../lib/OverseerrClient";
-import { TMDB_IMAGE_URL } from "../../lib/constants";
+import { DEFAULT_REFETCH_INTERVAL, TMDB_IMAGE_URL } from "../../lib/constants";
 import TvList from "../../components/TvList/TvList";
 
 type NetworkScreenRouteProp = RouteProp<RootStackParamList, 'MovieGenre'>;
@@ -17,7 +17,8 @@ function NetworkScreen(): JSX.Element {
 
   const {error, isPending, isSuccess, data } = useQuery({
     queryKey: ['network-tv', category.id],
-    queryFn: () => client?.search.getDiscoverTvNetwork(category.id.toString())
+    queryFn: () => client?.search.getDiscoverTvNetwork(category.id.toString()),
+		refetchInterval: DEFAULT_REFETCH_INTERVAL
   })
 
   const onPress = (item: TvResult) => {
@@ -39,6 +40,9 @@ function NetworkScreen(): JSX.Element {
   )
   return(
     <SafeAreaView>
+			{isPending &&
+				<ActivityIndicator size="large" style={{ paddingTop: 30 }} />
+			}
       {isSuccess && data?.results?.length &&
         <TvList
           tv={data?.results}
@@ -47,7 +51,7 @@ function NetworkScreen(): JSX.Element {
         />
       }
     </SafeAreaView>
-  ) 
+  )
 }
 
 export default NetworkScreen

@@ -80,7 +80,6 @@ function MovieScreen(): JSX.Element {
 				{isSuccess && data &&
 					<MovieDetails
 						movie={data}
-						mediaInfo={item.mediaInfo}
 						canRequest={canRequest}
 						onRequest={submitRequest}
 					/>

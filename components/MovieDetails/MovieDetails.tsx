@@ -1,6 +1,6 @@
 import { Image, Text, View, StyleSheet, Pressable } from "react-native"
 import TvButton from "../TvButton/TvButton"
-import { MediaInfo, MovieDetails as MovieDetailsType } from "../../lib/OverseerrClient"
+import { MovieDetails as MovieDetailsType } from "../../lib/OverseerrClient"
 import { TMDB_IMAGE_URL } from "../../lib/constants"
 import { formatDollars, trunc } from "../../lib/utils"
 import { languageMap } from "../../lib/maps"
@@ -9,12 +9,11 @@ import StatusPill from "../StatusPill/StatusPill"
 const DIRECTOR_KEY = 'Director'
 interface MovieDetailsProps {
 	movie: MovieDetailsType
-	mediaInfo: MediaInfo | undefined
 	canRequest?: boolean
 	onRequest: () => void
 }
 
-const MovieDetails: React.FC<MovieDetailsProps> = ({ movie, mediaInfo, canRequest = false, onRequest }) => {
+const MovieDetails: React.FC<MovieDetailsProps> = ({ movie, canRequest = false, onRequest }) => {
 	const {
 		budget,
 		credits,
@@ -29,6 +28,7 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movie, mediaInfo, canReques
 		tagline,
 		title,
 		voteAverage,
+		mediaInfo
 	} = movie
 	const directors = credits?.crew?.filter((crew) => crew.job === DIRECTOR_KEY).map((director) => director.name)
 	const cast = credits?.cast ? credits?.cast.slice(0, 4).map(member => member.name) : []

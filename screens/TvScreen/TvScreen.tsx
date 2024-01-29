@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, ScrollView, ActivityIndicator, Text, View } from "react-native";
+import { SafeAreaView, StyleSheet, ScrollView, ActivityIndicator, Text, View, Alert } from "react-native";
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useQuery } from "@tanstack/react-query";
 import { RootStackParamList } from '../../App';
@@ -15,24 +15,46 @@ function TvScreen(): JSX.Element {
   const { client } = useAppStore()
   const { item } = route.params
 
-  const {error, isPending, isSuccess, data } = useQuery({
+  const {error, isPending, isSuccess, data, refetch } = useQuery({
     queryKey: ['tv', item.id],
     queryFn: () => client?.tv.getTv(item.id)
   })
 
-  const { error: similarError, isPending: similarIsPending, isSuccess: similarIsSuccess, data: similarData } = useQuery({
+  const { isSuccess: similarIsSuccess, data: similarData } = useQuery({
     queryKey: ['tvSimilar', item.id],
     queryFn: () => client?.tv.getTvSimilar(item.id)
   })
 
-  const submitRequest = async () => {
-    // await client?.request.postRequest({
-    //   mediaId: item.id,
-    //   mediaType: 'tv'
-    // })
-    // console.log('Requested')
-    // navigation.navigate('Discovery')
-  }
+  const submitRequest = () => {
+		Alert.alert(
+			`Submit request`,
+			`Do you want to submit a request for all seasons of the series "${data?.name}"`,
+			[
+				{
+					text: 'Request',
+					onPress: async () => {
+						try {
+							await client?.request.postRequest({
+								mediaType: 'tv',
+								mediaId: item.id,
+								seasons: 'all'
+							})
+							await refetch()
+						} catch (e) {
+							console.log(e)
+							Alert.alert(`Error`, `There was an error submitting your request`)
+						}
+					},
+					style: 'default',
+					isPreferred: true
+				},
+				{
+					text: 'Cancel',
+					style: 'cancel'
+				}
+			],
+		)
+	}
 
   const onTvPress = (item: TvResult) => {
     navigation.navigate('Tv', { item })
@@ -42,10 +64,10 @@ function TvScreen(): JSX.Element {
     <SafeAreaView>
       <ScrollView style={{ overflow:'visible'}}>
         {isPending &&
-          <ActivityIndicator size="large" />
+          <ActivityIndicator size="large" style={{ paddingTop: 30 }} />
         }
-        {isSuccess && data && 
-          <TvDetails tv={data} mediaInfo={item.mediaInfo} onRequest={submitRequest} />
+        {isSuccess && data &&
+          <TvDetails tv={data} onRequest={submitRequest} />
         }
         {similarIsSuccess && similarData?.results &&
           <View>

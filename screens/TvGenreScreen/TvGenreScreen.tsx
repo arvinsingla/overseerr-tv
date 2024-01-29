@@ -1,10 +1,11 @@
-import { SafeAreaView, StyleSheet, Text } from "react-native";
+import { ActivityIndicator, SafeAreaView, StyleSheet, Text } from "react-native";
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useQuery } from "@tanstack/react-query";
 import { RootStackParamList } from '../../App';
 import useAppStore from '../../lib/store';
 import TvList from "../../components/TvList/TvList";
 import { TvResult } from "../../lib/OverseerrClient";
+import { DEFAULT_REFETCH_INTERVAL } from "../../lib/constants";
 
 type TvGenreScreenRouteProp = RouteProp<RootStackParamList, 'MovieGenre'>;
 
@@ -16,7 +17,8 @@ function TvGenreScreen(): JSX.Element {
 
   const {error, isPending, isSuccess, data } = useQuery({
     queryKey: ['genre-tv', category.id],
-    queryFn: () => client?.search.getDiscoverTvGenre(category.id.toString())
+    queryFn: () => client?.search.getDiscoverTvGenre(category.id.toString()),
+		refetchInterval: DEFAULT_REFETCH_INTERVAL
   })
 
   const onPress = (item: TvResult) => {
@@ -25,6 +27,9 @@ function TvGenreScreen(): JSX.Element {
 
   return(
     <SafeAreaView>
+			{isPending &&
+				<ActivityIndicator size="large" style={{ paddingTop: 30 }} />
+			}
       {isSuccess && data?.results?.length &&
         <TvList
           tv={data?.results}
@@ -33,7 +38,7 @@ function TvGenreScreen(): JSX.Element {
         />
       }
     </SafeAreaView>
-  ) 
+  )
 }
 
 const styles = StyleSheet.create({

@@ -1,10 +1,11 @@
-import { SafeAreaView, Text, StyleSheet } from "react-native";
+import { SafeAreaView, Text, StyleSheet, ActivityIndicator } from "react-native";
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useQuery } from "@tanstack/react-query";
 import { RootStackParamList } from '../../App';
 import useAppStore from '../../lib/store';
 import MovieList from "../../components/MovieList/MovieList";
 import { MovieResult } from "../../lib/OverseerrClient";
+import { DEFAULT_REFETCH_INTERVAL } from "../../lib/constants";
 
 type MovieGenreScreenRouteProp = RouteProp<RootStackParamList, 'MovieGenre'>;
 
@@ -16,7 +17,8 @@ function MovieGenreScreen(): JSX.Element {
 
   const {error, isPending, isSuccess, data } = useQuery({
     queryKey: ['genre-movies', category.id],
-    queryFn: () => client?.search.getDiscoverMoviesGenre(category.id.toString())
+    queryFn: () => client?.search.getDiscoverMoviesGenre(category.id.toString()),
+		refetchInterval: DEFAULT_REFETCH_INTERVAL
   })
 
   const onPress = (item: MovieResult) => {
@@ -25,6 +27,9 @@ function MovieGenreScreen(): JSX.Element {
 
   return(
     <SafeAreaView>
+			{isPending &&
+				<ActivityIndicator size="large" style={{ paddingTop: 30 }} />
+			}
       {isSuccess && data?.results?.length &&
         <MovieList
           movies={data?.results}
@@ -33,7 +38,7 @@ function MovieGenreScreen(): JSX.Element {
         />
       }
     </SafeAreaView>
-  ) 
+  )
 }
 
 const styles = StyleSheet.create({
