@@ -7,7 +7,7 @@ import { OverseerrClient } from '../../lib/OverseerrClient';
 
 function SettingsScreen(): JSX.Element {
 	const navigation = useNavigation()
-	const { apiKey, apiAddress, setApiAddress, setApiKey } = useAppStore()
+	const { apiKey, apiAddress, setApiAddress, setApiKey, setOverseerClient } = useAppStore()
 	const [key, setKey] = useState<string>(apiKey)
 	const [address, setAddress] = useState<string>(apiAddress)
 	const [isValid, setIsValid] = useState<boolean>(false)
@@ -32,7 +32,12 @@ function SettingsScreen(): JSX.Element {
 	function save() {
 		setApiKey(key)
 		setApiAddress(address)
-		navigation.goBack()
+		setOverseerClient()
+		if (navigation.canGoBack()) {
+			navigation.goBack()
+		} else {
+			navigation.navigate('Discovery')
+		}
 	}
 
 	return (
@@ -45,6 +50,7 @@ function SettingsScreen(): JSX.Element {
 						onChangeText={setKey}
 						style={style.input}
 						placeholder='API Key from Overseerr'
+						placeholderTextColor="#000000"
 					/>
 					<Text style={style.label}>Server IP Address:</Text>
 					<TextInput
@@ -75,7 +81,9 @@ const style = StyleSheet.create({
 	input: {
 		marginBottom: 20,
 		fontSize: 38,
-		height: 68,
+		height: 80,
+		borderRadius: 10,
+		backgroundColor: '#DDDDDD'
 	},
 	buttonRow: {
 		marginTop: 40,

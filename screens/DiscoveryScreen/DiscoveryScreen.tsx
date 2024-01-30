@@ -35,7 +35,8 @@ function DiscoveryScreen(): JSX.Element {
   }
 
   if (!client) {
-    return (<Text>Overseerr Client not instantiated</Text>)
+    navigation.navigate('Settings')
+		return <></>
   }
 
   const {error: popularMoviesError, isPending: popularMoviesPending, isSuccess: popularMoviesSuccess, data: popularMoviesData } = useQuery({

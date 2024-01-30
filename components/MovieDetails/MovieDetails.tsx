@@ -1,5 +1,5 @@
 import { Image, Text, View, StyleSheet, Pressable } from "react-native"
-import TvButton from "../TvButton/TvButton"
+import TvButton, { TvButtonType } from "../TvButton/TvButton"
 import { MovieDetails as MovieDetailsType } from "../../lib/OverseerrClient"
 import { TMDB_IMAGE_URL } from "../../lib/constants"
 import { formatDollars, trunc } from "../../lib/utils"
@@ -35,7 +35,7 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movie, canRequest = false, 
 	const movieData = []
 	const mediaStatus = mediaInfo?.status
 
-	if (directors?.length) movieData.push({ title: 'Director(s)', value: directors.join(', ') })
+	if (directors?.length) movieData.push({ title: 'Director(s)', value: directors.join('\n') })
 	if (cast?.length) movieData.push({ title: 'Cast', value: cast.join('\n') })
 	if (originalLanguage) movieData.push({ title: 'Original Language', value: languageMap[originalLanguage] })
 	if (status) movieData.push({ title: 'Status', value: status })
@@ -81,7 +81,7 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movie, canRequest = false, 
 			<View style={style.contentRight}>
 				{canRequest &&
 					<View style={style.request}>
-						<TvButton title="Request" onPress={onRequest} />
+						<TvButton title="Request" onPress={onRequest} type={TvButtonType.cancel} />
 					</View>
 				}
 				{movieData.length &&
@@ -179,7 +179,7 @@ const style = StyleSheet.create({
 		borderRadius: 10,
 		display: 'flex',
 		flexDirection: 'column',
-		minWidth: 550,
+		width: 550,
 	},
 	contentRightItem: {
 		display: 'flex',
