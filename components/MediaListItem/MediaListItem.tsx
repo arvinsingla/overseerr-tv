@@ -39,7 +39,7 @@ const MediaListItem: React.FC<MediaListItemProps> = ({ media, onPress }) => {
         <MediaPill type={mediaType as MediaType} />
         {mediaInfo?.status === 5 &&
           <View style={styles.availability}>
-            <Image source={require('./img/green-check.png')} style={{ width: 25, height: 15}} />
+            <Image source={require('./img/green-check.png')} style={{ width: 20, height: 10}} />
           </View>
         }
       </View>

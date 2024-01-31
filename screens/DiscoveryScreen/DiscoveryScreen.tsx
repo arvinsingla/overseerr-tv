@@ -39,24 +39,24 @@ function DiscoveryScreen(): JSX.Element {
 		return <></>
   }
 
-  const {error: popularMoviesError, isPending: popularMoviesPending, isSuccess: popularMoviesSuccess, data: popularMoviesData } = useQuery({
+  const {isSuccess: popularMoviesSuccess, data: popularMoviesData } = useQuery({
     queryKey: ['popular-movies'],
     queryFn: () => client.search.getDiscoverMovies(),
 		refetchInterval: DEFAULT_REFETCH_INTERVAL
   })
-  const {error: popularTvError, isPending: popularTvPending, isSuccess: popularTvSuccess, data: popularTvData } = useQuery({
+  const {isSuccess: popularTvSuccess, data: popularTvData } = useQuery({
     queryKey: ['popular-tv'],
     queryFn: () => client.search.getDiscoverTv(),
 		refetchInterval: DEFAULT_REFETCH_INTERVAL
   })
 
-  const {error: upcomingMoviesError, isPending: upcomingMoviesPending, isSuccess: upcomingMoviesSuccess, data: upcomingMoviesData } = useQuery({
+  const {isSuccess: upcomingMoviesSuccess, data: upcomingMoviesData } = useQuery({
     queryKey: ['upcoming-movies'],
     queryFn: () => client.search.getDiscoverMoviesUpcoming(),
 		refetchInterval: DEFAULT_REFETCH_INTERVAL
   })
 
-  const {error: upcomingTvError, isPending: upcomingTvPending, isSuccess: upcomingTvSuccess, data: upcomingTvData } = useQuery({
+  const {isSuccess: upcomingTvSuccess, data: upcomingTvData } = useQuery({
     queryKey: ['upcoming-tv'],
     queryFn: () => client.search.getDiscoverTvUpcoming(),
 		refetchInterval: DEFAULT_REFETCH_INTERVAL

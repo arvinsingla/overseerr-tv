@@ -39,13 +39,13 @@ const Header: React.FC<HeaderProps> = ({ header}) => {
             <Image source={require('./img/logo.png')} />
             {!isSettingsPage &&
                 <TouchableOpacity
-                    activeOpacity={0.6}
+                    activeOpacity={1}
                     tvParallaxProperties={{
                         enabled: true,
                         magnification: 1.1,
                         tiltAngle: 0
                     }}
-                    style={{ opacity: 1 }}
+                    style={{ opacity: 0.5 }}
                     onPress={onPress}
                 >
                     {userData?.avatar &&

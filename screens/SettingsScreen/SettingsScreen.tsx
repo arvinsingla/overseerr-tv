@@ -4,6 +4,15 @@ import useAppStore from '../../lib/store';
 import { View, Text, TextInput, StyleSheet, SafeAreaView, Alert } from "react-native";
 import TvButton from '../../components/TvButton/TvButton'
 import { OverseerrClient } from '../../lib/OverseerrClient';
+import {
+	CONNECTION_FAILD,
+	CONNECTION_SUCCESSFUL,
+	SETTINGS_ADDRESS,
+	SETTINGS_ADDRESS_PLACEHOLDER,
+	SETTINGS_HELP,
+	SETTINGS_KEY,
+	SETTINGS_KEY_PLACEHOLDER
+} from '../../lib/constants';
 
 function SettingsScreen(): JSX.Element {
 	const navigation = useNavigation()
@@ -23,9 +32,9 @@ function SettingsScreen(): JSX.Element {
 		try {
 			await overseerrClient.settings.getSettingsAbout()
 			setIsValid(true)
-			Alert.alert('Successfully connected ✅')
+			Alert.alert(CONNECTION_SUCCESSFUL)
 		} catch (e) {
-			Alert.alert('Oops... Something went wrong connecting to Overseerr. Please check your settings and try again')
+			Alert.alert(CONNECTION_FAILD)
 		}
 	}
 
@@ -43,21 +52,22 @@ function SettingsScreen(): JSX.Element {
 	return (
 		<SafeAreaView>
 			<View style={style.wrapper}>
+				<Text style={style.title}>{SETTINGS_HELP}</Text>
 				<View>
-					<Text style={style.label}>API Key:</Text>
+					<Text style={style.label}>{SETTINGS_KEY}</Text>
 					<TextInput
 						value={key}
 						onChangeText={setKey}
 						style={style.input}
-						placeholder='API Key from Overseerr'
+						placeholder={SETTINGS_KEY_PLACEHOLDER}
 						placeholderTextColor="#000000"
 					/>
-					<Text style={style.label}>Server IP Address:</Text>
+					<Text style={style.label}>{SETTINGS_ADDRESS}</Text>
 					<TextInput
 						value={address}
 						onChangeText={setAddress}
 						style={style.input}
-						placeholder='IP Address (e.g. 192.168.10.100)'
+						placeholder={SETTINGS_ADDRESS_PLACEHOLDER}
 						keyboardType='numeric'
 					/>
 				</View>
@@ -90,6 +100,14 @@ const style = StyleSheet.create({
 		display: 'flex',
 		flexDirection: 'row',
 		justifyContent: 'space-around'
+	},
+	title: {
+		padding: 30,
+		backgroundColor: '#1E2836',
+		color: '#ffffff',
+		fontSize: 38,
+		alignContent: 'center',
+		marginBottom: 30,
 	}
 })
 

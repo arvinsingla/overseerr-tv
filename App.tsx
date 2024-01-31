@@ -35,10 +35,8 @@ const Stack = createNativeStackNavigator<RootStackParamList>()
 const queryClient = new QueryClient()
 
 function App(): JSX.Element {
-  const { apiKey, apiAddress, setOverseerClient } = useAppStore()
+  const { apiKey, apiAddress } = useAppStore()
   const hasServerSettings = apiKey && apiAddress
-  // Instantiate the Overseerr client in the store
-  setOverseerClient()
   return (
     <QueryClientProvider client={queryClient}>
       <NavigationContainer>
