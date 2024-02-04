@@ -43,6 +43,7 @@ function SettingsScreen(): JSX.Element {
 		setApiAddress(address)
 		setOverseerClient()
 		if (navigation.canGoBack()) {
+			console.log('We entered canGoBack')
 			navigation.goBack()
 		} else {
 			navigation.navigate('Discovery')
