@@ -46,18 +46,14 @@ function App(): JSX.Element {
             header: (props) => <Header header={props} />
           }}
         >
-          <Stack.Group>
-            <Stack.Screen name="Discovery" component={DiscoveryScreen} />
-            <Stack.Screen name="Movie" component={MovieScreen} />
-            <Stack.Screen name="Tv" component={TvScreen} />
-            <Stack.Screen name="MovieGenre" component={MovieGenreScreen} />
-            <Stack.Screen name="TvGenre" component={TvGenreScreen} />
-            <Stack.Screen name="Studio" component={StudioScreen} />
-            <Stack.Screen name="Network" component={NetworkScreen} />
-          </Stack.Group>
-          <Stack.Group screenOptions={{ presentation: 'modal' }}>
-            <Stack.Screen name="Settings" component={SettingsScreen} />
-          </Stack.Group>
+					<Stack.Screen name="Discovery" component={DiscoveryScreen} />
+					<Stack.Screen name="Movie" component={MovieScreen} />
+					<Stack.Screen name="Tv" component={TvScreen} />
+					<Stack.Screen name="MovieGenre" component={MovieGenreScreen} />
+					<Stack.Screen name="TvGenre" component={TvGenreScreen} />
+					<Stack.Screen name="Studio" component={StudioScreen} />
+					<Stack.Screen name="Network" component={NetworkScreen} />
+					<Stack.Screen name="Settings" component={SettingsScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </QueryClientProvider>

@@ -12,8 +12,7 @@ interface AppState {
     setUser: (user: User) => void
     setRadarr: (settings: RadarrSettings[]) => void
     setSonarr: (settings: SonarrSettings[]) => void
-    setApiKey: (key: string) => void
-    setApiAddress: (address: string) => void
+		setClientConfig: (key: string, address: string) => void
     setOverseerClient: (key?: string, address?: string) => void
 }
 
@@ -38,27 +37,26 @@ const useAppStore = create<AppState>()((set) => ({
     apiKey: Settings.get('apiKey'),
     apiAddress: Settings.get('apiAddress'),
     client: instantiateClient(),
-    setApiKey: (key) => {
-      Settings.set({ apiKey: key })
-      set(() => ({ apiKey: key}))
-    },
-    setApiAddress: (address) => {
-      Settings.set({ apiAddress: address})
-      set(() => ({ apiAddress: address}))
-    },
-    setOverseerClient: () => {
-      const client = instantiateClient()
-      Settings.set({ client })
-    },
     setUser: (user) => {
-      set(() => ({ user }))
+			set(() => ({ user }))
     },
     setRadarr: (settings) => {
-      set(() => ({ radarr: settings }))
+			set(() => ({ radarr: settings }))
     },
     setSonarr: (settings) => {
-      set(() => ({ sonarr: settings }))
+			set(() => ({ sonarr: settings }))
     },
+		setClientConfig: (key: string, address: string) => {
+			Settings.set({ apiKey: key })
+			Settings.set({ apiAddress: address})
+			set(() => ({ apiAddress: address, apiKey: key}))
+		},
+		setOverseerClient: (key?: string, address?: string) => {
+			Settings.set({ apiKey: key })
+			Settings.set({ apiAddress: address})
+			const client = key && address ? instantiateClient(key, address) : instantiateClient()
+			set(() => ({ apiAddress: address, apiKey: key, client}))
+		},
 }))
 
 export default useAppStore

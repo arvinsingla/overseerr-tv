@@ -13,10 +13,11 @@ import {
 	SETTINGS_KEY,
 	SETTINGS_KEY_PLACEHOLDER
 } from '../../lib/constants';
+import { TvButtonType } from '../../components/TvButton/TvButton';
 
 function SettingsScreen(): JSX.Element {
 	const navigation = useNavigation()
-	const { apiKey, apiAddress, setApiAddress, setApiKey, setOverseerClient } = useAppStore()
+	const { apiKey, apiAddress, setClientConfig, setOverseerClient } = useAppStore()
 	const [key, setKey] = useState<string>(apiKey)
 	const [address, setAddress] = useState<string>(apiAddress)
 	const [isValid, setIsValid] = useState<boolean>(false)
@@ -39,15 +40,20 @@ function SettingsScreen(): JSX.Element {
 	}
 
 	function save() {
-		setApiKey(key)
-		setApiAddress(address)
-		setOverseerClient()
+		setOverseerClient(key, address)
 		if (navigation.canGoBack()) {
 			console.log('We entered canGoBack')
 			navigation.goBack()
 		} else {
+			console.log('We entered the else')
 			navigation.navigate('Discovery')
 		}
+	}
+
+	function clear() {
+		setClientConfig('', '')
+		setAddress('')
+		setKey('')
 	}
 
 	return (
@@ -74,7 +80,8 @@ function SettingsScreen(): JSX.Element {
 				</View>
 				<View style={style.buttonRow}>
 					<TvButton disabled={!key && !address} onPress={test} title="Test" />
-					<TvButton disabled={!isValid} onPress={save} title="Save" />
+					<TvButton disabled={!key && !address} onPress={clear} type={TvButtonType.destructive} title="Clear" />
+					<TvButton disabled={!isValid} onPress={save} type={TvButtonType.cancel} title="Save" />
 				</View>
 			</View>
 		</SafeAreaView>

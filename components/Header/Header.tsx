@@ -11,17 +11,13 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ header}) => {
     const navigation = useNavigation()
-    const { client, setUser, setRadarr, setSonarr } = useAppStore()
+    const { client, setUser } = useAppStore()
     const { route } = header
     const isSettingsPage = route.name === "Settings"
 
-    if (!client) {
-        return null
-    }
-
     const {data: userData } = useQuery({
         queryKey: ['user'],
-        queryFn: () => client.auth.getAuthMe()
+        queryFn: () => client?.auth.getAuthMe()
     })
 
     useEffect(() => {

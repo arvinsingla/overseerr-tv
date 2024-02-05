@@ -1,4 +1,4 @@
-import { View, ScrollView, StyleSheet, SafeAreaView, Text } from "react-native";
+import { View, ScrollView, StyleSheet, SafeAreaView, Text, ActivityIndicator } from "react-native";
 import { useQuery } from '@tanstack/react-query'
 import { useNavigation } from "@react-navigation/native";
 import { MovieResult, TvResult } from '../../lib/OverseerrClient'
@@ -35,30 +35,29 @@ function DiscoveryScreen(): JSX.Element {
   }
 
   if (!client) {
-    navigation.navigate('Settings')
-		return <></>
+		return <ActivityIndicator size="large" style={{ paddingTop: 30 }} />
   }
 
   const {isSuccess: popularMoviesSuccess, data: popularMoviesData } = useQuery({
     queryKey: ['popular-movies'],
-    queryFn: () => client.search.getDiscoverMovies(),
+    queryFn: () => client?.search.getDiscoverMovies(),
 		refetchInterval: DEFAULT_REFETCH_INTERVAL
   })
   const {isSuccess: popularTvSuccess, data: popularTvData } = useQuery({
     queryKey: ['popular-tv'],
-    queryFn: () => client.search.getDiscoverTv(),
+    queryFn: () => client?.search.getDiscoverTv(),
 		refetchInterval: DEFAULT_REFETCH_INTERVAL
   })
 
   const {isSuccess: upcomingMoviesSuccess, data: upcomingMoviesData } = useQuery({
     queryKey: ['upcoming-movies'],
-    queryFn: () => client.search.getDiscoverMoviesUpcoming(),
+    queryFn: () => client?.search.getDiscoverMoviesUpcoming(),
 		refetchInterval: DEFAULT_REFETCH_INTERVAL
   })
 
   const {isSuccess: upcomingTvSuccess, data: upcomingTvData } = useQuery({
     queryKey: ['upcoming-tv'],
-    queryFn: () => client.search.getDiscoverTvUpcoming(),
+    queryFn: () => client?.search.getDiscoverTvUpcoming(),
 		refetchInterval: DEFAULT_REFETCH_INTERVAL
   })
 
