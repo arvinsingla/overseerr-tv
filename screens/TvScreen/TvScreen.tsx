@@ -14,6 +14,7 @@ function TvScreen(): JSX.Element {
   const navigation = useNavigation()
   const { client } = useAppStore()
   const { item } = route.params
+	let canRequest = false
 
   const {error, isPending, isSuccess, data, refetch } = useQuery({
     queryKey: ['tv', item.id],
@@ -24,6 +25,17 @@ function TvScreen(): JSX.Element {
     queryKey: ['tvSimilar', item.id],
     queryFn: () => client?.tv.getTvSimilar(item.id)
   })
+
+	const { data: sonarrData } = useQuery({
+		queryKey: ['sonarr'],
+		queryFn: () => client?.service.getServiceSonarr(),
+	})
+
+	if (data?.mediaInfo?.status === 1 || data?.mediaInfo?.status === undefined) {
+		if (sonarrData?.length) {
+			canRequest = true
+		}
+	}
 
   const submitRequest = () => {
 		Alert.alert(
@@ -67,7 +79,7 @@ function TvScreen(): JSX.Element {
           <ActivityIndicator size="large" style={{ paddingTop: 30 }} />
         }
         {isSuccess && data &&
-          <TvDetails tv={data} onRequest={submitRequest} />
+          <TvDetails tv={data} canRequest={canRequest} onRequest={submitRequest} />
         }
         {similarIsSuccess && similarData?.results &&
           <View>

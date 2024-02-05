@@ -1,3 +1,5 @@
+import { RelatedVideo } from "./OverseerrClient";
+
 export function trunc(str: string, length: number, elipses: boolean = false): string {
     if (str.length > length) {
         if (elipses) {
@@ -23,4 +25,15 @@ export function formatDollars(dollars: number) {
     }
 
     return '$' + result;
+}
+
+export function getTrailerURLFromRelatedVideos(relatedVideos: RelatedVideo[]) {
+	if (!relatedVideos.length) {
+		return ''
+	}
+	const key = relatedVideos.find((video) => video.type === "Trailer" && video.site === "YouTube" ? true : false)?.key ?? ''
+	if (key) {
+		return `youtube://watch/${key}`
+	}
+	return ''
 }

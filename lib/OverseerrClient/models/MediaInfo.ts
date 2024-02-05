@@ -14,5 +14,7 @@ export type MediaInfo = {
     readonly requests?: Array<MediaRequest>;
     readonly createdAt?: string;
     readonly updatedAt?: string;
+		readonly iOSPlexUrl?: string;
+		readonly downloadStatus?: string[]
 };
 

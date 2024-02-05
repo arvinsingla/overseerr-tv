@@ -13,6 +13,7 @@ import type { ProductionCompany } from './ProductionCompany';
 import type { Season } from './Season';
 import type { SpokenLanguage } from './SpokenLanguage';
 import type { WatchProviders } from './WatchProviders';
+import type { RelatedVideo } from './RelatedVideo';
 export type TvDetails = {
     id?: number;
     backdropPath?: string;
@@ -67,5 +68,6 @@ export type TvDetails = {
     keywords?: Array<Keyword>;
     mediaInfo?: MediaInfo;
     watchProviders?: Array<WatchProviders>;
+		relatedVideos?: Array<RelatedVideo>;
 };
 

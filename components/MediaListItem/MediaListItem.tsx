@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, Image, StyleSheet, Animated, TouchableOpacity } from 'react-native'
+import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native'
 import { MovieResult, TvResult } from '../../lib/OverseerrClient'
 import MediaPill from '../MediaPill/MediaPill'
 import { MediaType } from '../../lib/types'
@@ -39,9 +39,19 @@ const MediaListItem: React.FC<MediaListItemProps> = ({ media, onPress }) => {
         <MediaPill type={mediaType as MediaType} />
         {mediaInfo?.status === 5 &&
           <View style={styles.availability}>
-            <Image source={require('./img/green-check.png')} style={{ width: 20, height: 10}} />
+            <Image source={require('./img/green-check.png')} style={{ width: 20, height: 15}} />
           </View>
         }
+        {mediaInfo?.status === 4 &&
+          <View style={styles.availability}>
+            <Image source={require('./img/green-line.png')} style={{ width: 20, height: 3}} />
+          </View>
+        }
+				{mediaInfo?.status === 3 && (mediaInfo?.downloadStatus ?? []).length === 0 &&
+					<View style={styles.requested}>
+						<Image source={require('./img/lavendar-clock.png')} style={{ width: 20, height: 2}} />
+					</View>
+				}
       </View>
       {isFocused &&
         <View style={styles.info}>
@@ -83,6 +93,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     borderRadius: 50,
     borderColor: 'rgba(74,222,128,.8)',
+    borderWidth: 3,
+    width: 35,
+		justifyContent: 'center',
+		alignItems: 'center',
+		display: 'flex',
+		flexDirection: 'row',
+  },
+  requested: {
+    backgroundColor: '#ffffff',
+    borderRadius: 50,
+    borderColor: '#9ec1fb',
     borderWidth: 3,
     width: 35,
 		justifyContent: 'center',

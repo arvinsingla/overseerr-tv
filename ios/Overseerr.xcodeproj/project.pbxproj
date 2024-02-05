@@ -701,7 +701,7 @@
 				ENABLE_TESTABILITY = YES;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "Overseerr-tvOS/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = OverseerrTV;
+				INFOPLIST_KEY_CFBundleDisplayName = overseerrTV;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -741,7 +741,7 @@
 				ENABLE_BITCODE = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "Overseerr-tvOS/Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = OverseerrTV;
+				INFOPLIST_KEY_CFBundleDisplayName = overseerrTV;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

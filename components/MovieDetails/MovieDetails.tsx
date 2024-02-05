@@ -1,8 +1,8 @@
-import { Image, Text, View, StyleSheet, Pressable } from "react-native"
+import { Image, Text, View, StyleSheet, Pressable, Linking, Alert } from "react-native"
 import TvButton, { TvButtonType } from "../TvButton/TvButton"
 import { MovieDetails as MovieDetailsType } from "../../lib/OverseerrClient"
 import { TMDB_IMAGE_URL } from "../../lib/constants"
-import { formatDollars, trunc } from "../../lib/utils"
+import { formatDollars, getTrailerURLFromRelatedVideos, trunc } from "../../lib/utils"
 import { languageMap } from "../../lib/maps"
 import StatusPill from "../StatusPill/StatusPill"
 
@@ -28,12 +28,23 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movie, canRequest = false, 
 		tagline,
 		title,
 		voteAverage,
-		mediaInfo
+		mediaInfo,
+		relatedVideos
 	} = movie
 	const directors = credits?.crew?.filter((crew) => crew.job === DIRECTOR_KEY).map((director) => director.name)
 	const cast = credits?.cast ? credits?.cast.slice(0, 4).map(member => member.name) : []
 	const movieData = []
 	const mediaStatus = mediaInfo?.status
+	const trailerURL = getTrailerURLFromRelatedVideos(relatedVideos ?? [])
+	const plexURL = mediaInfo?.iOSPlexUrl ?? ''
+
+	const play = async (url: string, type: string) => {
+		try {
+			await Linking.openURL(url)
+		} catch (e) {
+			Alert.alert(`Sorry we couldn\'t open the ${type} content`)
+		}
+	}
 
 	if (directors?.length) movieData.push({ title: 'Director(s)', value: directors.join('\n') })
 	if (cast?.length) movieData.push({ title: 'Cast', value: cast.join('\n') })
@@ -49,7 +60,7 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movie, canRequest = false, 
 				<View style={style.header}>
 					<Pressable><Image source={{ uri: `${TMDB_IMAGE_URL}${posterPath}` }} style={style.headerPoster} /></Pressable>
 					<View style={style.headerDetails}>
-						{mediaStatus && <StatusPill status={mediaStatus} />}
+						{mediaStatus && <StatusPill status={mediaStatus} downloadStatus={mediaInfo.downloadStatus} />}
 						<View style={style.HeaderDetailsTitle}>
 							<Text>
 								<Text style={style.headerDetailsTitleMain}>{title}</Text>
@@ -80,8 +91,18 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movie, canRequest = false, 
 			</View>
 			<View style={style.contentRight}>
 				{canRequest &&
-					<View style={style.request}>
+					<View style={style.contentRightButton}>
 						<TvButton title="Request" onPress={onRequest} type={TvButtonType.cancel} />
+					</View>
+				}
+				{trailerURL &&
+					<View style={style.contentRightButton}>
+						<TvButton title="Trailer" onPress={() => play(trailerURL, "YouTube")} type={TvButtonType.default} />
+					</View>
+				}
+				{plexURL &&
+					<View style={style.contentRightButton}>
+						<TvButton title="Play in Plex" onPress={() => play(plexURL, "Plex")} type={TvButtonType.default} />
 					</View>
 				}
 				{movieData.length &&
@@ -121,7 +142,7 @@ const style = StyleSheet.create({
 	contentRight: {
 		display: 'flex',
 		flexDirection: 'column',
-		alignItems: 'center',
+		alignItems: 'flex-end',
 	},
 	header: {
 		display: 'flex',
@@ -160,8 +181,8 @@ const style = StyleSheet.create({
 	HeaderDetailsSubtitleText: {
 		fontSize: 30
 	},
-	request: {
-		marginBottom: 50
+	contentRightButton: {
+		marginBottom: 20
 	},
 	contentLeftTagline: {
 		fontSize: 35,
