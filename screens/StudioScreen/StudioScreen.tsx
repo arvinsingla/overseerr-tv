@@ -1,11 +1,11 @@
-import { ActivityIndicator, Image, SafeAreaView, View } from "react-native";
+import { ActivityIndicator, Image, SafeAreaView, View, useColorScheme } from "react-native";
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useQuery } from "@tanstack/react-query";
 import { RootStackParamList } from '../../App';
 import useAppStore from '../../lib/store';
 import MovieList from "../../components/MovieList/MovieList";
 import { MovieResult } from "../../lib/OverseerrClient";
-import { DEFAULT_REFETCH_INTERVAL, TMDB_IMAGE_URL } from "../../lib/constants";
+import { DEFAULT_REFETCH_INTERVAL, TMDB_IMAGE_URL, TMDB_IMAGE_URL_FILTER} from "../../lib/constants";
 
 type StudioScreenRouteProp = RouteProp<RootStackParamList, 'MovieGenre'>;
 
@@ -14,8 +14,10 @@ function StudioScreen(): JSX.Element {
   const navigation = useNavigation()
   const { client } = useAppStore()
   const { category } = route.params
+	const scheme = useColorScheme()
+	const imgBaseURL = scheme === 'dark' ? TMDB_IMAGE_URL_FILTER : TMDB_IMAGE_URL
 
-  const {error, isPending, isSuccess, data } = useQuery({
+	const {error, isPending, isSuccess, data } = useQuery({
     queryKey: ['studio-movies', category.id],
     queryFn: () => client?.search.getDiscoverMoviesStudio(category.id.toString()),
 		refetchInterval: DEFAULT_REFETCH_INTERVAL,
@@ -25,7 +27,7 @@ function StudioScreen(): JSX.Element {
     navigation.navigate("Movie", { item })
   }
 
-  const uri = `${TMDB_IMAGE_URL}${category.backdrops[0]}`
+  const uri = `${imgBaseURL}${category.backdrops[0]}`
   const header = (
     <View style={{ alignItems: 'center', marginTop: 20, marginBottom: 20 }}>
       <Image

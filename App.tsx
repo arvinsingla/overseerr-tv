@@ -1,7 +1,9 @@
-import { NavigationContainer } from '@react-navigation/native'
+import { useColorScheme } from 'react-native'
+import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import useAppStore from './lib/store'
+import { navigationDarkTheme } from './lib/theme'
 import DiscoveryScreen from './screens/DiscoveryScreen/DiscoveryScreen'
 import SettingsScreen from './screens/SettingsScreen/SettingsScreen'
 import Header from './components/Header/Header'
@@ -37,9 +39,10 @@ const queryClient = new QueryClient()
 function App(): JSX.Element {
   const { apiKey, apiAddress } = useAppStore()
   const hasServerSettings = apiKey && apiAddress
+	const scheme = useColorScheme()
   return (
     <QueryClientProvider client={queryClient}>
-      <NavigationContainer>
+      <NavigationContainer theme={scheme === 'dark' ? navigationDarkTheme : DefaultTheme}>
         <Stack.Navigator
           initialRouteName={hasServerSettings ? 'Discovery' : 'Settings'}
           screenOptions={{

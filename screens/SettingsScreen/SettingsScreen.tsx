@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import useAppStore from '../../lib/store';
-import { View, Text, TextInput, StyleSheet, SafeAreaView, Alert } from "react-native";
+import { View, Text, TextInput, StyleSheet, SafeAreaView, Alert, useColorScheme } from "react-native";
 import TvButton from '../../components/TvButton/TvButton'
 import { OverseerrClient } from '../../lib/OverseerrClient';
 import {
@@ -14,6 +14,7 @@ import {
 	SETTINGS_KEY_PLACEHOLDER
 } from '../../lib/constants';
 import { TvButtonType } from '../../components/TvButton/TvButton';
+import { getTheme } from "../../lib/theme";
 
 function SettingsScreen(): JSX.Element {
 	const navigation = useNavigation()
@@ -21,6 +22,8 @@ function SettingsScreen(): JSX.Element {
 	const [key, setKey] = useState<string>(apiKey)
 	const [address, setAddress] = useState<string>(apiAddress)
 	const [isValid, setIsValid] = useState<boolean>(false)
+	const scheme = useColorScheme()
+	const theme = getTheme(scheme)
 
 	async function test() {
 		// Test the API
@@ -59,17 +62,16 @@ function SettingsScreen(): JSX.Element {
 	return (
 		<SafeAreaView>
 			<View style={style.wrapper}>
-				<Text style={style.title}>{SETTINGS_HELP}</Text>
+				<Text style={[style.title]}>{SETTINGS_HELP}</Text>
 				<View>
-					<Text style={style.label}>{SETTINGS_KEY}</Text>
+					<Text style={[theme.title]}>{SETTINGS_KEY}</Text>
 					<TextInput
 						value={key}
 						onChangeText={setKey}
 						style={style.input}
 						placeholder={SETTINGS_KEY_PLACEHOLDER}
-						placeholderTextColor="#000000"
 					/>
-					<Text style={style.label}>{SETTINGS_ADDRESS}</Text>
+					<Text style={[theme.title]}>{SETTINGS_ADDRESS}</Text>
 					<TextInput
 						value={address}
 						onChangeText={setAddress}
@@ -91,10 +93,6 @@ function SettingsScreen(): JSX.Element {
 const style = StyleSheet.create({
 	wrapper: {
 		paddingTop: 40,
-	},
-	label: {
-		fontSize: 38,
-		lineHeight: 66,
 	},
 	input: {
 		marginBottom: 20,

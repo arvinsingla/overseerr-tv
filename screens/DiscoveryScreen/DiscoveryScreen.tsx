@@ -1,4 +1,4 @@
-import { View, ScrollView, StyleSheet, SafeAreaView, Text, ActivityIndicator } from "react-native";
+import { View, ScrollView, StyleSheet, SafeAreaView, Text, ActivityIndicator, useColorScheme } from "react-native";
 import { useQuery } from '@tanstack/react-query'
 import { useNavigation } from "@react-navigation/native";
 import { MovieResult, TvResult } from '../../lib/OverseerrClient'
@@ -10,10 +10,13 @@ import movieGenres from '../../lib/movieGenres.json'
 import tvGenres from '../../lib/tvGenres.json'
 import MovieList from "../../components/MovieList/MovieList";
 import TvList from "../../components/TvList/TvList";
+import { getTheme } from "../../lib/theme";
 
 function DiscoveryScreen(): JSX.Element {
   const navigation = useNavigation()
   const { client } = useAppStore()
+	const scheme = useColorScheme()
+	const theme = getTheme(scheme)
 
   const handlePressMovie = (item: MovieResult) => {
     navigation.navigate('Movie', { item })
@@ -66,7 +69,7 @@ function DiscoveryScreen(): JSX.Element {
         <ScrollView style={style.wrapper}>
           {popularMoviesSuccess &&
             <View style={style.list}>
-              <Text style={style.title}>Popular Movies</Text>
+              <Text style={[style.title, theme.title]}>Popular Movies</Text>
               <MovieList
                 movies={popularMoviesData?.results || []}
                 onPress={handlePressMovie}
@@ -75,12 +78,12 @@ function DiscoveryScreen(): JSX.Element {
             </View>
           }
           <View style={style.list}>
-            <Text style={style.title}>Movie Genres</Text>
+            <Text style={[style.title, theme.title]}>Movie Genres</Text>
             <HorizontalCategoryList categories={movieGenres} onPress={handlePressMovieGenre} />
           </View>
           {upcomingMoviesSuccess &&
             <View style={style.list}>
-              <Text style={style.title}>Upcoming Movies</Text>
+              <Text style={[style.title, theme.title]}>Upcoming Movies</Text>
               <MovieList
                 movies={upcomingMoviesData?.results || []}
                 onPress={handlePressMovie}
@@ -89,12 +92,12 @@ function DiscoveryScreen(): JSX.Element {
             </View>
           }
           <View style={style.list}>
-            <Text style={style.title}>Studios</Text>
+            <Text style={[style.title, theme.title]}>Studios</Text>
             <HorizontalCategoryList categories={studios} isLogo={true} onPress={handlePressStudio} />
           </View>
           {popularTvSuccess &&
             <View style={style.list}>
-              <Text style={style.title}>Popular Series</Text>
+              <Text style={[style.title, theme.title]}>Popular Series</Text>
               <TvList
                 tv={popularTvData?.results || []}
                 onPress={handlePressTv}
@@ -108,7 +111,7 @@ function DiscoveryScreen(): JSX.Element {
           </View>
           {upcomingTvSuccess &&
             <View style={style.list}>
-              <Text style={style.title}>Upcoming Series</Text>
+              <Text style={[style.title, theme.title]}>Upcoming Series</Text>
               <TvList
                 tv={upcomingTvData?.results || []}
                 onPress={handlePressTv}
@@ -117,7 +120,7 @@ function DiscoveryScreen(): JSX.Element {
             </View>
           }
           <View style={style.list}>
-            <Text style={style.title}>Networks</Text>
+            <Text style={[style.title, theme.title]}>Networks</Text>
             <HorizontalCategoryList categories={networks} isLogo={true} onPress={handlePressNetwork} />
           </View>
         </ScrollView>
@@ -133,8 +136,6 @@ const style = StyleSheet.create({
     marginBottom: 30
   },
   title: {
-    fontSize: 38,
-    lineHeight: 66,
     marginBottom: 20,
   },
 })

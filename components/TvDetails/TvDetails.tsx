@@ -1,10 +1,11 @@
-import { Image, Text, View, StyleSheet, Pressable, Linking, Alert } from "react-native"
+import { Image, Text, View, StyleSheet, Pressable, Linking, Alert, useColorScheme } from "react-native"
 import TvButton, { TvButtonType } from "../TvButton/TvButton"
 import { TvDetails as TvDetailsType } from "../../lib/OverseerrClient"
 import { TMDB_IMAGE_URL } from "../../lib/constants"
 import { languageMap } from "../../lib/maps"
 import StatusPill from "../StatusPill/StatusPill"
 import { getTrailerURLFromRelatedVideos } from "../../lib/utils"
+import { getTheme } from "../../lib/theme";
 
 const DIRECTOR_KEY = 'Director'
 interface TvDetailsProps {
@@ -36,6 +37,9 @@ const TvDetails: React.FC<TvDetailsProps> = ({ tv, canRequest = false, onRequest
 	const trailerURL = getTrailerURLFromRelatedVideos(relatedVideos ?? [])
 	const plexURL = mediaInfo?.iOSPlexUrl ?? ''
 
+	const scheme = useColorScheme()
+	const theme = getTheme(scheme)
+
 	if (directors?.length) tvData.push({ title: 'Director(s)', value: directors.join(', ') })
 	if (cast?.length) tvData.push({ title: 'Cast', value: cast.join('\n') })
 	if (originalLanguage) tvData.push({ title: 'Original Language', value: languageMap[originalLanguage] })
@@ -60,22 +64,22 @@ const TvDetails: React.FC<TvDetailsProps> = ({ tv, canRequest = false, onRequest
 						{mediaStatus && <StatusPill status={mediaStatus} downloadStatus={mediaInfo.downloadStatus} />}
 						<View style={style.HeaderDetailsTitle}>
 							<Text>
-								<Text style={style.headerDetailsTitleMain}>{name}</Text>
+								<Text style={[style.headerDetailsTitleMain, theme.text]}>{name}</Text>
 							</Text>
 						</View>
 						{genres?.length ?
 							<View>
-								<Text style={style.HeaderDetailsSubtitleText}>{genres?.map((item) => item.name).join(', ')}</Text>
+								<Text style={[style.HeaderDetailsSubtitleText, theme.text]}>{genres?.map((item) => item.name).join(', ')}</Text>
 							</View>
 							: null
 						}
 					</View>
 				</View>
-				{tagline && <Text style={style.contentLeftTagline}>{tagline}</Text>}
+				{tagline && <Text style={[style.contentLeftTagline, theme.text]}>{tagline}</Text>}
 				{overview &&
 					<>
-						<Text style={{ fontSize: 40, fontWeight: 'bold' }}>Overview</Text>
-						<Text style={style.contentLeftOverview}>{overview}</Text>
+						<Text style={[{ fontSize: 40, fontWeight: 'bold' }, theme.text]}>Overview</Text>
+						<Text style={[style.contentLeftOverview, theme.text]}>{overview}</Text>
 					</>
 				}
 			</View>
@@ -96,13 +100,13 @@ const TvDetails: React.FC<TvDetailsProps> = ({ tv, canRequest = false, onRequest
 					</View>
 				}
 				{tvData.length &&
-					<View style={style.contentRightTable}>
+					<View style={[style.contentRightTable, theme.border]}>
 						{tvData.map((data, index) => {
 							const isLastItem = index === tvData.length - 1
 							return (
-								<View key={index} style={[style.contentRightItem, { borderBottomWidth: isLastItem ? 0 : 1 }]}>
-									<Text style={[style.bold, style.contentRightItemText]}>{data.title}:</Text>
-									<Text style={style.contentRightItemText}>{data.value}</Text>
+								<View key={index} style={[style.contentRightItem, { borderBottomWidth: isLastItem ? 0 : 1 }, theme.border]}>
+									<Text style={[style.bold, style.contentRightItemText, theme.text]}>{data.title}:</Text>
+									<Text style={[style.contentRightItemText, theme.text]}>{data.value}</Text>
 								</View>
 							)
 						})}

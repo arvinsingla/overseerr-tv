@@ -1,10 +1,10 @@
-import { ActivityIndicator, Image, SafeAreaView, View } from "react-native";
+import { ActivityIndicator, Image, SafeAreaView, View, useColorScheme } from "react-native";
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useQuery } from "@tanstack/react-query";
 import { RootStackParamList } from '../../App';
 import useAppStore from '../../lib/store';
 import { TvResult } from "../../lib/OverseerrClient";
-import { DEFAULT_REFETCH_INTERVAL, TMDB_IMAGE_URL } from "../../lib/constants";
+import { DEFAULT_REFETCH_INTERVAL, TMDB_IMAGE_URL, TMDB_IMAGE_URL_FILTER } from "../../lib/constants";
 import TvList from "../../components/TvList/TvList";
 
 type NetworkScreenRouteProp = RouteProp<RootStackParamList, 'MovieGenre'>;
@@ -14,6 +14,8 @@ function NetworkScreen(): JSX.Element {
   const navigation = useNavigation()
   const { client } = useAppStore()
   const { category } = route.params
+	const scheme = useColorScheme()
+	const imgBaseURL = scheme === 'dark' ? TMDB_IMAGE_URL_FILTER : TMDB_IMAGE_URL
 
   const {error, isPending, isSuccess, data } = useQuery({
     queryKey: ['network-tv', category.id],
@@ -25,7 +27,7 @@ function NetworkScreen(): JSX.Element {
     navigation.navigate("Tv", { item })
   }
 
-  const uri = `${TMDB_IMAGE_URL}${category.backdrops[0]}`
+  const uri = `${imgBaseURL}${category.backdrops[0]}`
   const header = (
     <View style={{ alignItems: 'center', marginTop: 20, marginBottom: 20 }}>
       <Image

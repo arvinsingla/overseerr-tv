@@ -65,11 +65,13 @@ const style = StyleSheet.create({
         verticalAlign: 'middle',
         width: '100%',
         height: 200,
-        backgroundColor: '#1E2836',
+        backgroundColor: '#1E2837',
         paddingTop: 10,
         paddingBottom: 10,
         paddingLeft: 80,
         paddingRight: 80,
+				borderBottomWidth: 1,
+				borderBottomColor: '#374151'
     },
     headerText: {
         fontSize: 60,

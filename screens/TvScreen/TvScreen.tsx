@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, ScrollView, ActivityIndicator, Text, View, Alert } from "react-native";
+import { SafeAreaView, StyleSheet, ScrollView, ActivityIndicator, Text, View, Alert, useColorScheme } from "react-native";
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useQuery } from "@tanstack/react-query";
 import { RootStackParamList } from '../../App';
@@ -6,6 +6,7 @@ import useAppStore from '../../lib/store';
 import TvDetails from "../../components/TvDetails/TvDetails";
 import TvList from "../../components/TvList/TvList";
 import { TvResult } from "../../lib/OverseerrClient";
+import { getTheme } from "../../lib/theme";
 
 type TvScreenRouteProp = RouteProp<RootStackParamList, 'Tv'>;
 
@@ -14,6 +15,9 @@ function TvScreen(): JSX.Element {
   const navigation = useNavigation()
   const { client } = useAppStore()
   const { item } = route.params
+	const scheme = useColorScheme()
+	const theme = getTheme(scheme)
+
 	let canRequest = false
 
   const {error, isPending, isSuccess, data, refetch } = useQuery({
@@ -83,7 +87,7 @@ function TvScreen(): JSX.Element {
         }
         {similarIsSuccess && similarData?.results &&
           <View>
-            <Text style={style.title}>Similar Series</Text>
+            <Text style={[style.title, theme.title]}>Similar Series</Text>
             <TvList tv={similarData.results} isHorizontal={true} onPress={onTvPress} />
           </View>
         }

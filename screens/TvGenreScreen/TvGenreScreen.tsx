@@ -1,4 +1,4 @@
-import { ActivityIndicator, SafeAreaView, StyleSheet, Text } from "react-native";
+import { ActivityIndicator, SafeAreaView, StyleSheet, Text, useColorScheme } from "react-native";
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useQuery } from "@tanstack/react-query";
 import { RootStackParamList } from '../../App';
@@ -6,6 +6,7 @@ import useAppStore from '../../lib/store';
 import TvList from "../../components/TvList/TvList";
 import { TvResult } from "../../lib/OverseerrClient";
 import { DEFAULT_REFETCH_INTERVAL } from "../../lib/constants";
+import { getTheme } from "../../lib/theme";
 
 type TvGenreScreenRouteProp = RouteProp<RootStackParamList, 'MovieGenre'>;
 
@@ -14,6 +15,8 @@ function TvGenreScreen(): JSX.Element {
   const navigation = useNavigation()
   const { client } = useAppStore()
   const { category } = route.params
+	const scheme = useColorScheme()
+	const theme = getTheme(scheme)
 
   const {error, isPending, isSuccess, data } = useQuery({
     queryKey: ['genre-tv', category.id],
@@ -34,7 +37,7 @@ function TvGenreScreen(): JSX.Element {
         <TvList
           tv={data?.results}
           onPress={onPress}
-          header={<Text style={styles.title}>Series: {category.name}</Text>}
+          header={<Text style={[theme.title, styles.title]}>Series: {category.name}</Text>}
         />
       }
     </SafeAreaView>
@@ -43,7 +46,6 @@ function TvGenreScreen(): JSX.Element {
 
 const styles = StyleSheet.create({
   title: {
-    fontWeight: 'bold',
     fontSize: 60,
     marginTop: 20,
     marginBottom: 20,
