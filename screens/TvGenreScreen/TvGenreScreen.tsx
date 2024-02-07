@@ -1,12 +1,12 @@
 import { ActivityIndicator, SafeAreaView, StyleSheet, Text, useColorScheme } from "react-native";
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { RootStackParamList } from '../../App';
 import useAppStore from '../../lib/store';
 import TvList from "../../components/TvList/TvList";
 import { TvResult } from "../../lib/OverseerrClient";
-import { DEFAULT_REFETCH_INTERVAL } from "../../lib/constants";
 import { getTheme } from "../../lib/theme";
+import { useEffect } from "react";
 
 type TvGenreScreenRouteProp = RouteProp<RootStackParamList, 'MovieGenre'>;
 
@@ -18,11 +18,28 @@ function TvGenreScreen(): JSX.Element {
 	const scheme = useColorScheme()
 	const theme = getTheme(scheme)
 
-  const {error, isPending, isSuccess, data } = useQuery({
-    queryKey: ['genre-tv', category.id],
-    queryFn: () => client?.search.getDiscoverTvGenre(category.id.toString()),
-		refetchInterval: DEFAULT_REFETCH_INTERVAL
-  })
+	const queryClient = useQueryClient();
+	const {
+		fetchNextPage,
+		isFetching,
+		data,
+	} = useInfiniteQuery({
+		queryKey: ['genre-tv', category.id],
+		queryFn: ({ pageParam }) => client?.search.getDiscoverTvGenre(category.id.toString(), pageParam),
+		initialPageParam: 1,
+		getNextPageParam: (lastPage) => {
+			if (lastPage?.page && lastPage?.totalPages && lastPage.page < lastPage.totalPages) {
+				return lastPage.page + 1
+			}
+			return undefined
+		},
+	})
+
+	useEffect(() => {
+    return () => {
+      queryClient.removeQueries({ queryKey: ['genre-tv'] });
+    };
+  }, []);
 
   const onPress = (item: TvResult) => {
     navigation.navigate("Tv", { item })
@@ -30,16 +47,17 @@ function TvGenreScreen(): JSX.Element {
 
   return(
     <SafeAreaView>
-			{isPending &&
-				<ActivityIndicator size="large" style={{ paddingTop: 30 }} />
-			}
-      {isSuccess && data?.results?.length &&
+			{data?.pages.length &&
         <TvList
-          tv={data?.results}
+          tv={data?.pages.map((page) => page?.results).flat()}
           onPress={onPress}
           header={<Text style={[theme.title, styles.title]}>Series: {category.name}</Text>}
+					onEndReached={fetchNextPage}
         />
       }
+			{isFetching &&
+				<ActivityIndicator size="large" style={{ paddingTop: 30 }} />
+			}
     </SafeAreaView>
   )
 }

@@ -1,11 +1,12 @@
 import { ActivityIndicator, Image, SafeAreaView, View, useColorScheme } from "react-native";
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { RootStackParamList } from '../../App';
 import useAppStore from '../../lib/store';
 import MovieList from "../../components/MovieList/MovieList";
 import { MovieResult } from "../../lib/OverseerrClient";
-import { DEFAULT_REFETCH_INTERVAL, TMDB_IMAGE_URL, TMDB_IMAGE_URL_FILTER} from "../../lib/constants";
+import { TMDB_IMAGE_URL, TMDB_IMAGE_URL_FILTER} from "../../lib/constants";
+import { useEffect } from "react";
 
 type StudioScreenRouteProp = RouteProp<RootStackParamList, 'MovieGenre'>;
 
@@ -17,11 +18,28 @@ function StudioScreen(): JSX.Element {
 	const scheme = useColorScheme()
 	const imgBaseURL = scheme === 'dark' ? TMDB_IMAGE_URL_FILTER : TMDB_IMAGE_URL
 
-	const {error, isPending, isSuccess, data } = useQuery({
-    queryKey: ['studio-movies', category.id],
-    queryFn: () => client?.search.getDiscoverMoviesStudio(category.id.toString()),
-		refetchInterval: DEFAULT_REFETCH_INTERVAL,
-  })
+	const queryClient = useQueryClient();
+	const {
+		fetchNextPage,
+		isFetching,
+		data,
+	} = useInfiniteQuery({
+		queryKey: ['studio-movies', category.id],
+		queryFn: ({ pageParam }) => client?.search.getDiscoverMoviesStudio(category.id.toString(), pageParam),
+		initialPageParam: 1,
+		getNextPageParam: (lastPage) => {
+			if (lastPage?.page && lastPage?.totalPages && lastPage.page < lastPage.totalPages) {
+				return lastPage.page + 1
+			}
+			return undefined
+		},
+	})
+
+	useEffect(() => {
+    return () => {
+      queryClient.removeQueries({ queryKey: ['studio-movies', category.id] });
+    };
+  }, []);
 
   const onPress = (item: MovieResult) => {
     navigation.navigate("Movie", { item })
@@ -43,16 +61,17 @@ function StudioScreen(): JSX.Element {
 
   return(
     <SafeAreaView>
-			{isPending &&
-				<ActivityIndicator size="large" style={{ paddingTop: 30 }} />
-			}
-      {isSuccess && data?.results?.length &&
+			{data?.pages.length &&
         <MovieList
-          movies={data?.results}
+          movies={data?.pages.map((page) => page?.results).flat()}
           onPress={onPress}
           header={header}
+					onEndReached={fetchNextPage}
         />
       }
+			{isFetching &&
+				<ActivityIndicator size="large" style={{ paddingTop: 30 }} />
+			}
     </SafeAreaView>
   )
 }

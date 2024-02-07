@@ -9,10 +9,11 @@ interface MovieListProps {
   movies: MovieResult[]
   isHorizontal?: boolean
   onPress: (item: MovieResult) => void
+	onEndReached?: () => void
 }
 
-const MovieList: React.FC<MovieListProps> = ({ movies, header, footer, isHorizontal = false, onPress }) => {
-  return (
+const MovieList: React.FC<MovieListProps> = ({ movies, header, footer, isHorizontal = false, onPress, onEndReached = () => {} }) => {
+	return (
     <FlatList
       horizontal={isHorizontal}
       numColumns={isHorizontal ? 1 : 5}
@@ -22,6 +23,7 @@ const MovieList: React.FC<MovieListProps> = ({ movies, header, footer, isHorizon
       style={styles.list}
       data={movies}
       keyExtractor={(item) => item.id.toString()}
+			onEndReached={onEndReached}
       renderItem={({ item }) => {
         return (
           <View

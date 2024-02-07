@@ -20,7 +20,6 @@ const SelectList: React.FC<SelectListProps> = ({ data }) => {
         return (
             <TouchableOpacity
                 onPress={() => setSelectedItem(item)}
-                onFocus={() => console.log(`Focused on ${item.id}`)}
                 style={{ ...styles.item, backgroundColor: selectedItem === item ? 'blue' : 'gray' }}
                 >
                 <Text style={styles.itemText}>{item.label}</Text>

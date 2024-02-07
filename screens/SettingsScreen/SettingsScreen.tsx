@@ -45,10 +45,8 @@ function SettingsScreen(): JSX.Element {
 	function save() {
 		setOverseerClient(key, address)
 		if (navigation.canGoBack()) {
-			console.log('We entered canGoBack')
 			navigation.goBack()
 		} else {
-			console.log('We entered the else')
 			navigation.navigate('Discovery')
 		}
 	}

@@ -57,7 +57,6 @@ function TvScreen(): JSX.Element {
 							})
 							await refetch()
 						} catch (e) {
-							console.log(e)
 							Alert.alert(`Error`, `There was an error submitting your request`)
 						}
 					},

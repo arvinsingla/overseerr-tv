@@ -9,9 +9,10 @@ interface TvListProps {
   tv: TvResult[]
   isHorizontal?: boolean
   onPress: (item: TvResult) => void
+	onEndReached?: () => void
 }
 
-const TvList: React.FC<TvListProps> = ({ tv, header, footer, isHorizontal = false, onPress }) => {
+const TvList: React.FC<TvListProps> = ({ tv, header, footer, isHorizontal = false, onPress, onEndReached = () => {} }) => {
   return (
     <FlatList
       horizontal={isHorizontal}
@@ -22,6 +23,7 @@ const TvList: React.FC<TvListProps> = ({ tv, header, footer, isHorizontal = fals
       style={styles.list}
       data={tv}
       keyExtractor={(item) => item.id.toString()}
+			onEndReached={onEndReached}
       renderItem={({ item }) => {
         return (
           <View
