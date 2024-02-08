@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { Settings } from 'react-native'
 import { OverseerrClient, RadarrSettings, SonarrSettings, User } from './OverseerrClient'
+import { DEFAULT_OVERSEERR_PORT } from './constants'
 
 interface AppState {
     user: User | null
@@ -8,6 +9,7 @@ interface AppState {
     sonarr: SonarrSettings[]
     apiKey: string
     apiAddress: string
+    apiPort: string
     client: OverseerrClient | null
     setUser: (user: User) => void
     setRadarr: (settings: RadarrSettings[]) => void
@@ -16,12 +18,13 @@ interface AppState {
     setOverseerClient: (key?: string, address?: string) => void
 }
 
-const instantiateClient = (apiKey?: string, apiAddress?: string): OverseerrClient | null => {
+const instantiateClient = (apiKey?: string, apiAddress?: string, apiPort?: string): OverseerrClient | null => {
   const key = apiKey ?? Settings.get('apiKey')
   const address = apiAddress ?? Settings.get('apiAddress')
+  const port = apiPort ?? Settings.get('apiPort') ?? DEFAULT_OVERSEERR_PORT
   if (key && address) {
     return new OverseerrClient({
-      BASE: `http://${address}:5055/api/v1`,
+      BASE: `http://${address}:${port}/api/v1`,
       HEADERS: {
         'X-Api-Key': key
       }
@@ -36,6 +39,7 @@ const useAppStore = create<AppState>()((set) => ({
     sonarr: [],
     apiKey: Settings.get('apiKey'),
     apiAddress: Settings.get('apiAddress'),
+    apiPort: Settings.get('apiPort') || DEFAULT_OVERSEERR_PORT,
     client: instantiateClient(),
     setUser: (user) => {
 			set(() => ({ user }))

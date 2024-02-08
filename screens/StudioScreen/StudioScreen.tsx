@@ -7,6 +7,7 @@ import MovieList from "../../components/MovieList/MovieList";
 import { MovieResult } from "../../lib/OverseerrClient";
 import { TMDB_IMAGE_URL, TMDB_IMAGE_URL_FILTER} from "../../lib/constants";
 import { useEffect } from "react";
+import Shrug from "../../components/Shrug/Shrug";
 
 type StudioScreenRouteProp = RouteProp<RootStackParamList, 'MovieGenre'>;
 
@@ -25,7 +26,15 @@ function StudioScreen(): JSX.Element {
 		data,
 	} = useInfiniteQuery({
 		queryKey: ['studio-movies', category.id],
-		queryFn: ({ pageParam }) => client?.search.getDiscoverMoviesStudio(category.id.toString(), pageParam),
+		queryFn: async ({ pageParam }) => {
+			console.log('category id', category.id.toString())
+			try {
+				const queryResult = await client?.search.getDiscoverMoviesStudio(category.id.toString(), pageParam)
+				return queryResult
+			} catch (e) {
+				console.log(e)
+			}
+		},
 		initialPageParam: 1,
 		getNextPageParam: (lastPage) => {
 			if (lastPage?.page && lastPage?.totalPages && lastPage.page < lastPage.totalPages) {
@@ -61,6 +70,9 @@ function StudioScreen(): JSX.Element {
 
   return(
     <SafeAreaView>
+			{!isFetching && !data?.pages.length &&
+				<Shrug />
+			}
 			{data?.pages.length &&
         <MovieList
           movies={data?.pages.map((page) => page?.results).flat()}

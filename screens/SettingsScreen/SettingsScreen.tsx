@@ -7,20 +7,24 @@ import { OverseerrClient } from '../../lib/OverseerrClient';
 import {
 	CONNECTION_FAILD,
 	CONNECTION_SUCCESSFUL,
+	DEFAULT_OVERSEERR_PORT,
 	SETTINGS_ADDRESS,
 	SETTINGS_ADDRESS_PLACEHOLDER,
 	SETTINGS_HELP,
 	SETTINGS_KEY,
-	SETTINGS_KEY_PLACEHOLDER
+	SETTINGS_KEY_PLACEHOLDER,
+	SETTINGS_PORT,
+	SETTINGS_PORT_PLACEHOLDER
 } from '../../lib/constants';
 import { TvButtonType } from '../../components/TvButton/TvButton';
 import { getTheme } from "../../lib/theme";
 
 function SettingsScreen(): JSX.Element {
 	const navigation = useNavigation()
-	const { apiKey, apiAddress, setClientConfig, setOverseerClient } = useAppStore()
+	const { apiKey, apiAddress, apiPort, setClientConfig, setOverseerClient } = useAppStore()
 	const [key, setKey] = useState<string>(apiKey)
 	const [address, setAddress] = useState<string>(apiAddress)
+	const [port, setPort] = useState<string>(apiPort)
 	const [isValid, setIsValid] = useState<boolean>(false)
 	const scheme = useColorScheme()
 	const theme = getTheme(scheme)
@@ -28,7 +32,7 @@ function SettingsScreen(): JSX.Element {
 	async function test() {
 		// Test the API
 		const overseerrClient = new OverseerrClient({
-			BASE: `http://${address}:5055/api/v1`,
+			BASE: `http://${address}:${port}/api/v1`,
 			HEADERS: {
 				'X-Api-Key': key
 			}
@@ -55,6 +59,7 @@ function SettingsScreen(): JSX.Element {
 		setClientConfig('', '')
 		setAddress('')
 		setKey('')
+		setPort(DEFAULT_OVERSEERR_PORT)
 	}
 
 	return (
@@ -77,10 +82,18 @@ function SettingsScreen(): JSX.Element {
 						placeholder={SETTINGS_ADDRESS_PLACEHOLDER}
 						keyboardType='numeric'
 					/>
+					<Text style={[theme.title]}>{SETTINGS_PORT}</Text>
+					<TextInput
+						value={port}
+						onChangeText={setPort}
+						style={style.input}
+						placeholder={SETTINGS_PORT_PLACEHOLDER}
+						keyboardType='numeric'
+					/>
 				</View>
 				<View style={style.buttonRow}>
-					<TvButton disabled={!key && !address} onPress={test} title="Test" />
-					<TvButton disabled={!key && !address} onPress={clear} type={TvButtonType.destructive} title="Clear" />
+					<TvButton disabled={!key && !address && !port} onPress={test} title="Test" />
+					<TvButton disabled={!key && !address && !port} onPress={clear} type={TvButtonType.destructive} title="Clear" />
 					<TvButton disabled={!isValid} onPress={save} type={TvButtonType.cancel} title="Save" />
 				</View>
 			</View>
