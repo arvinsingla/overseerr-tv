@@ -19,6 +19,7 @@
     "react-native": "npm:react-native-tvos@0.73.2-0",
     "react-native-safe-area-context": "^4.8.2",
     "react-native-screens": "^3.29.0",
+    "use-debounce": "^10.0.0",
     "zustand": "^4.4.7"
   },
   "devDependencies": {

@@ -16,6 +16,7 @@ import TvGenreScreen from './screens/TvGenreScreen/TvGenreScreen'
 import StudioScreen from './screens/StudioScreen/StudioScreen'
 import NetworkScreen from './screens/NetworkScreen/NetworkScreen'
 import MediaListScreen from './screens/MediaListScreen/MediaListScreen'
+import SearchScreen from './screens/SearchScreen/SearchScreen'
 
 declare global {
   namespace ReactNavigation {
@@ -26,6 +27,7 @@ declare global {
 export type RootStackParamList = {
   Discovery: undefined
   Settings: undefined
+  Search: undefined
   Movie: { item: MovieResult }
   Tv: { item: TvResult }
   MovieGenre: { category: Category}
@@ -59,6 +61,7 @@ function App(): JSX.Element {
 					<Stack.Screen name="Studio" component={StudioScreen} />
 					<Stack.Screen name="Network" component={NetworkScreen} />
 					<Stack.Screen name="MediaList" component={MediaListScreen} />
+					<Stack.Screen name="Search" component={SearchScreen} />
 					<Stack.Screen name="Settings" component={SettingsScreen} />
         </Stack.Navigator>
       </NavigationContainer>
