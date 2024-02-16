@@ -5,7 +5,7 @@ import { RootStackParamList } from '../../App';
 import useAppStore from '../../lib/store';
 import { TvResult } from "../../lib/OverseerrClient";
 import { TMDB_IMAGE_URL, TMDB_IMAGE_URL_FILTER } from "../../lib/constants";
-import TvList from "../../components/TvList/TvList";
+import MediaList from "../../components/MediaList/MediaList";
 import { useEffect } from "react";
 
 type NetworkScreenRouteProp = RouteProp<RootStackParamList, 'MovieGenre'>;
@@ -61,8 +61,8 @@ function NetworkScreen(): JSX.Element {
   return(
     <SafeAreaView>
 			{data?.pages.length &&
-        <TvList
-          tv={data?.pages.map((page) => page?.results).flat()}
+        <MediaList
+          media={data?.pages.map((page) => page?.results).flat()}
           onPress={onPress}
           header={header}
 					onEndReached={fetchNextPage}

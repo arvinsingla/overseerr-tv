@@ -8,9 +8,9 @@ import { studios, networks } from '../../lib/maps'
 import { DEFAULT_REFETCH_INTERVAL } from "../../lib/constants";
 import movieGenres from '../../lib/movieGenres.json'
 import tvGenres from '../../lib/tvGenres.json'
-import MovieList from "../../components/MovieList/MovieList";
-import TvList from "../../components/TvList/TvList";
+import MediaList from "../../components/MediaList/MediaList";
 import { getTheme } from "../../lib/theme";
+import { MediaType } from "../../lib/types";
 
 function DiscoveryScreen(): JSX.Element {
   const navigation = useNavigation()
@@ -18,12 +18,14 @@ function DiscoveryScreen(): JSX.Element {
 	const scheme = useColorScheme()
 	const theme = getTheme(scheme)
 
-  const handlePressMovie = (item: MovieResult) => {
-    navigation.navigate('Movie', { item })
-  }
-  const handlePressTv = (item: TvResult) => {
-    navigation.navigate('Tv', { item })
-  }
+	const handleMediaPress = (item: MovieResult | TvResult) => {
+		if (item.mediaType === MediaType.movie) {
+			// @ts-ignore
+			navigation.navigate('Movie', { item })
+		} else {
+			navigation.navigate('Tv', { item })
+		}
+	}
   const handlePressTvGenre = (category: Category) => {
     navigation.navigate('TvGenre', { category })
   }
@@ -41,6 +43,11 @@ function DiscoveryScreen(): JSX.Element {
 		return <ActivityIndicator size="large" style={{ paddingTop: 30 }} />
   }
 
+  const {isSuccess: trendingSuccess, data: trendingData } = useQuery({
+    queryKey: ['trending'],
+    queryFn: () => client?.search.getDiscoverTrending(),
+		refetchInterval: DEFAULT_REFETCH_INTERVAL
+  })
   const {isSuccess: popularMoviesSuccess, data: popularMoviesData } = useQuery({
     queryKey: ['popular-movies'],
     queryFn: () => client?.search.getDiscoverMovies(),
@@ -51,13 +58,11 @@ function DiscoveryScreen(): JSX.Element {
     queryFn: () => client?.search.getDiscoverTv(),
 		refetchInterval: DEFAULT_REFETCH_INTERVAL
   })
-
   const {isSuccess: upcomingMoviesSuccess, data: upcomingMoviesData } = useQuery({
     queryKey: ['upcoming-movies'],
     queryFn: () => client?.search.getDiscoverMoviesUpcoming(),
 		refetchInterval: DEFAULT_REFETCH_INTERVAL
   })
-
   const {isSuccess: upcomingTvSuccess, data: upcomingTvData } = useQuery({
     queryKey: ['upcoming-tv'],
     queryFn: () => client?.search.getDiscoverTvUpcoming(),
@@ -67,12 +72,22 @@ function DiscoveryScreen(): JSX.Element {
   return (
       <SafeAreaView>
         <ScrollView style={style.wrapper}>
+          {trendingSuccess &&
+            <View style={style.list}>
+              <Text style={[style.title, theme.title]}>Trending</Text>
+              <MediaList
+                media={trendingData?.results || []}
+                onPress={handleMediaPress}
+                isHorizontal={true}
+              />
+            </View>
+          }
           {popularMoviesSuccess &&
             <View style={style.list}>
               <Text style={[style.title, theme.title]}>Popular Movies</Text>
-              <MovieList
-                movies={popularMoviesData?.results || []}
-                onPress={handlePressMovie}
+              <MediaList
+                media={popularMoviesData?.results || []}
+                onPress={handleMediaPress}
                 isHorizontal={true}
               />
             </View>
@@ -84,9 +99,9 @@ function DiscoveryScreen(): JSX.Element {
           {upcomingMoviesSuccess &&
             <View style={style.list}>
               <Text style={[style.title, theme.title]}>Upcoming Movies</Text>
-              <MovieList
-                movies={upcomingMoviesData?.results || []}
-                onPress={handlePressMovie}
+              <MediaList
+                media={upcomingMoviesData?.results || []}
+                onPress={handleMediaPress}
                 isHorizontal={true}
               />
             </View>
@@ -98,9 +113,9 @@ function DiscoveryScreen(): JSX.Element {
           {popularTvSuccess &&
             <View style={style.list}>
               <Text style={[style.title, theme.title]}>Popular Series</Text>
-              <TvList
-                tv={popularTvData?.results || []}
-                onPress={handlePressTv}
+              <MediaList
+                media={popularTvData?.results || []}
+                onPress={handleMediaPress}
                 isHorizontal={true}
               />
             </View>
@@ -112,9 +127,9 @@ function DiscoveryScreen(): JSX.Element {
           {upcomingTvSuccess &&
             <View style={style.list}>
               <Text style={[style.title, theme.title]}>Upcoming Series</Text>
-              <TvList
-                tv={upcomingTvData?.results || []}
-                onPress={handlePressTv}
+              <MediaList
+                media={upcomingTvData?.results || []}
+                onPress={handleMediaPress}
                 isHorizontal={true}
               />
             </View>

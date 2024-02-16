@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { RootStackParamList } from '../../App';
 import useAppStore from '../../lib/store';
 import TvDetails from "../../components/TvDetails/TvDetails";
-import TvList from "../../components/TvList/TvList";
+import MediaList from "../../components/MediaList/MediaList";
 import { TvResult } from "../../lib/OverseerrClient";
 import { getTheme } from "../../lib/theme";
 
@@ -87,7 +87,7 @@ function TvScreen(): JSX.Element {
         {similarIsSuccess && similarData?.results &&
           <View>
             <Text style={[style.title, theme.title]}>Similar Series</Text>
-            <TvList tv={similarData.results} isHorizontal={true} onPress={onTvPress} />
+            <MediaList media={similarData.results} isHorizontal={true} onPress={onTvPress} />
           </View>
         }
       </ScrollView>

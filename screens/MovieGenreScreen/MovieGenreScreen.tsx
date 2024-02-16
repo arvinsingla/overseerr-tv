@@ -3,8 +3,7 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { RootStackParamList } from '../../App';
 import useAppStore from '../../lib/store';
-import MovieList from "../../components/MovieList/MovieList";
-import { MovieResult } from "../../lib/OverseerrClient";
+import MediaList from "../../components/MediaList/MediaList";
 import { getTheme } from "../../lib/theme";
 import { useEffect } from "react";
 
@@ -41,15 +40,15 @@ function MovieGenreScreen(): JSX.Element {
     };
   }, []);
 
-  const onPress = (item: MovieResult) => {
+  const onPress = (item: any) => {
     navigation.navigate("Movie", { item })
   }
 
   return(
     <SafeAreaView>
       {data?.pages.length &&
-        <MovieList
-          movies={data?.pages.map((page) => page?.results).flat()}
+        <MediaList
+          media={data?.pages.map((page) => page?.results).flat()}
           onPress={onPress}
           header={<Text style={[theme.title, styles.title]}>Movies: {category.name}</Text>}
 					onEndReached={fetchNextPage}

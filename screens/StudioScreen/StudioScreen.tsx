@@ -3,8 +3,7 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { RootStackParamList } from '../../App';
 import useAppStore from '../../lib/store';
-import MovieList from "../../components/MovieList/MovieList";
-import { MovieResult } from "../../lib/OverseerrClient";
+import MediaList from "../../components/MediaList/MediaList";
 import { TMDB_IMAGE_URL, TMDB_IMAGE_URL_FILTER} from "../../lib/constants";
 import { useEffect } from "react";
 import Shrug from "../../components/Shrug/Shrug";
@@ -50,7 +49,7 @@ function StudioScreen(): JSX.Element {
     };
   }, []);
 
-  const onPress = (item: MovieResult) => {
+  const onPress = (item: any) => {
     navigation.navigate("Movie", { item })
   }
 
@@ -74,8 +73,8 @@ function StudioScreen(): JSX.Element {
 				<Shrug />
 			}
 			{data?.pages.length &&
-        <MovieList
-          movies={data?.pages.map((page) => page?.results).flat()}
+        <MediaList
+          media={data?.pages.map((page) => page?.results).flat()}
           onPress={onPress}
           header={header}
 					onEndReached={fetchNextPage}

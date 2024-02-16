@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { RootStackParamList } from '../../App';
 import useAppStore from '../../lib/store';
 import MovieDetails from "../../components/MovieDetails/MovieDetails";
-import MovieList from "../../components/MovieList/MovieList";
+import MediaList from "../../components/MediaList/MediaList";
 import { MovieResult } from "../../lib/OverseerrClient";
 import { getTheme } from "../../lib/theme";
 
@@ -90,8 +90,8 @@ function MovieScreen(): JSX.Element {
 				{similarIsSuccess && similarData?.results &&
 					<View>
 						<Text style={[style.title, theme.title]}>Similar Movies</Text>
-						<MovieList
-							movies={similarData.results}
+						<MediaList
+							media={similarData.results}
 							isHorizontal={true}
 							onPress={onMoviePress}
 						/>

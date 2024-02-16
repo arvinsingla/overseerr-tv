@@ -3,7 +3,7 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { RootStackParamList } from '../../App';
 import useAppStore from '../../lib/store';
-import TvList from "../../components/TvList/TvList";
+import MediaList from "../../components/MediaList/MediaList";
 import { TvResult } from "../../lib/OverseerrClient";
 import { getTheme } from "../../lib/theme";
 import { useEffect } from "react";
@@ -48,8 +48,8 @@ function TvGenreScreen(): JSX.Element {
   return(
     <SafeAreaView>
 			{data?.pages.length &&
-        <TvList
-          tv={data?.pages.map((page) => page?.results).flat()}
+        <MediaList
+          media={data?.pages.map((page) => page?.results).flat()}
           onPress={onPress}
           header={<Text style={[theme.title, styles.title]}>Series: {category.name}</Text>}
 					onEndReached={fetchNextPage}

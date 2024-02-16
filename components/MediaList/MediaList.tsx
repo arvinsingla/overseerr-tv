@@ -1,18 +1,18 @@
 import React from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
-import { MovieResult } from '../../lib/OverseerrClient';
+import { MovieResult, TvResult } from '../../lib/OverseerrClient';
 import MediaListItem from '../MediaListItem/MediaListItem';
 
-interface MovieListProps {
+interface MediaListProps {
   header?: React.ReactElement
   footer?: React.ReactElement
-  movies: MovieResult[]
+  media: (any)[]
   isHorizontal?: boolean
-  onPress: (item: MovieResult) => void
+  onPress: (item: MovieResult|TvResult) => void
 	onEndReached?: () => void
 }
 
-const MovieList: React.FC<MovieListProps> = ({ movies, header, footer, isHorizontal = false, onPress, onEndReached = () => {} }) => {
+const MediaList: React.FC<MediaListProps> = ({ media, header, footer, isHorizontal = false, onPress, onEndReached = () => {} }) => {
 	return (
     <FlatList
       horizontal={isHorizontal}
@@ -21,7 +21,7 @@ const MovieList: React.FC<MovieListProps> = ({ movies, header, footer, isHorizon
       ListHeaderComponent={header}
       ListFooterComponent={footer}
       style={styles.list}
-      data={movies}
+      data={media}
       keyExtractor={(item) => item.id.toString()}
 			onEndReached={onEndReached}
       renderItem={({ item }) => {
@@ -46,4 +46,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default MovieList;
+export default MediaList;
