@@ -15,6 +15,7 @@ import MovieGenreScreen from './screens/MovieGenreScreen/MovieGenreScreen'
 import TvGenreScreen from './screens/TvGenreScreen/TvGenreScreen'
 import StudioScreen from './screens/StudioScreen/StudioScreen'
 import NetworkScreen from './screens/NetworkScreen/NetworkScreen'
+import MediaListScreen from './screens/MediaListScreen/MediaListScreen'
 
 declare global {
   namespace ReactNavigation {
@@ -31,6 +32,7 @@ export type RootStackParamList = {
   TvGenre: { category: Category}
   Network: { category: Category}
   Studio: { category: Category}
+	MediaList: { fetchFn: (page: number) => void, title: string, cacheKey: string }
 }
 
 const Stack = createNativeStackNavigator<RootStackParamList>()
@@ -56,6 +58,7 @@ function App(): JSX.Element {
 					<Stack.Screen name="TvGenre" component={TvGenreScreen} />
 					<Stack.Screen name="Studio" component={StudioScreen} />
 					<Stack.Screen name="Network" component={NetworkScreen} />
+					<Stack.Screen name="MediaList" component={MediaListScreen} />
 					<Stack.Screen name="Settings" component={SettingsScreen} />
         </Stack.Navigator>
       </NavigationContainer>

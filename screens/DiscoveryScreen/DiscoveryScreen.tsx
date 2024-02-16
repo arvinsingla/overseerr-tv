@@ -11,6 +11,7 @@ import tvGenres from '../../lib/tvGenres.json'
 import MediaList from "../../components/MediaList/MediaList";
 import { getTheme } from "../../lib/theme";
 import { MediaType } from "../../lib/types";
+import MoreListItem from "../../components/MoreListItem/MoreListItem";
 
 function DiscoveryScreen(): JSX.Element {
   const navigation = useNavigation()
@@ -18,31 +19,11 @@ function DiscoveryScreen(): JSX.Element {
 	const scheme = useColorScheme()
 	const theme = getTheme(scheme)
 
-	const handleMediaPress = (item: MovieResult | TvResult) => {
-		if (item.mediaType === MediaType.movie) {
-			// @ts-ignore
-			navigation.navigate('Movie', { item })
-		} else {
-			navigation.navigate('Tv', { item })
-		}
-	}
-  const handlePressTvGenre = (category: Category) => {
-    navigation.navigate('TvGenre', { category })
-  }
-  const handlePressNetwork = (category: Category) => {
-    navigation.navigate('Network', { category })
-  }
-  const handlePressMovieGenre = (category: Category) => {
-    navigation.navigate('MovieGenre', { category })
-  }
-  const handlePressStudio = (category: Category) => {
-    navigation.navigate('Studio', { category })
-  }
-
   if (!client) {
 		return <ActivityIndicator size="large" style={{ paddingTop: 30 }} />
   }
 
+	// Discovery screen data fetching
   const {isSuccess: trendingSuccess, data: trendingData } = useQuery({
     queryKey: ['trending'],
     queryFn: () => client?.search.getDiscoverTrending(),
@@ -69,6 +50,71 @@ function DiscoveryScreen(): JSX.Element {
 		refetchInterval: DEFAULT_REFETCH_INTERVAL
   })
 
+	// Query functions to pass to media list screens
+	const trendingScreenQueryFn = (page: number) => {
+		return client?.search.getDiscoverTrending(page)
+	}
+	const moviePopularScreenQueryFn = (page: number) => {
+		return client?.search.getDiscoverMovies(page)
+	}
+	const movieUpcomingScreenQueryFn = (page: number) => {
+		return client?.search.getDiscoverMoviesUpcoming(page)
+	}
+	const tvPopularScreenQueryFn = (page: number) => {
+		return client?.search.getDiscoverTv(page)
+	}
+	const tvUpcomingScreenQueryFn = (page: number) => {
+		return client?.search.getDiscoverTvUpcoming(page)
+	}
+
+	// onPress handlers
+	const handlePressMedia = (item: MovieResult | TvResult) => {
+		if (item.mediaType === MediaType.movie) {
+			// @ts-ignore
+			navigation.navigate('Movie', { item })
+		} else {
+			navigation.navigate('Tv', { item })
+		}
+	}
+  const handlePressTvGenre = (category: Category) => {
+    navigation.navigate('TvGenre', { category })
+  }
+  const handlePressNetwork = (category: Category) => {
+    navigation.navigate('Network', { category })
+  }
+  const handlePressMovieGenre = (category: Category) => {
+    navigation.navigate('MovieGenre', { category })
+  }
+  const handlePressStudio = (category: Category) => {
+    navigation.navigate('Studio', { category })
+  }
+	const handlePressTrending = () => navigation.navigate('MediaList', {
+		title: 'Trending',
+		cacheKey: 'trending-screen',
+		fetchFn: trendingScreenQueryFn
+	})
+	const handlePressMoviePopular = () => navigation.navigate('MediaList', {
+		title: 'Popular Movies',
+		cacheKey: 'popular-movies-screen',
+		fetchFn: moviePopularScreenQueryFn
+	})
+	const handlePressMovieUpcoming = () => navigation.navigate('MediaList', {
+		title: 'Upcoming Movies',
+		cacheKey: 'upcoming-movies-screen',
+		fetchFn: movieUpcomingScreenQueryFn
+	})
+	const handlePressTvPopular = () => navigation.navigate('MediaList', {
+		title: 'Popular Series',
+		cacheKey: 'popular-tv-screen',
+		fetchFn: tvPopularScreenQueryFn
+	})
+	const handlePressTvUpcoming = () => navigation.navigate('MediaList', {
+		title: 'Upcoming Series',
+		cacheKey: 'trending-screen',
+		fetchFn: tvUpcomingScreenQueryFn
+	})
+
+
   return (
       <SafeAreaView>
         <ScrollView style={style.wrapper}>
@@ -77,8 +123,9 @@ function DiscoveryScreen(): JSX.Element {
               <Text style={[style.title, theme.title]}>Trending</Text>
               <MediaList
                 media={trendingData?.results || []}
-                onPress={handleMediaPress}
+                onPress={handlePressMedia}
                 isHorizontal={true}
+								footer={<MoreListItem onPress={handlePressTrending} />}
               />
             </View>
           }
@@ -87,8 +134,9 @@ function DiscoveryScreen(): JSX.Element {
               <Text style={[style.title, theme.title]}>Popular Movies</Text>
               <MediaList
                 media={popularMoviesData?.results || []}
-                onPress={handleMediaPress}
+                onPress={handlePressMedia}
                 isHorizontal={true}
+								footer={<MoreListItem onPress={handlePressMoviePopular} />}
               />
             </View>
           }
@@ -101,8 +149,9 @@ function DiscoveryScreen(): JSX.Element {
               <Text style={[style.title, theme.title]}>Upcoming Movies</Text>
               <MediaList
                 media={upcomingMoviesData?.results || []}
-                onPress={handleMediaPress}
+                onPress={handlePressMedia}
                 isHorizontal={true}
+								footer={<MoreListItem onPress={handlePressMovieUpcoming} />}
               />
             </View>
           }
@@ -115,8 +164,9 @@ function DiscoveryScreen(): JSX.Element {
               <Text style={[style.title, theme.title]}>Popular Series</Text>
               <MediaList
                 media={popularTvData?.results || []}
-                onPress={handleMediaPress}
+                onPress={handlePressMedia}
                 isHorizontal={true}
+								footer={<MoreListItem onPress={handlePressTvPopular} />}
               />
             </View>
           }
@@ -129,8 +179,9 @@ function DiscoveryScreen(): JSX.Element {
               <Text style={[style.title, theme.title]}>Upcoming Series</Text>
               <MediaList
                 media={upcomingTvData?.results || []}
-                onPress={handleMediaPress}
+                onPress={handlePressMedia}
                 isHorizontal={true}
+								footer={<MoreListItem onPress={handlePressTvUpcoming} />}
               />
             </View>
           }
