@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { View, Text, SafeAreaView, TextInput, StyleSheet, ActivityIndicator } from "react-native"
+import { SafeAreaView, TextInput, StyleSheet, ActivityIndicator } from "react-native"
 import { useNavigation } from '@react-navigation/native'
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query"
 import { useDebounce } from "use-debounce"
@@ -13,8 +13,6 @@ function SearchScreen(): JSX.Element {
 	const [searchValue] = useDebounce(searchString, 1000)
 	const navigation = useNavigation()
 	const { client } = useAppStore()
-
-	console.log('searchValue', searchValue)
 
 	const queryClient = useQueryClient()
 	const {
@@ -55,12 +53,11 @@ function SearchScreen(): JSX.Element {
 			onChangeText={setSearchString}
 			style={style.input}
 			placeholder={'Search'}
+			inputMode="search"
 		/>
 	)
 
 	const media = data?.pages ? data?.pages.map((page) => page?.results).flat() : []
-
-	console.log('isFetching', isFetching)
 
 	return (
 		<SafeAreaView>
