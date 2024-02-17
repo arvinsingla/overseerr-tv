@@ -5,6 +5,7 @@
 export type PersonDetails = {
     id?: number;
     name?: string;
+		birthday?: string;
     deathday?: string;
     knownForDepartment?: string;
     alsoKnownAs?: Array<string>;

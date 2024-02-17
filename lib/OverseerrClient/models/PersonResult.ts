@@ -6,6 +6,7 @@ import type { MovieResult } from './MovieResult';
 import type { TvResult } from './TvResult';
 export type PersonResult = {
     id?: number;
+		name?: string;
     profilePath?: string;
     adult?: boolean;
     mediaType?: string;

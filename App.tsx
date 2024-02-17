@@ -9,7 +9,7 @@ import SettingsScreen from './screens/SettingsScreen/SettingsScreen'
 import Header from './components/Header/Header'
 import MovieScreen from './screens/MovieScreen/MovieScreen'
 import TvScreen from './screens/TvScreen/TvScreen'
-import { MovieResult, TvResult } from './lib/OverseerrClient'
+import { MovieResult, PersonResult, TvResult } from './lib/OverseerrClient'
 import { Category } from './components/HorizontalCategoryList/HorizontalCategoryList'
 import MovieGenreScreen from './screens/MovieGenreScreen/MovieGenreScreen'
 import TvGenreScreen from './screens/TvGenreScreen/TvGenreScreen'
@@ -17,6 +17,7 @@ import StudioScreen from './screens/StudioScreen/StudioScreen'
 import NetworkScreen from './screens/NetworkScreen/NetworkScreen'
 import MediaListScreen from './screens/MediaListScreen/MediaListScreen'
 import SearchScreen from './screens/SearchScreen/SearchScreen'
+import PersonScreen from './screens/PersonScreen/PersonScreen'
 
 declare global {
   namespace ReactNavigation {
@@ -30,6 +31,7 @@ export type RootStackParamList = {
   Search: undefined
   Movie: { item: MovieResult }
   Tv: { item: TvResult }
+  Person: { item: PersonResult }
   MovieGenre: { category: Category}
   TvGenre: { category: Category}
   Network: { category: Category}
@@ -56,6 +58,7 @@ function App(): JSX.Element {
 					<Stack.Screen name="Discovery" component={DiscoveryScreen} />
 					<Stack.Screen name="Movie" component={MovieScreen} />
 					<Stack.Screen name="Tv" component={TvScreen} />
+					<Stack.Screen name="Person" component={PersonScreen} />
 					<Stack.Screen name="MovieGenre" component={MovieGenreScreen} />
 					<Stack.Screen name="TvGenre" component={TvGenreScreen} />
 					<Stack.Screen name="Studio" component={StudioScreen} />

@@ -5,7 +5,7 @@ import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query"
 import { useDebounce } from "use-debounce"
 import useAppStore from '../../lib/store'
 import MediaList from "../../components/MediaList/MediaList"
-import { MovieResult, TvResult } from "../../lib/OverseerrClient"
+import { MovieResult, PersonResult, TvResult } from "../../lib/OverseerrClient"
 import { MediaType } from "../../lib/types"
 
 function SearchScreen(): JSX.Element {
@@ -38,12 +38,18 @@ function SearchScreen(): JSX.Element {
     }
   }, [])
 
-	const handlePressMedia = (item: MovieResult | TvResult) => {
-		if (item.mediaType === MediaType.movie) {
-			// @ts-ignore
-			navigation.navigate('Movie', { item })
-		} else {
-			navigation.navigate('Tv', { item })
+	const handlePress = (item: MovieResult | TvResult | PersonResult) => {
+		switch (item.mediaType) {
+			case MediaType.movie:
+				// @ts-ignore
+				navigation.navigate('Movie', { item })
+				break
+			case MediaType.tv:
+				navigation.navigate('Tv', { item })
+				break
+			case MediaType.person:
+				navigation.navigate('Person', { item })
+				break
 		}
 	}
 
@@ -54,6 +60,7 @@ function SearchScreen(): JSX.Element {
 			style={style.input}
 			placeholder={'Search'}
 			inputMode="search"
+			placeholderTextColor="#000000"
 		/>
 	)
 
@@ -64,7 +71,7 @@ function SearchScreen(): JSX.Element {
 			<MediaList
 				header={header}
 				media={media}
-				onPress={handlePressMedia}
+				onPress={handlePress}
 				onEndReached={fetchNextPage}
 			/>
 			{isFetching &&
@@ -81,7 +88,6 @@ const style = StyleSheet.create({
 		fontSize: 38,
 		height: 80,
 		borderRadius: 10,
-		backgroundColor: '#DDDDDD'
 	}
 })
 

@@ -1,14 +1,16 @@
 import React from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
-import { MovieResult, TvResult } from '../../lib/OverseerrClient';
+import { MovieResult, PersonResult, TvResult } from '../../lib/OverseerrClient';
 import MediaListItem from '../MediaListItem/MediaListItem';
+import { MediaType } from '../../lib/types';
+import PersonListItem from '../PersonListItem/PersonListItem';
 
 interface MediaListProps {
   header?: React.ReactElement
   footer?: React.ReactElement
   media: (any)[]
   isHorizontal?: boolean
-  onPress: (item: MovieResult|TvResult) => void
+  onPress: (item: MovieResult|TvResult|PersonResult) => void
 	onEndReached?: () => void
 }
 
@@ -32,7 +34,12 @@ const MediaList: React.FC<MediaListProps> = ({ media, header, footer, isHorizont
                 marginBottom: isHorizontal ? 0 : 50
             }}
           >
-            <MediaListItem media={item} onPress={onPress} />
+						{item.mediaType === MediaType.person &&
+							<PersonListItem person={item} onPress={onPress} />
+						}
+						{item.mediaType !== MediaType.person &&
+							<MediaListItem media={item} onPress={onPress} />
+						}
           </View>
         )
       }}

@@ -29,12 +29,24 @@ const MediaListItem: React.FC<MediaListItemProps> = ({ media, onPress }) => {
         tiltAngle: 0
       }}
     >
-      <Image
-        source={{ uri: `${TMDB_IMAGE_URL}${posterPath}` }}
-        style={[
-          styles.poster,
-          { opacity: isFocused ? 0.3 : 1 }
-        ]} />
+			{posterPath &&
+				<Image
+					source={{ uri: `${TMDB_IMAGE_URL}${posterPath}` }}
+					style={[
+						styles.poster,
+						{ opacity: isFocused ? 0.3 : 1 }
+					]}
+				/>
+			}
+			{!posterPath &&
+				<Image
+				source={require('./img/not-found-logo.png')}
+					style={[
+						styles.poster,
+						{ opacity: isFocused ? 0.3 : 1 }
+					]}
+				/>
+			}
       <View style={styles.header}>
         <MediaPill type={mediaType as MediaType} />
         {mediaInfo?.status === 5 &&
@@ -53,7 +65,7 @@ const MediaListItem: React.FC<MediaListItemProps> = ({ media, onPress }) => {
 					</View>
 				}
       </View>
-      {isFocused &&
+      {(isFocused || !posterPath) &&
         <View style={styles.info}>
           <Text style={styles.infoYear}>{trunc(mediaDate, 4)}</Text>
           <Text style={styles.infoTitle}>{trunc(title, 30, true)}</Text>
