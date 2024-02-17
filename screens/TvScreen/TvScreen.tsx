@@ -5,7 +5,6 @@ import { RootStackParamList } from '../../App';
 import useAppStore from '../../lib/store';
 import TvDetails from "../../components/TvDetails/TvDetails";
 import MediaList from "../../components/MediaList/MediaList";
-import { TvResult } from "../../lib/OverseerrClient";
 import { getTheme } from "../../lib/theme";
 
 type TvScreenRouteProp = RouteProp<RootStackParamList, 'Tv'>;
@@ -20,7 +19,7 @@ function TvScreen(): JSX.Element {
 
 	let canRequest = false
 
-  const {error, isPending, isSuccess, data, refetch } = useQuery({
+  const { isPending, isSuccess, data, refetch } = useQuery({
     queryKey: ['tv', item.id],
     queryFn: () => client?.tv.getTv(item.id)
   })
@@ -71,7 +70,7 @@ function TvScreen(): JSX.Element {
 		)
 	}
 
-  const onTvPress = (item: TvResult) => {
+  const onTvPress = (item: any) => {
     navigation.navigate('Tv', { item })
   }
 
