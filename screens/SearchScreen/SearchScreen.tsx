@@ -29,7 +29,7 @@ function SearchScreen(): JSX.Element {
 			}
 			return undefined
 		},
-		enabled: searchValue ? true: false
+		enabled: searchValue !== '',
 	})
 
 	useEffect(() => {
@@ -45,6 +45,7 @@ function SearchScreen(): JSX.Element {
 				navigation.navigate('Movie', { item })
 				break
 			case MediaType.tv:
+				// @ts-ignore
 				navigation.navigate('Tv', { item })
 				break
 			case MediaType.person:
@@ -64,6 +65,12 @@ function SearchScreen(): JSX.Element {
 		/>
 	)
 
+	const onEndReached = () => {
+		if (searchValue !== '') {
+			fetchNextPage
+		}
+	}
+
 	const media = data?.pages ? data?.pages.map((page) => page?.results).flat() : []
 
 	return (
@@ -72,7 +79,7 @@ function SearchScreen(): JSX.Element {
 				header={header}
 				media={media}
 				onPress={handlePress}
-				onEndReached={fetchNextPage}
+				onEndReached={onEndReached}
 			/>
 			{isFetching &&
 				<ActivityIndicator size="large" style={{ paddingTop: 30 }} />

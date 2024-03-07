@@ -1,7 +1,7 @@
 import { View, ScrollView, StyleSheet, SafeAreaView, Text, ActivityIndicator, useColorScheme } from "react-native";
 import { useQuery } from '@tanstack/react-query'
 import { useNavigation } from "@react-navigation/native";
-import { MovieResult, TvResult } from '../../lib/OverseerrClient'
+import { MovieResult, PersonResult, TvResult } from '../../lib/OverseerrClient'
 import useAppStore from "../../lib/store";
 import HorizontalCategoryList, { Category } from "../../components/HorizontalCategoryList/HorizontalCategoryList";
 import { studios, networks } from '../../lib/maps'
@@ -68,12 +68,22 @@ function DiscoveryScreen(): JSX.Element {
 	}
 
 	// onPress handlers
-	const handlePressMedia = (item: MovieResult | TvResult) => {
-		if (item.mediaType === MediaType.movie) {
-			// @ts-ignore
-			navigation.navigate('Movie', { item })
-		} else {
-			navigation.navigate('Tv', { item })
+	const handlePressMedia = (item: MovieResult | TvResult | PersonResult) => {
+		switch(item.mediaType) {
+			case MediaType.movie:
+				// @ts-ignore
+				navigation.navigate('Movie', { item })
+				break
+			case MediaType.tv:
+				// @ts-ignore
+				navigation.navigate('Tv', { item })
+				break
+			case MediaType.person:
+				// @ts-ignore
+				navigation.navigate('Person', { item })
+				break
+			default:
+				break
 		}
 	}
   const handlePressTvGenre = (category: Category) => {
@@ -113,7 +123,6 @@ function DiscoveryScreen(): JSX.Element {
 		cacheKey: 'trending-screen',
 		fetchFn: tvUpcomingScreenQueryFn
 	})
-
 
   return (
       <SafeAreaView>

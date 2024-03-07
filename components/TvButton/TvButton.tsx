@@ -11,7 +11,7 @@ interface TvButtonProps extends ButtonProps {
 	type?: TvButtonType
 }
 
-const TvButton: React.FC<TvButtonProps> = ({ onPress, title, disabled, type = TvButtonType.default }) => {
+const TvButton: React.FC<TvButtonProps> = ({ onPress, title, disabled, type = TvButtonType.default, ...props }) => {
 	const [isFocused, setIsFocused] = useState<boolean>(false)
 	const handlePress = (event: GestureResponderEvent) => {
 		if (!disabled && onPress) {
@@ -48,6 +48,7 @@ const TvButton: React.FC<TvButtonProps> = ({ onPress, title, disabled, type = Tv
 				magnification: 1.1,
 				tiltAngle: 0
 			}}
+			{...props}
 		>
 			<Text
 				style={[

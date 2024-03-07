@@ -5,6 +5,7 @@ import { RootStackParamList } from '../../App';
 import MediaList from "../../components/MediaList/MediaList";
 import { getTheme } from "../../lib/theme";
 import { useEffect } from "react";
+import { MediaType } from "../../lib/types";
 
 type MediaListScreenRouteProp = RouteProp<RootStackParamList, 'MediaList'>;
 
@@ -39,7 +40,12 @@ function MediaListScreen(): JSX.Element {
   }, []);
 
   const onPress = (item: any) => {
-    navigation.navigate("Movie", { item })
+		if (item.mediaType === MediaType.movie) {
+			// @ts-ignore
+			navigation.navigate('Movie', { item })
+		} else {
+			navigation.navigate('Tv', { item })
+		}
   }
 
   return(

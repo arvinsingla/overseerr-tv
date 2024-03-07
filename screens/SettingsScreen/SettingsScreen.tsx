@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
-import useAppStore from '../../lib/store';
 import { View, Text, TextInput, StyleSheet, SafeAreaView, Alert, useColorScheme } from "react-native";
-import TvButton from '../../components/TvButton/TvButton'
+import useAppStore from '../../lib/store';
+import { getTheme } from "../../lib/theme";
+import { logError } from '../../lib/utils';
 import { OverseerrClient } from '../../lib/OverseerrClient';
+import TvButton from '../../components/TvButton/TvButton'
 import {
 	CONNECTION_FAILD,
 	CONNECTION_SUCCESSFUL,
@@ -17,7 +19,6 @@ import {
 	SETTINGS_PORT_PLACEHOLDER
 } from '../../lib/constants';
 import { TvButtonType } from '../../components/TvButton/TvButton';
-import { getTheme } from "../../lib/theme";
 
 function SettingsScreen(): JSX.Element {
 	const navigation = useNavigation()
@@ -41,7 +42,8 @@ function SettingsScreen(): JSX.Element {
 			await overseerrClient.settings.getSettingsAbout()
 			setIsValid(true)
 			Alert.alert(CONNECTION_SUCCESSFUL)
-		} catch (e) {
+		} catch (e: any) {
+			logError('Settings Test', e)
 			Alert.alert(CONNECTION_FAILD)
 		}
 	}
@@ -56,10 +58,27 @@ function SettingsScreen(): JSX.Element {
 	}
 
 	function clear() {
-		setClientConfig('', '')
-		setAddress('')
-		setKey('')
-		setPort(DEFAULT_OVERSEERR_PORT)
+		Alert.alert(
+			`Clear settings`,
+			`Are you sure you want to clear your settings?`,
+			[
+				{
+					text: 'Confirm',
+					onPress: async () => {
+						setClientConfig('', '')
+						setAddress('')
+						setKey('')
+						setPort(DEFAULT_OVERSEERR_PORT)
+					},
+					style: 'destructive',
+					isPreferred: true
+				},
+				{
+					text: 'Cancel',
+					style: 'cancel'
+				}
+			],
+		)
 	}
 
 	return (
@@ -92,8 +111,8 @@ function SettingsScreen(): JSX.Element {
 					/>
 				</View>
 				<View style={style.buttonRow}>
-					<TvButton disabled={!key && !address && !port} onPress={test} title="Test" />
 					<TvButton disabled={!key && !address && !port} onPress={clear} type={TvButtonType.destructive} title="Clear" />
+					<TvButton disabled={!key && !address && !port} onPress={test} title="Test" />
 					<TvButton disabled={!isValid} onPress={save} type={TvButtonType.cancel} title="Save" />
 				</View>
 			</View>

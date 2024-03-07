@@ -3,10 +3,11 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useQuery } from "@tanstack/react-query";
 import { RootStackParamList } from '../../App';
 import useAppStore from '../../lib/store';
+import { getTheme } from "../../lib/theme";
+import { logError } from '../../lib/utils';
+import { MovieResult } from "../../lib/OverseerrClient";
 import MovieDetails from "../../components/MovieDetails/MovieDetails";
 import MediaList from "../../components/MediaList/MediaList";
-import { MovieResult } from "../../lib/OverseerrClient";
-import { getTheme } from "../../lib/theme";
 
 type MovieScreenRouteProp = RouteProp<RootStackParamList, 'Movie'>;
 
@@ -55,7 +56,8 @@ function MovieScreen(): JSX.Element {
 								mediaId: item.id,
 							})
 							await refetch()
-						} catch (e) {
+						} catch (e: any) {
+							logError('Movie Request', e)
 							Alert.alert(`Error`, `There was an error submitting your request`)
 						}
 					},

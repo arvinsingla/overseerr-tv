@@ -1,4 +1,5 @@
 import { RelatedVideo } from "./OverseerrClient";
+import { ERROR_URL } from "./constants";
 
 export function trunc(str: string, length: number, elipses: boolean = false): string {
     if (str.length > length) {
@@ -36,4 +37,21 @@ export function getTrailerURLFromRelatedVideos(relatedVideos: RelatedVideo[]) {
 		return `youtube://watch/${key}`
 	}
 	return ''
+}
+
+export const logError = (type: string, error: any) => {
+	const text = error.message ? error.message : error.toString();
+	const body = JSON.stringify({
+		type,
+		error: {
+			text,
+		}
+	})
+	return fetch(ERROR_URL, {
+		method: "POST",
+		body,
+		headers: {
+			"Content-Type": "application/json",
+		},
+	});
 }
