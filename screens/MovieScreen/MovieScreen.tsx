@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { RootStackParamList } from '../../App';
 import useAppStore from '../../lib/store';
 import { getTheme } from "../../lib/theme";
-import { logError } from '../../lib/utils';
+import { logError, normalizeSize } from '../../lib/utils';
 import { MovieResult } from "../../lib/OverseerrClient";
 import MovieDetails from "../../components/MovieDetails/MovieDetails";
 import MediaList from "../../components/MediaList/MediaList";
@@ -80,7 +80,7 @@ function MovieScreen(): JSX.Element {
 		<SafeAreaView>
 			<ScrollView style={{ overflow: 'visible' }}>
 				{isPending &&
-					<ActivityIndicator size="large" style={{ paddingTop: 30 }} />
+					<ActivityIndicator size="large" style={{ paddingTop: normalizeSize(30) }} />
 				}
 				{isSuccess && data &&
 					<MovieDetails
@@ -106,9 +106,9 @@ function MovieScreen(): JSX.Element {
 
 const style = StyleSheet.create({
 	title: {
-		fontSize: 38,
-		lineHeight: 66,
-		marginBottom: 20,
+		fontSize: normalizeSize(38),
+		lineHeight: normalizeSize(66),
+		marginBottom: normalizeSize(20),
 	},
 })
 

@@ -12,6 +12,7 @@ import MediaList from "../../components/MediaList/MediaList";
 import { getTheme } from "../../lib/theme";
 import { MediaType } from "../../lib/types";
 import MoreListItem from "../../components/MoreListItem/MoreListItem";
+import { normalizeSize } from "../../lib/utils";
 
 function DiscoveryScreen(): JSX.Element {
   const navigation = useNavigation()
@@ -125,93 +126,93 @@ function DiscoveryScreen(): JSX.Element {
 	})
 
   return (
-      <SafeAreaView>
-        <ScrollView style={style.wrapper}>
-          {trendingSuccess &&
-            <View style={style.list}>
-              <Text style={[style.title, theme.title]}>Trending</Text>
-              <MediaList
-                media={trendingData?.results || []}
-                onPress={handlePressMedia}
-                isHorizontal={true}
-								footer={<MoreListItem onPress={handlePressTrending} />}
-              />
-            </View>
-          }
-          {popularMoviesSuccess &&
-            <View style={style.list}>
-              <Text style={[style.title, theme.title]}>Popular Movies</Text>
-              <MediaList
-                media={popularMoviesData?.results || []}
-                onPress={handlePressMedia}
-                isHorizontal={true}
-								footer={<MoreListItem onPress={handlePressMoviePopular} />}
-              />
-            </View>
-          }
-          <View style={style.list}>
-            <Text style={[style.title, theme.title]}>Movie Genres</Text>
-            <HorizontalCategoryList categories={movieGenres} onPress={handlePressMovieGenre} />
-          </View>
-          {upcomingMoviesSuccess &&
-            <View style={style.list}>
-              <Text style={[style.title, theme.title]}>Upcoming Movies</Text>
-              <MediaList
-                media={upcomingMoviesData?.results || []}
-                onPress={handlePressMedia}
-                isHorizontal={true}
-								footer={<MoreListItem onPress={handlePressMovieUpcoming} />}
-              />
-            </View>
-          }
-          <View style={style.list}>
-            <Text style={[style.title, theme.title]}>Studios</Text>
-            <HorizontalCategoryList categories={studios} isLogo={true} onPress={handlePressStudio} />
-          </View>
-          {popularTvSuccess &&
-            <View style={style.list}>
-              <Text style={[style.title, theme.title]}>Popular Series</Text>
-              <MediaList
-                media={popularTvData?.results || []}
-                onPress={handlePressMedia}
-                isHorizontal={true}
-								footer={<MoreListItem onPress={handlePressTvPopular} />}
-              />
-            </View>
-          }
-          <View style={style.list}>
-            <Text style={style.title}>Series Genres</Text>
-            <HorizontalCategoryList categories={tvGenres} onPress={handlePressTvGenre} />
-          </View>
-          {upcomingTvSuccess &&
-            <View style={style.list}>
-              <Text style={[style.title, theme.title]}>Upcoming Series</Text>
-              <MediaList
-                media={upcomingTvData?.results || []}
-                onPress={handlePressMedia}
-                isHorizontal={true}
-								footer={<MoreListItem onPress={handlePressTvUpcoming} />}
-              />
-            </View>
-          }
-          <View style={style.list}>
-            <Text style={[style.title, theme.title]}>Networks</Text>
-            <HorizontalCategoryList categories={networks} isLogo={true} onPress={handlePressNetwork} />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
+		<ScrollView style={style.wrapper}>
+			{trendingSuccess &&
+				<View style={style.list}>
+					<Text style={[style.title, theme.title]}>Trending</Text>
+					<MediaList
+						media={trendingData?.results || []}
+						onPress={handlePressMedia}
+						isHorizontal={true}
+						footer={<MoreListItem onPress={handlePressTrending} />}
+					/>
+				</View>
+			}
+			{popularMoviesSuccess &&
+				<View style={style.list}>
+					<Text style={[style.title, theme.title]}>Popular Movies</Text>
+					<MediaList
+						media={popularMoviesData?.results || []}
+						onPress={handlePressMedia}
+						isHorizontal={true}
+						footer={<MoreListItem onPress={handlePressMoviePopular} />}
+					/>
+				</View>
+			}
+			<View style={style.list}>
+				<Text style={[style.title, theme.title]}>Movie Genres</Text>
+				<HorizontalCategoryList categories={movieGenres} onPress={handlePressMovieGenre} />
+			</View>
+			{upcomingMoviesSuccess &&
+				<View style={style.list}>
+					<Text style={[style.title, theme.title]}>Upcoming Movies</Text>
+					<MediaList
+						media={upcomingMoviesData?.results || []}
+						onPress={handlePressMedia}
+						isHorizontal={true}
+						footer={<MoreListItem onPress={handlePressMovieUpcoming} />}
+					/>
+				</View>
+			}
+			<View style={style.list}>
+				<Text style={[style.title, theme.title]}>Studios</Text>
+				<HorizontalCategoryList categories={studios} isLogo={true} onPress={handlePressStudio} />
+			</View>
+			{popularTvSuccess &&
+				<View style={style.list}>
+					<Text style={[style.title, theme.title]}>Popular Series</Text>
+					<MediaList
+						media={popularTvData?.results || []}
+						onPress={handlePressMedia}
+						isHorizontal={true}
+						footer={<MoreListItem onPress={handlePressTvPopular} />}
+					/>
+				</View>
+			}
+			<View style={style.list}>
+				<Text style={style.title}>Series Genres</Text>
+				<HorizontalCategoryList categories={tvGenres} onPress={handlePressTvGenre} />
+			</View>
+			{upcomingTvSuccess &&
+				<View style={style.list}>
+					<Text style={[style.title, theme.title]}>Upcoming Series</Text>
+					<MediaList
+						media={upcomingTvData?.results || []}
+						onPress={handlePressMedia}
+						isHorizontal={true}
+						footer={<MoreListItem onPress={handlePressTvUpcoming} />}
+					/>
+				</View>
+			}
+			<View style={style.list}>
+				<Text style={[style.title, theme.title]}>Networks</Text>
+				<HorizontalCategoryList categories={networks} isLogo={true} onPress={handlePressNetwork} />
+			</View>
+		</ScrollView>
   );
 }
 
 const style = StyleSheet.create({
   wrapper: {
-    overflow: 'visible'
+    overflow: 'visible',
+		paddingLeft: normalizeSize(80),
+		paddingRight: normalizeSize(80),
   },
   list: {
-    marginBottom: 30
+    marginBottom: normalizeSize(30)
   },
   title: {
-    marginBottom: 20,
+    marginBottom: normalizeSize(20),
   },
 })
 

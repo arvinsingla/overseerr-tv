@@ -7,6 +7,7 @@ import useAppStore from '../../lib/store'
 import MediaList from "../../components/MediaList/MediaList"
 import { MovieResult, PersonResult, TvResult } from "../../lib/OverseerrClient"
 import { MediaType } from "../../lib/types"
+import { normalizeSize } from "../../lib/utils"
 
 function SearchScreen(): JSX.Element {
 	const [searchString, setSearchString] = useState('')
@@ -82,7 +83,7 @@ function SearchScreen(): JSX.Element {
 				onEndReached={onEndReached}
 			/>
 			{isFetching &&
-				<ActivityIndicator size="large" style={{ paddingTop: 30 }} />
+				<ActivityIndicator size="large" style={{ paddingTop: normalizeSize(30) }} />
 			}
 		</SafeAreaView>
 	)
@@ -90,11 +91,11 @@ function SearchScreen(): JSX.Element {
 
 const style = StyleSheet.create({
 	input: {
-		marginTop: 50,
-		marginBottom: 50,
-		fontSize: 38,
-		height: 80,
-		borderRadius: 10,
+		marginTop: normalizeSize(50),
+		marginBottom: normalizeSize(50),
+		fontSize: normalizeSize(38),
+		height: normalizeSize(80),
+		borderRadius: normalizeSize(10),
 	}
 })
 

@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, StyleSheet, FlatList } from 'react-native'
 import CategoryListItem from '../CategoryListItem/CategoryListItem'
+import { normalizeSize } from '../../lib/utils'
 
 export interface Category {
   id: number
@@ -38,7 +39,7 @@ const styles = StyleSheet.create({
     overflow: 'visible',
   },
   item: {
-    marginRight: 30,
+    marginRight: normalizeSize(30),
   }
 })
 

@@ -1,4 +1,5 @@
 import { View, Text, StyleSheet } from 'react-native';
+import { normalizeSize } from '../../lib/utils'
 
 export enum PillColor {
     'green' = 'green',
@@ -48,17 +49,17 @@ const Pill: React.FC<PillProps> = ({ color, isUppercase, text }) => {
 
 const styles = StyleSheet.create({
     container: {
-        paddingTop: 6,
-        paddingBottom: 6,
-        paddingLeft: 10,
-        paddingRight: 10,
+        paddingTop: normalizeSize(6),
+        paddingBottom: normalizeSize(6),
+        paddingLeft: normalizeSize(10),
+        paddingRight: normalizeSize(10),
         borderColor: '#aaaaaa',
         borderWidth: 1,
-        borderRadius: 15,
+        borderRadius: normalizeSize(15),
     },
     text: {
         color: '#fff',
-        fontSize: 20,
+        fontSize: normalizeSize(20),
         fontWeight: 'bold',
         textAlign: 'center',
     }

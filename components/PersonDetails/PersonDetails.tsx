@@ -2,6 +2,7 @@ import { Image, Text, View, StyleSheet, Pressable, useColorScheme } from "react-
 import { PersonDetails as PersonDetailsType } from "../../lib/OverseerrClient"
 import { TMDB_IMAGE_URL } from "../../lib/constants"
 import { getTheme } from "../../lib/theme";
+import { normalizeSize } from "../../lib/utils";
 
 interface PersonDetailsProps {
 	person: PersonDetailsType
@@ -39,7 +40,7 @@ const PersonDetails: React.FC<PersonDetailsProps> = ({ person }) => {
 				</View>
 				{biography &&
 					<>
-						<Text style={[{ fontSize: 40, fontWeight: 'bold' }, theme.text]}>Biography</Text>
+						<Text style={[{ fontSize: normalizeSize(40), fontWeight: 'bold' }, theme.text]}>Biography</Text>
 						<Text style={[style.contentLeftOverview, theme.text]}>{biography}</Text>
 					</>
 				}
@@ -74,10 +75,10 @@ const style = StyleSheet.create({
 		display: 'flex',
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		marginTop: 50,
+		marginTop: normalizeSize(50),
 	},
 	contentLeft: {
-		maxWidth: 1200,
+		maxWidth: normalizeSize(1200),
 	},
 	contentRight: {
 		display: 'flex',
@@ -88,13 +89,13 @@ const style = StyleSheet.create({
 		display: 'flex',
 		flexDirection: 'row',
 		alignItems: 'flex-end',
-		marginBottom: 50,
+		marginBottom: normalizeSize(50),
 	},
 	headerPoster: {
-		width: 300,
-		height: 400,
-		borderRadius: 20,
-		marginRight: 30,
+		width: normalizeSize(300),
+		height: normalizeSize(400),
+		borderRadius: normalizeSize(20),
+		marginRight: normalizeSize(30),
 	},
 	headerDetails: {
 		display: 'flex',
@@ -102,16 +103,16 @@ const style = StyleSheet.create({
 		alignItems: 'flex-start',
 	},
 	HeaderDetailsTitle: {
-		maxWidth: 800,
+		maxWidth: normalizeSize(800),
 	},
 	headerDetailsTitleMain: {
-		fontSize: 60,
+		fontSize: normalizeSize(60),
 		fontWeight: 'bold',
 	},
 	headerDetailsTitleDate: {
-		fontSize: 50,
+		fontSize: normalizeSize(50),
 		fontWeight: 'bold',
-		paddingLeft: 20
+		paddingLeft: normalizeSize(20)
 	},
 	HeaderDetailsSubtitle: {
 		display: 'flex',
@@ -119,37 +120,37 @@ const style = StyleSheet.create({
 		alignItems: 'center'
 	},
 	HeaderDetailsSubtitleText: {
-		fontSize: 30
+		fontSize: normalizeSize(30)
 	},
 	contentRightButton: {
-		marginBottom: 20
+		marginBottom: normalizeSize(20)
 	},
 	contentLeftTagline: {
-		fontSize: 35,
+		fontSize: normalizeSize(35),
 		fontStyle: 'italic',
-		marginBottom: 30
+		marginBottom: normalizeSize(30)
 	},
 	contentLeftOverview: {
-		fontSize: 26,
-		marginTop: 10,
-		lineHeight: 40,
-		marginBottom: 30,
+		fontSize: normalizeSize(26),
+		marginTop: normalizeSize(10),
+		lineHeight: normalizeSize(40),
+		marginBottom: normalizeSize(30),
 	},
 	contentRightTable: {
 		borderWidth: 1,
-		borderRadius: 10,
+		borderRadius: normalizeSize(10),
 		display: 'flex',
 		flexDirection: 'column',
-		width: 550,
+		width: normalizeSize(550),
 	},
 	contentRightItem: {
 		display: 'flex',
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		padding: 20,
+		padding: normalizeSize(20),
 	},
 	contentRightItemText: {
-		fontSize: 25,
+		fontSize: normalizeSize(25),
 		textAlign: 'right',
 	}
 })

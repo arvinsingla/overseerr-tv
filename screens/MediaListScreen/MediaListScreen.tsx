@@ -6,6 +6,7 @@ import MediaList from "../../components/MediaList/MediaList";
 import { getTheme } from "../../lib/theme";
 import { useEffect } from "react";
 import { MediaType } from "../../lib/types";
+import { normalizeSize } from "../../lib/utils";
 
 type MediaListScreenRouteProp = RouteProp<RootStackParamList, 'MediaList'>;
 
@@ -59,7 +60,7 @@ function MediaListScreen(): JSX.Element {
         />
       }
 			{isFetching &&
-				<ActivityIndicator size="large" style={{ paddingTop: 30 }} />
+				<ActivityIndicator size="large" style={{ paddingTop: normalizeSize(30) }} />
 			}
     </SafeAreaView>
   )
@@ -67,9 +68,9 @@ function MediaListScreen(): JSX.Element {
 
 const styles = StyleSheet.create({
   title: {
-		fontSize: 60,
-    marginTop: 20,
-    marginBottom: 20,
+		fontSize: normalizeSize(60),
+    marginTop: normalizeSize(20),
+    marginBottom: normalizeSize(20),
   },
 });
 

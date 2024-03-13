@@ -1,10 +1,11 @@
 import { Theme } from "@react-navigation/native";
 import { StyleSheet, ColorSchemeName } from "react-native";
+import { normalizeSize }from './utils';
 
 const baseTheme = StyleSheet.create({
 	title: {
-		fontSize: 38,
-    lineHeight: 66,
+		fontSize: normalizeSize(38),
+    lineHeight: normalizeSize(66),
 	}
 })
 

@@ -7,6 +7,7 @@ import { TvResult } from "../../lib/OverseerrClient";
 import { TMDB_IMAGE_URL, TMDB_IMAGE_URL_FILTER } from "../../lib/constants";
 import MediaList from "../../components/MediaList/MediaList";
 import { useEffect } from "react";
+import { normalizeSize } from "../../lib/utils";
 
 type NetworkScreenRouteProp = RouteProp<RootStackParamList, 'MovieGenre'>;
 
@@ -47,7 +48,7 @@ function NetworkScreen(): JSX.Element {
 
   const uri = `${imgBaseURL}${category.backdrops[0]}`
   const header = (
-    <View style={{ alignItems: 'center', marginTop: 20, marginBottom: 20 }}>
+    <View style={{ alignItems: 'center', marginTop: normalizeSize(20), marginBottom: normalizeSize(20) }}>
       <Image
         source={{ uri }}
         resizeMode="contain"
@@ -69,7 +70,7 @@ function NetworkScreen(): JSX.Element {
         />
       }
 			{isFetching &&
-				<ActivityIndicator size="large" style={{ paddingTop: 30 }} />
+				<ActivityIndicator size="large" style={{ paddingTop: normalizeSize(30) }} />
 			}
     </SafeAreaView>
   )

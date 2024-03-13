@@ -4,7 +4,7 @@ import { MovieResult, TvResult } from '../../lib/OverseerrClient'
 import MediaPill from '../MediaPill/MediaPill'
 import { MediaType } from '../../lib/types'
 import { TMDB_IMAGE_URL } from '../../lib/constants'
-import { trunc } from '../../lib/utils'
+import { trunc, normalizeSize } from '../../lib/utils'
 interface MediaListItemProps {
   media: MovieResult | TvResult
   onPress: (media: any) => void
@@ -51,17 +51,17 @@ const MediaListItem: React.FC<MediaListItemProps> = ({ media, onPress }) => {
         <MediaPill type={mediaType as MediaType} />
         {mediaInfo?.status === 5 &&
           <View style={styles.availability}>
-            <Image source={require('./img/green-check.png')} style={{ width: 20, height: 15}} />
+            <Image source={require('./img/green-check.png')} style={{ width: normalizeSize(20), height: normalizeSize(15)}} />
           </View>
         }
         {mediaInfo?.status === 4 &&
           <View style={styles.availability}>
-            <Image source={require('./img/green-line.png')} style={{ width: 20, height: 3}} />
+            <Image source={require('./img/green-line.png')} style={{ width: normalizeSize(20), height: normalizeSize(3)}} />
           </View>
         }
 				{mediaInfo?.status === 3 && (mediaInfo?.downloadStatus ?? []).length === 0 &&
 					<View style={styles.requested}>
-						<Image source={require('./img/lavendar-clock.png')} style={{ width: 20, height: 2}} />
+						<Image source={require('./img/lavendar-clock.png')} style={{ width: normalizeSize(20), height: normalizeSize(2)}} />
 					</View>
 				}
       </View>
@@ -81,32 +81,32 @@ const styles = StyleSheet.create({
     position: 'relative',
     borderColor: '#aaaaaa',
     borderWidth: 1,
-    borderRadius: 15,
+    borderRadius: normalizeSize(15),
     backgroundColor: "#000000",
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
-    width: 300,
-    height: 400,
+    width: normalizeSize(300),
+    height: normalizeSize(400),
   },
   poster: {
     position: 'absolute',
-    width: 300,
-    height: 400,
-    borderRadius: 15,
+    width: normalizeSize(300),
+    height: normalizeSize(400),
+    borderRadius: normalizeSize(15),
   },
   header: {
-    padding: 15,
+    padding: normalizeSize(15),
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   availability: {
     backgroundColor: '#ffffff',
-    borderRadius: 50,
+    borderRadius: normalizeSize(50),
     borderColor: 'rgba(74,222,128,.8)',
     borderWidth: 3,
-    width: 35,
+    width: normalizeSize(35),
 		justifyContent: 'center',
 		alignItems: 'center',
 		display: 'flex',
@@ -114,34 +114,34 @@ const styles = StyleSheet.create({
   },
   requested: {
     backgroundColor: '#ffffff',
-    borderRadius: 50,
+    borderRadius: normalizeSize(50),
     borderColor: '#9ec1fb',
     borderWidth: 3,
-    width: 35,
+    width: normalizeSize(35),
 		justifyContent: 'center',
 		alignItems: 'center',
 		display: 'flex',
 		flexDirection: 'row',
   },
   info: {
-    padding: 10,
+    padding: normalizeSize(10),
   },
   infoYear: {
     color: '#ffffff',
-    fontSize: 24,
-    marginBottom: 5
+    fontSize: normalizeSize(24),
+    marginBottom: normalizeSize(5)
   },
   infoTitle: {
     color: '#ffffff',
-    fontSize: 32,
+    fontSize: normalizeSize(32),
     fontWeight: 'bold',
-    lineHeight: 32,
-    marginBottom: 5,
+    lineHeight: normalizeSize(32),
+    marginBottom: normalizeSize(5),
   },
   infoDescription: {
     color: '#ffffff',
-    fontSize: 18,
-    maxHeight: 100,
+    fontSize: normalizeSize(18),
+    maxHeight: normalizeSize(100),
     overflow: 'hidden'
   },
 })

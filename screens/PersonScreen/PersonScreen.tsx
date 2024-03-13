@@ -8,6 +8,7 @@ import { MovieResult, TvResult } from "../../lib/OverseerrClient";
 import { getTheme } from "../../lib/theme";
 import PersonDetails from "../../components/PersonDetails/PersonDetails";
 import { MediaType } from "../../lib/types";
+import { normalizeSize } from "../../lib/utils";
 
 type PersonScreenRouteProp = RouteProp<RootStackParamList, 'Person'>;
 
@@ -38,7 +39,7 @@ function PersonScreen(): JSX.Element {
 		<SafeAreaView>
 			<ScrollView style={{ overflow: 'visible' }}>
 				{isPending &&
-					<ActivityIndicator size="large" style={{ paddingTop: 30 }} />
+					<ActivityIndicator size="large" style={{ paddingTop: normalizeSize(30) }} />
 				}
 				{isSuccess && data &&
 					<PersonDetails person={data} />
@@ -60,9 +61,9 @@ function PersonScreen(): JSX.Element {
 
 const style = StyleSheet.create({
 	title: {
-		fontSize: 38,
-		lineHeight: 66,
-		marginBottom: 20,
+		fontSize: normalizeSize(38),
+		lineHeight: normalizeSize(66),
+		marginBottom: normalizeSize(20),
 	},
 })
 

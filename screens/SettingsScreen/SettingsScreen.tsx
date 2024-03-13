@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import { View, Text, TextInput, StyleSheet, SafeAreaView, Alert, useColorScheme } from "react-native";
 import useAppStore from '../../lib/store';
 import { getTheme } from "../../lib/theme";
-import { logError } from '../../lib/utils';
+import { logError, normalizeSize, responsiveFontSize } from '../../lib/utils';
 import { OverseerrClient } from '../../lib/OverseerrClient';
 import TvButton from '../../components/TvButton/TvButton'
 import {
@@ -82,68 +82,68 @@ function SettingsScreen(): JSX.Element {
 	}
 
 	return (
-		<SafeAreaView>
-			<View style={style.wrapper}>
-				<Text style={[style.title]}>{SETTINGS_HELP}</Text>
-				<View>
-					<Text style={[theme.title]}>{SETTINGS_KEY}</Text>
-					<TextInput
-						value={key}
-						onChangeText={setKey}
-						style={style.input}
-						placeholder={SETTINGS_KEY_PLACEHOLDER}
-					/>
-					<Text style={[theme.title]}>{SETTINGS_ADDRESS}</Text>
-					<TextInput
-						value={address}
-						onChangeText={setAddress}
-						style={style.input}
-						placeholder={SETTINGS_ADDRESS_PLACEHOLDER}
-						keyboardType='numeric'
-					/>
-					<Text style={[theme.title]}>{SETTINGS_PORT}</Text>
-					<TextInput
-						value={port}
-						onChangeText={setPort}
-						style={style.input}
-						placeholder={SETTINGS_PORT_PLACEHOLDER}
-						keyboardType='numeric'
-					/>
-				</View>
-				<View style={style.buttonRow}>
-					<TvButton disabled={!key && !address && !port} onPress={clear} type={TvButtonType.destructive} title="Clear" />
-					<TvButton disabled={!key && !address && !port} onPress={test} title="Test" />
-					<TvButton disabled={!isValid} onPress={save} type={TvButtonType.cancel} title="Save" />
-				</View>
+		<View style={style.wrapper}>
+			<Text style={[style.title]}>{SETTINGS_HELP}</Text>
+			<View>
+				<Text style={[theme.title]}>{SETTINGS_KEY}</Text>
+				<TextInput
+					value={key}
+					onChangeText={setKey}
+					style={style.input}
+					placeholder={SETTINGS_KEY_PLACEHOLDER}
+				/>
+				<Text style={[theme.title]}>{SETTINGS_ADDRESS}</Text>
+				<TextInput
+					value={address}
+					onChangeText={setAddress}
+					style={style.input}
+					placeholder={SETTINGS_ADDRESS_PLACEHOLDER}
+					keyboardType='numeric'
+				/>
+				<Text style={[theme.title]}>{SETTINGS_PORT}</Text>
+				<TextInput
+					value={port}
+					onChangeText={setPort}
+					style={style.input}
+					placeholder={SETTINGS_PORT_PLACEHOLDER}
+					keyboardType='numeric'
+				/>
 			</View>
-		</SafeAreaView>
+			<View style={style.buttonRow}>
+				<TvButton disabled={!key && !address && !port} onPress={clear} type={TvButtonType.destructive} title="Clear" />
+				<TvButton disabled={!key && !address && !port} onPress={test} title="Test" />
+				<TvButton disabled={!isValid} onPress={save} type={TvButtonType.cancel} title="Save" />
+			</View>
+		</View>
 	);
 }
 
 const style = StyleSheet.create({
 	wrapper: {
-		paddingTop: 40,
+		paddingTop: normalizeSize(40),
+		paddingLeft: normalizeSize(80),
+		paddingRight: normalizeSize(80),
 	},
 	input: {
-		marginBottom: 20,
-		fontSize: 38,
-		height: 80,
-		borderRadius: 10,
+		marginBottom: normalizeSize(20),
+		fontSize: normalizeSize(38),
+		height: normalizeSize(80),
+		borderRadius: normalizeSize(10),
 		backgroundColor: '#DDDDDD'
 	},
 	buttonRow: {
-		marginTop: 40,
+		marginTop: normalizeSize(40),
 		display: 'flex',
 		flexDirection: 'row',
 		justifyContent: 'space-around'
 	},
 	title: {
-		padding: 30,
+		padding: normalizeSize(30),
 		backgroundColor: '#1E2836',
 		color: '#ffffff',
-		fontSize: 38,
+		fontSize: normalizeSize(38),
 		alignContent: 'center',
-		marginBottom: 30,
+		marginBottom: normalizeSize(30),
 	}
 })
 

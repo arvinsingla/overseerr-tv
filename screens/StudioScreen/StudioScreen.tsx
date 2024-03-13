@@ -7,6 +7,7 @@ import MediaList from "../../components/MediaList/MediaList";
 import { TMDB_IMAGE_URL, TMDB_IMAGE_URL_FILTER} from "../../lib/constants";
 import { useEffect } from "react";
 import Shrug from "../../components/Shrug/Shrug";
+import { normalizeSize } from "../../lib/utils";
 
 type StudioScreenRouteProp = RouteProp<RootStackParamList, 'MovieGenre'>;
 
@@ -55,7 +56,7 @@ function StudioScreen(): JSX.Element {
 
   const uri = `${imgBaseURL}${category.backdrops[0]}`
   const header = (
-    <View style={{ alignItems: 'center', marginTop: 20, marginBottom: 20 }}>
+    <View style={{ alignItems: 'center', marginTop: normalizeSize(20), marginBottom: normalizeSize(20) }}>
       <Image
         source={{ uri }}
         resizeMode="contain"
@@ -81,7 +82,7 @@ function StudioScreen(): JSX.Element {
         />
       }
 			{isFetching &&
-				<ActivityIndicator size="large" style={{ paddingTop: 30 }} />
+				<ActivityIndicator size="large" style={{ paddingTop: normalizeSize(30) }} />
 			}
     </SafeAreaView>
   )
