@@ -7,7 +7,7 @@ import MediaList from "../../components/MediaList/MediaList";
 import { TMDB_IMAGE_URL, TMDB_IMAGE_URL_FILTER} from "../../lib/constants";
 import { useEffect } from "react";
 import Shrug from "../../components/Shrug/Shrug";
-import { normalizeSize } from "../../lib/utils";
+import { logError, normalizeSize } from '../../lib/utils';
 
 type StudioScreenRouteProp = RouteProp<RootStackParamList, 'MovieGenre'>;
 
@@ -27,12 +27,11 @@ function StudioScreen(): JSX.Element {
 	} = useInfiniteQuery({
 		queryKey: ['studio-movies', category.id],
 		queryFn: async ({ pageParam }) => {
-			console.log('category id', category.id.toString())
 			try {
 				const queryResult = await client?.search.getDiscoverMoviesStudio(category.id.toString(), pageParam)
 				return queryResult
 			} catch (e) {
-				console.log(e)
+				logError('StudioScreen', e)
 			}
 		},
 		initialPageParam: 1,

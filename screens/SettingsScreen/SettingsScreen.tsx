@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
-import { View, Text, TextInput, StyleSheet, SafeAreaView, Alert, useColorScheme } from "react-native";
+import { View, Text, TextInput, StyleSheet, SafeAreaView, Alert, useColorScheme, Pressable, Platform } from "react-native";
 import useAppStore from '../../lib/store';
 import { getTheme } from "../../lib/theme";
-import { logError, normalizeSize, responsiveFontSize } from '../../lib/utils';
+import { logError, normalizeSize } from '../../lib/utils';
 import { OverseerrClient } from '../../lib/OverseerrClient';
 import TvButton from '../../components/TvButton/TvButton'
 import {
@@ -49,7 +49,7 @@ function SettingsScreen(): JSX.Element {
 	}
 
 	function save() {
-		setOverseerClient(key, address)
+		setOverseerClient(key, address, port)
 		if (navigation.canGoBack()) {
 			navigation.goBack()
 		} else {
@@ -81,10 +81,8 @@ function SettingsScreen(): JSX.Element {
 		)
 	}
 
-	return (
-		<View style={style.wrapper}>
-			<Text style={[style.title]}>{SETTINGS_HELP}</Text>
-			<View>
+	const settingsInputApple = (
+		<View>
 				<Text style={[theme.title]}>{SETTINGS_KEY}</Text>
 				<TextInput
 					value={key}
@@ -109,6 +107,50 @@ function SettingsScreen(): JSX.Element {
 					keyboardType='numeric'
 				/>
 			</View>
+	)
+	const settingsInputAndroid = (
+		<View>
+				<Text style={[theme.title]}>{SETTINGS_KEY}</Text>
+				<Pressable onPress={() => this.keyInput.focus()}>
+					<TextInput
+						value={key}
+						onChangeText={setKey}
+						style={style.input}
+						placeholder={SETTINGS_KEY_PLACEHOLDER}
+						ref={(input) => { this.keyInput = input; }}
+					/>
+				</Pressable>
+				<Text style={[theme.title]}>{SETTINGS_ADDRESS}</Text>
+				<Pressable onPress={() => this.addressInput.focus()}>
+					<TextInput
+						value={address}
+						onChangeText={setAddress}
+						style={style.input}
+						placeholder={SETTINGS_ADDRESS_PLACEHOLDER}
+						keyboardType='numeric'
+						ref={(input) => { this.addressInput = input; }}
+					/>
+				</Pressable>
+				<Text style={[theme.title]}>{SETTINGS_PORT}</Text>
+				<Pressable onPress={() => this.portInput.focus()}>
+					<TextInput
+						value={port}
+						onChangeText={setPort}
+						style={style.input}
+						placeholder={SETTINGS_PORT_PLACEHOLDER}
+						keyboardType='numeric'
+						ref={(input) => { this.portInput = input; }}
+					/>
+				</Pressable>
+			</View>
+	)
+
+	const input = Platform.OS === 'ios' ? settingsInputApple : settingsInputAndroid
+
+	return (
+		<View style={style.wrapper}>
+			<Text style={[style.title]}>{SETTINGS_HELP}</Text>
+			{input}
 			<View style={style.buttonRow}>
 				<TvButton disabled={!key && !address && !port} onPress={clear} type={TvButtonType.destructive} title="Clear" />
 				<TvButton disabled={!key && !address && !port} onPress={test} title="Test" />

@@ -1,5 +1,7 @@
+import { Platform } from 'react-native'
 import { create } from 'zustand'
 import { Settings } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { OverseerrClient, RadarrSettings, SonarrSettings, User } from './OverseerrClient'
 import { DEFAULT_OVERSEERR_PORT } from './constants'
 
@@ -14,33 +16,28 @@ interface AppState {
     setUser: (user: User) => void
     setRadarr: (settings: RadarrSettings[]) => void
     setSonarr: (settings: SonarrSettings[]) => void
-		setClientConfig: (key: string, address: string) => void
-    setOverseerClient: (key?: string, address?: string) => void
+		setClientConfig: (key: string, address: string) => Promise<void>
+    setOverseerClient: (key: string, address: string, port: string) => Promise<void>
+		fetchInitialData: () => Promise<void>
 }
 
-const instantiateClient = (apiKey?: string, apiAddress?: string, apiPort?: string): OverseerrClient | null => {
-  const key = apiKey ?? Settings.get('apiKey')
-  const address = apiAddress ?? Settings.get('apiAddress')
-  const port = apiPort ?? Settings.get('apiPort') ?? DEFAULT_OVERSEERR_PORT
-  if (key && address) {
-    return new OverseerrClient({
-      BASE: `http://${address}:${port}/api/v1`,
-      HEADERS: {
-        'X-Api-Key': key
-      }
-    })
-  }
-  return null
+const instantiateClient = (apiKey: string, apiAddress: string, apiPort: string): OverseerrClient => {
+  return new OverseerrClient({
+		BASE: `http://${apiAddress}:${apiPort}/api/v1`,
+		HEADERS: {
+			'X-Api-Key': apiKey
+		}
+	})
 }
 
 const useAppStore = create<AppState>()((set) => ({
     user: null,
     radarr: [],
     sonarr: [],
-    apiKey: Settings.get('apiKey'),
-    apiAddress: Settings.get('apiAddress'),
-    apiPort: Settings.get('apiPort') || DEFAULT_OVERSEERR_PORT,
-    client: instantiateClient(),
+    apiKey: '',
+    apiAddress: '',
+    apiPort: DEFAULT_OVERSEERR_PORT,
+    client: null,
     setUser: (user) => {
 			set(() => ({ user }))
     },
@@ -50,17 +47,51 @@ const useAppStore = create<AppState>()((set) => ({
     setSonarr: (settings) => {
 			set(() => ({ sonarr: settings }))
     },
-		setClientConfig: (key: string, address: string) => {
-			Settings.set({ apiKey: key })
-			Settings.set({ apiAddress: address})
-			set(() => ({ apiAddress: address, apiKey: key}))
+		setClientConfig: async (apiKey: string, apiAddress: string) => {
+			if (Platform.OS === 'ios') {
+				Settings.set({ apiKey })
+				Settings.set({ apiAddress })
+				Settings.set({ apiPort: DEFAULT_OVERSEERR_PORT })
+			} else {
+				await AsyncStorage.setItem('apiKey', apiKey)
+				await AsyncStorage.setItem('apiAddress', apiAddress)
+				await AsyncStorage.setItem('apiPort', DEFAULT_OVERSEERR_PORT)
+			}
+			set(() => ({ apiAddress, apiKey, apiPort: DEFAULT_OVERSEERR_PORT }))
 		},
-		setOverseerClient: (key?: string, address?: string) => {
-			Settings.set({ apiKey: key })
-			Settings.set({ apiAddress: address})
-			const client = key && address ? instantiateClient(key, address) : instantiateClient()
-			set(() => ({ apiAddress: address, apiKey: key, client}))
+		setOverseerClient: async (apiKey: string, apiAddress: string, apiPort: string) => {
+			if (Platform.OS === 'ios') {
+				Settings.set({ apiKey })
+				Settings.set({ apiAddress })
+				Settings.set({ apiPort })
+			} else {
+				await AsyncStorage.setItem('apiKey', apiAddress)
+				await AsyncStorage.setItem('apiAddress', apiAddress)
+				await AsyncStorage.setItem('apiPort', apiPort)
+			}
+			const client = instantiateClient(apiKey, apiAddress, apiPort)
+			set(() => ({ apiKey, apiAddress, apiPort, client}))
+		},
+		fetchInitialData: async () => {
+			let apiKey = ''
+			let apiAddress = ''
+			let apiPort = ''
+			if (Platform.OS === 'ios') {
+				apiKey = Settings.get('apiKey') ?? ''
+				apiAddress = Settings.get('apiAddress') ?? ''
+				apiPort = Settings.get('apiPort') ?? DEFAULT_OVERSEERR_PORT
+			} else {
+				apiKey = await AsyncStorage.getItem('apiKey') ?? ''
+				apiAddress = await AsyncStorage.getItem('apiAddress') ?? ''
+				apiPort = await AsyncStorage.getItem('apiPort') ?? DEFAULT_OVERSEERR_PORT
+			}
+			if (apiKey && apiAddress) {
+				const client = instantiateClient(apiKey, apiAddress, apiPort)
+				set({ apiKey, apiAddress, apiPort, client })
+			}
 		},
 }))
+
+useAppStore.getState().fetchInitialData()
 
 export default useAppStore
