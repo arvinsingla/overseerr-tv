@@ -20,10 +20,6 @@ function DiscoveryScreen(): JSX.Element {
 	const scheme = useColorScheme()
 	const theme = getTheme(scheme)
 
-  if (!client) {
-		return <ActivityIndicator size="large" style={{ paddingTop: 30 }} />
-  }
-
 	// Discovery screen data fetching
   const {isSuccess: trendingSuccess, data: trendingData } = useQuery({
     queryKey: ['trending'],
@@ -50,6 +46,10 @@ function DiscoveryScreen(): JSX.Element {
     queryFn: () => client?.search.getDiscoverTvUpcoming(),
 		refetchInterval: DEFAULT_REFETCH_INTERVAL
   })
+
+  if (!client) {
+		return <ActivityIndicator size="large" style={{ paddingTop: 30 }} />
+  }
 
 	// Query functions to pass to media list screens
 	const trendingScreenQueryFn = (page: number) => {
