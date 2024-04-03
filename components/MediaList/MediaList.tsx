@@ -4,6 +4,7 @@ import { MovieResult, PersonResult, TvResult } from '../../lib/OverseerrClient';
 import MediaListItem from '../MediaListItem/MediaListItem';
 import { MediaType } from '../../lib/types';
 import PersonListItem from '../PersonListItem/PersonListItem';
+import { normalizeSize } from '../../lib/utils';
 
 interface MediaListProps {
   header?: React.ReactElement
@@ -30,8 +31,8 @@ const MediaList: React.FC<MediaListProps> = ({ media, header, footer, isHorizont
         return (
           <View
             style={{
-                marginRight: isHorizontal ? 30 : 65,
-                marginBottom: isHorizontal ? 0 : 50
+                marginRight: isHorizontal ? normalizeSize(30) : normalizeSize(65),
+                marginBottom: isHorizontal ? 0 : normalizeSize(50)
             }}
           >
 						{item.mediaType === MediaType.person &&

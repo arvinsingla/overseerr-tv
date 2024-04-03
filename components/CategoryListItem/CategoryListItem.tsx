@@ -2,6 +2,7 @@ import React from 'react'
 import { Text, Image, StyleSheet, TouchableOpacity } from 'react-native'
 import { TMDB_IMAGE_URL, TMDB_IMAGE_URL_FILTER } from '../../lib/constants'
 import { Category } from '../HorizontalCategoryList/HorizontalCategoryList'
+import { normalizeSize } from '../../lib/utils'
 
 interface CategoryListItemProps {
   category: Category,
@@ -49,32 +50,32 @@ const styles = StyleSheet.create({
     position: 'relative',
     borderColor: '#aaaaaa',
     borderWidth: 1,
-    borderRadius: 15,
+    borderRadius: normalizeSize(15),
     backgroundColor: "#000000",
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    width: 400,
-    height: 225,
+    width: normalizeSize(400),
+    height: normalizeSize(225),
   },
   poster: {
     position: 'absolute',
-    width: 400,
-    height: 225,
-    borderRadius: 15,
+    width: normalizeSize(400),
+    height: normalizeSize(225),
+    borderRadius: normalizeSize(15),
     opacity: 0.5,
   },
   logo: {
     position: 'absolute',
-    width: 250,
-    height: 150,
-    borderRadius: 15,
+    width: normalizeSize(250),
+    height: normalizeSize(150),
+    borderRadius: normalizeSize(15),
     opacity: 0.9,
   },
   nameText: {
     color: '#ffffff',
-    fontSize: 50,
+    fontSize: normalizeSize(50),
     fontWeight: 'bold',
   }
 })

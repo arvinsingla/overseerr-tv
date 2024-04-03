@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, useColorScheme } from 'react-native'
 import { getTheme } from "../../lib/theme";
+import { normalizeSize } from '../../lib/utils';
 
 interface ShrugProps {
 	text?: string
@@ -14,10 +15,10 @@ const Shrug: React.FC<ShrugProps> = ({ text = '¯\\_(ツ)_/¯' }) => {
 
 const style = StyleSheet.create({
 	wrapper: {
-		padding: 50
+		padding: normalizeSize(50)
 	},
 	text: {
-		fontSize: 100,
+		fontSize: normalizeSize(100),
 		textAlign: 'center'
 	}
 })

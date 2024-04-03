@@ -1,9 +1,10 @@
 import { useEffect } from 'react'
-import { StyleSheet, SafeAreaView, Image, TouchableOpacity, View, Text } from 'react-native'
+import { StyleSheet, SafeAreaView, Image, TouchableOpacity, View } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackHeaderProps } from '@react-navigation/native-stack';
 import useAppStore from '../../lib/store';
 import { useQuery } from '@tanstack/react-query';
+import { normalizeSize } from '../../lib/utils';
 
 interface HeaderProps {
 	header: NativeStackHeaderProps
@@ -32,7 +33,7 @@ const Header: React.FC<HeaderProps> = ({ header }) => {
 
 	return (
 		<SafeAreaView style={style.wrapper}>
-			<Image source={require('./img/logo.png')} />
+			<Image style={style.logo} source={require('./img/logo.png')} />
 			<View style={style.links}>
 				{!isSettingsPage &&
 					<TouchableOpacity
@@ -93,24 +94,28 @@ const style = StyleSheet.create({
 		justifyContent: 'space-between',
 		verticalAlign: 'middle',
 		width: '100%',
-		height: 200,
+		height: normalizeSize(200),
 		backgroundColor: '#1E2837',
-		paddingTop: 10,
-		paddingBottom: 10,
-		paddingLeft: 80,
-		paddingRight: 80,
+		paddingTop: normalizeSize(10),
+		paddingBottom: normalizeSize(10),
+		paddingLeft: normalizeSize(80),
+		paddingRight: normalizeSize(80),
 		borderBottomWidth: 1,
 		borderBottomColor: '#374151'
 	},
 	headerText: {
-		fontSize: 60,
+		fontSize: normalizeSize(60),
 		color: '#ffffff'
 	},
+	logo: {
+		width: normalizeSize(486),
+		height: normalizeSize(86),
+	},
 	menuItem: {
-		width: 100,
-		height: 100,
-		borderRadius: 50,
-		borderWidth: 3,
+		width: normalizeSize(100),
+		height: normalizeSize(100),
+		borderRadius: normalizeSize(50),
+		borderWidth: normalizeSize(3),
 		borderColor: '#ffffff',
 		display: 'flex',
 		flexDirection: 'row',
@@ -118,20 +123,20 @@ const style = StyleSheet.create({
 		alignItems: 'center',
 	},
 	icon: {
-		width: 60,
-		height: 60,
+		width: normalizeSize(60),
+		height: normalizeSize(60),
 	},
 	avatar: {
-		width: 100,
-		height: 100,
-		borderRadius: 50,
-		borderWidth: 3,
+		width: normalizeSize(100),
+		height: normalizeSize(100),
+		borderRadius: normalizeSize(50),
+		borderWidth: normalizeSize(3),
 		borderColor: '#ffffff'
 	},
 	links: {
 		display: 'flex',
 		flexDirection: 'row',
-		gap: 40,
+		gap: normalizeSize(40),
 	}
 })
 

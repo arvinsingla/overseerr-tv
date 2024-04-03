@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { ButtonProps, GestureResponderEvent, Pressable, StyleSheet, Text } from 'react-native'
+import { normalizeSize } from '../../lib/utils';
 
 export enum TvButtonType {
 	'default' = 'default',
@@ -11,7 +12,7 @@ interface TvButtonProps extends ButtonProps {
 	type?: TvButtonType
 }
 
-const TvButton: React.FC<TvButtonProps> = ({ onPress, title, disabled, type = TvButtonType.default }) => {
+const TvButton: React.FC<TvButtonProps> = ({ onPress, title, disabled, type = TvButtonType.default, ...props }) => {
 	const [isFocused, setIsFocused] = useState<boolean>(false)
 	const handlePress = (event: GestureResponderEvent) => {
 		if (!disabled && onPress) {
@@ -48,6 +49,7 @@ const TvButton: React.FC<TvButtonProps> = ({ onPress, title, disabled, type = Tv
 				magnification: 1.1,
 				tiltAngle: 0
 			}}
+			{...props}
 		>
 			<Text
 				style={[
@@ -65,14 +67,14 @@ const styles = StyleSheet.create({
 	button: {
 		alignItems: 'center',
 		justifyContent: 'center',
-		borderRadius: 15,
+		borderRadius: normalizeSize(15),
 		elevation: 3,
-		width: 340,
-		height: 66
+		width: normalizeSize(340),
+		height: normalizeSize(66)
 	},
 	text: {
-		fontSize: 32,
-		lineHeight: 50,
+		fontSize: normalizeSize(32),
+		lineHeight: normalizeSize(50),
 	},
 })
 

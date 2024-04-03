@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "android": "expo run:android",
+    "android": "expo run:android --device Television_1080p_API_31",
     "ios": "expo run:ios",
     "tvos": "expo run:ios --scheme Overseerr-tvOS --device \"Apple TV 4K (3rd generation) (at 1080p)\"",
     "lint": "eslint .",
@@ -11,6 +11,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.22.3",
     "@react-navigation/native": "^6.1.9",
     "@react-navigation/native-stack": "^6.9.17",
     "@tanstack/react-query": "^5.17.12",

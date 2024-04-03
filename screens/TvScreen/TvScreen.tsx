@@ -3,9 +3,10 @@ import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useQuery } from "@tanstack/react-query";
 import { RootStackParamList } from '../../App';
 import useAppStore from '../../lib/store';
+import { getTheme } from "../../lib/theme";
+import { logError, normalizeSize } from '../../lib/utils';
 import TvDetails from "../../components/TvDetails/TvDetails";
 import MediaList from "../../components/MediaList/MediaList";
-import { getTheme } from "../../lib/theme";
 
 type TvScreenRouteProp = RouteProp<RootStackParamList, 'Tv'>;
 
@@ -55,7 +56,8 @@ function TvScreen(): JSX.Element {
 								seasons: 'all'
 							})
 							await refetch()
-						} catch (e) {
+						} catch (e: any) {
+							logError('TV Request', e)
 							Alert.alert(`Error`, `There was an error submitting your request`)
 						}
 					},
@@ -78,7 +80,7 @@ function TvScreen(): JSX.Element {
     <SafeAreaView>
       <ScrollView style={{ overflow:'visible'}}>
         {isPending &&
-          <ActivityIndicator size="large" style={{ paddingTop: 30 }} />
+          <ActivityIndicator size="large" style={{ paddingTop: normalizeSize(30) }} />
         }
         {isSuccess && data &&
           <TvDetails tv={data} canRequest={canRequest} onRequest={submitRequest} />
@@ -96,9 +98,9 @@ function TvScreen(): JSX.Element {
 
 const style = StyleSheet.create({
   title: {
-    fontSize: 38,
-    lineHeight: 66,
-    marginBottom: 20,
+    fontSize: normalizeSize(38),
+    lineHeight: normalizeSize(66),
+    marginBottom: normalizeSize(20),
   },
 })
 

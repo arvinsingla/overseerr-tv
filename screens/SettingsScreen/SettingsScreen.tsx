@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
+import { View, Text, TextInput, StyleSheet, SafeAreaView, Alert, useColorScheme, Pressable, Platform } from "react-native";
 import useAppStore from '../../lib/store';
-import { View, Text, TextInput, StyleSheet, SafeAreaView, Alert, useColorScheme } from "react-native";
-import TvButton from '../../components/TvButton/TvButton'
+import { getTheme } from "../../lib/theme";
+import { logError, normalizeSize } from '../../lib/utils';
 import { OverseerrClient } from '../../lib/OverseerrClient';
+import TvButton from '../../components/TvButton/TvButton'
 import {
 	CONNECTION_FAILD,
 	CONNECTION_SUCCESSFUL,
@@ -17,7 +19,6 @@ import {
 	SETTINGS_PORT_PLACEHOLDER
 } from '../../lib/constants';
 import { TvButtonType } from '../../components/TvButton/TvButton';
-import { getTheme } from "../../lib/theme";
 
 function SettingsScreen(): JSX.Element {
 	const navigation = useNavigation()
@@ -41,13 +42,14 @@ function SettingsScreen(): JSX.Element {
 			await overseerrClient.settings.getSettingsAbout()
 			setIsValid(true)
 			Alert.alert(CONNECTION_SUCCESSFUL)
-		} catch (e) {
+		} catch (e: any) {
+			logError('Settings Test', e)
 			Alert.alert(CONNECTION_FAILD)
 		}
 	}
 
 	function save() {
-		setOverseerClient(key, address)
+		setOverseerClient(key, address, port)
 		if (navigation.canGoBack()) {
 			navigation.goBack()
 		} else {
@@ -56,75 +58,134 @@ function SettingsScreen(): JSX.Element {
 	}
 
 	function clear() {
-		setClientConfig('', '')
-		setAddress('')
-		setKey('')
-		setPort(DEFAULT_OVERSEERR_PORT)
+		Alert.alert(
+			`Clear settings`,
+			`Are you sure you want to clear your settings?`,
+			[
+				{
+					text: 'Confirm',
+					onPress: async () => {
+						setClientConfig('', '')
+						setAddress('')
+						setKey('')
+						setPort(DEFAULT_OVERSEERR_PORT)
+					},
+					style: 'destructive',
+					isPreferred: true
+				},
+				{
+					text: 'Cancel',
+					style: 'cancel'
+				}
+			],
+		)
 	}
 
-	return (
-		<SafeAreaView>
-			<View style={style.wrapper}>
-				<Text style={[style.title]}>{SETTINGS_HELP}</Text>
-				<View>
-					<Text style={[theme.title]}>{SETTINGS_KEY}</Text>
+	const settingsInputApple = (
+		<View>
+				<Text style={[theme.title]}>{SETTINGS_KEY}</Text>
+				<TextInput
+					value={key}
+					onChangeText={setKey}
+					style={style.input}
+					placeholder={SETTINGS_KEY_PLACEHOLDER}
+				/>
+				<Text style={[theme.title]}>{SETTINGS_ADDRESS}</Text>
+				<TextInput
+					value={address}
+					onChangeText={setAddress}
+					style={style.input}
+					placeholder={SETTINGS_ADDRESS_PLACEHOLDER}
+					keyboardType='numeric'
+				/>
+				<Text style={[theme.title]}>{SETTINGS_PORT}</Text>
+				<TextInput
+					value={port}
+					onChangeText={setPort}
+					style={style.input}
+					placeholder={SETTINGS_PORT_PLACEHOLDER}
+					keyboardType='numeric'
+				/>
+			</View>
+	)
+	const settingsInputAndroid = (
+		<View>
+				<Text style={[theme.title]}>{SETTINGS_KEY}</Text>
+				<Pressable onPress={() => this.keyInput.focus()}>
 					<TextInput
 						value={key}
 						onChangeText={setKey}
 						style={style.input}
 						placeholder={SETTINGS_KEY_PLACEHOLDER}
+						ref={(input) => { this.keyInput = input; }}
 					/>
-					<Text style={[theme.title]}>{SETTINGS_ADDRESS}</Text>
+				</Pressable>
+				<Text style={[theme.title]}>{SETTINGS_ADDRESS}</Text>
+				<Pressable onPress={() => this.addressInput.focus()}>
 					<TextInput
 						value={address}
 						onChangeText={setAddress}
 						style={style.input}
 						placeholder={SETTINGS_ADDRESS_PLACEHOLDER}
 						keyboardType='numeric'
+						ref={(input) => { this.addressInput = input; }}
 					/>
-					<Text style={[theme.title]}>{SETTINGS_PORT}</Text>
+				</Pressable>
+				<Text style={[theme.title]}>{SETTINGS_PORT}</Text>
+				<Pressable onPress={() => this.portInput.focus()}>
 					<TextInput
 						value={port}
 						onChangeText={setPort}
 						style={style.input}
 						placeholder={SETTINGS_PORT_PLACEHOLDER}
 						keyboardType='numeric'
+						ref={(input) => { this.portInput = input; }}
 					/>
-				</View>
-				<View style={style.buttonRow}>
-					<TvButton disabled={!key && !address && !port} onPress={test} title="Test" />
-					<TvButton disabled={!key && !address && !port} onPress={clear} type={TvButtonType.destructive} title="Clear" />
-					<TvButton disabled={!isValid} onPress={save} type={TvButtonType.cancel} title="Save" />
-				</View>
+				</Pressable>
 			</View>
-		</SafeAreaView>
+	)
+
+	const input = Platform.OS === 'ios' ? settingsInputApple : settingsInputAndroid
+
+	return (
+		<View style={style.wrapper}>
+			<Text style={[style.title]}>{SETTINGS_HELP}</Text>
+			{input}
+			<View style={style.buttonRow}>
+				<TvButton disabled={!key && !address && !port} onPress={clear} type={TvButtonType.destructive} title="Clear" />
+				<TvButton disabled={!key && !address && !port} onPress={test} title="Test" />
+				<TvButton disabled={!isValid} onPress={save} type={TvButtonType.cancel} title="Save" />
+			</View>
+		</View>
 	);
 }
 
 const style = StyleSheet.create({
 	wrapper: {
-		paddingTop: 40,
+		paddingTop: normalizeSize(40),
+		paddingLeft: normalizeSize(80),
+		paddingRight: normalizeSize(80),
 	},
 	input: {
-		marginBottom: 20,
-		fontSize: 38,
-		height: 80,
-		borderRadius: 10,
+		marginBottom: normalizeSize(20),
+		fontSize: normalizeSize(38),
+		height: normalizeSize(80),
+		borderRadius: normalizeSize(10),
 		backgroundColor: '#DDDDDD'
 	},
 	buttonRow: {
-		marginTop: 40,
+		marginTop: normalizeSize(40),
 		display: 'flex',
 		flexDirection: 'row',
 		justifyContent: 'space-around'
 	},
 	title: {
-		padding: 30,
+		padding: normalizeSize(30),
 		backgroundColor: '#1E2836',
 		color: '#ffffff',
-		fontSize: 38,
+		fontSize: normalizeSize(38),
 		alignContent: 'center',
-		marginBottom: 30,
+		marginBottom: normalizeSize(30),
 	}
 })
 

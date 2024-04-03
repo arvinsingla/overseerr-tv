@@ -1,4 +1,4 @@
-import { SafeAreaView, Text, StyleSheet, ActivityIndicator, useColorScheme } from "react-native";
+import { SafeAreaView, Text, StyleSheet, ActivityIndicator, useColorScheme, View, ScrollView } from "react-native";
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import { RootStackParamList } from '../../App';
@@ -6,6 +6,7 @@ import useAppStore from '../../lib/store';
 import MediaList from "../../components/MediaList/MediaList";
 import { getTheme } from "../../lib/theme";
 import { useEffect } from "react";
+import { normalizeSize } from "../../lib/utils";
 
 type MovieGenreScreenRouteProp = RouteProp<RootStackParamList, 'MovieGenre'>;
 
@@ -45,27 +46,32 @@ function MovieGenreScreen(): JSX.Element {
   }
 
   return(
-    <SafeAreaView>
+    <View style={styles.wrapper}>
       {data?.pages.length &&
-        <MediaList
-          media={data?.pages.map((page) => page?.results).flat()}
-          onPress={onPress}
-          header={<Text style={[theme.title, styles.title]}>Movies: {category.name}</Text>}
+				<MediaList
+					media={data?.pages.map((page) => page?.results).flat()}
+					onPress={onPress}
+					header={<Text style={[theme.title, styles.title]}>Movies: {category.name}</Text>}
 					onEndReached={fetchNextPage}
-        />
+				/>
       }
 			{isFetching &&
-				<ActivityIndicator size="large" style={{ paddingTop: 30 }} />
+				<ActivityIndicator size="large" style={{ paddingTop: normalizeSize(30) }} />
 			}
-    </SafeAreaView>
+    </View>
   )
 }
 
 const styles = StyleSheet.create({
+	wrapper: {
+		paddingLeft: normalizeSize(80),
+		paddingRight: normalizeSize(80),
+		paddingBottom: normalizeSize(80),
+  },
   title: {
-		fontSize: 60,
-    marginTop: 20,
-    marginBottom: 20,
+		fontSize: normalizeSize(60),
+    marginTop: normalizeSize(20),
+    marginBottom: normalizeSize(20),
   },
 });
 

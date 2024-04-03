@@ -7,6 +7,7 @@ import MediaList from "../../components/MediaList/MediaList";
 import { TvResult } from "../../lib/OverseerrClient";
 import { getTheme } from "../../lib/theme";
 import { useEffect } from "react";
+import { normalizeSize } from "../../lib/utils";
 
 type TvGenreScreenRouteProp = RouteProp<RootStackParamList, 'MovieGenre'>;
 
@@ -56,7 +57,7 @@ function TvGenreScreen(): JSX.Element {
         />
       }
 			{isFetching &&
-				<ActivityIndicator size="large" style={{ paddingTop: 30 }} />
+				<ActivityIndicator size="large" style={{ paddingTop: normalizeSize(30) }} />
 			}
     </SafeAreaView>
   )
@@ -64,9 +65,9 @@ function TvGenreScreen(): JSX.Element {
 
 const styles = StyleSheet.create({
   title: {
-    fontSize: 60,
-    marginTop: 20,
-    marginBottom: 20,
+    fontSize: normalizeSize(60),
+    marginTop: normalizeSize(20),
+    marginBottom: normalizeSize(20),
   },
 });
 
