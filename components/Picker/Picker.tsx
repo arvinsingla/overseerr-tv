@@ -11,7 +11,6 @@ interface PickerProps {
 }
 
 const Picker: React.FC<PickerProps> = ({ label, options, selectedOption, onOptionSelected }) => {
-  console.log('selectedOption', selectedOption)
 	const index = options.findIndex((option) => option.id === selectedOption);
 	const [selectedOptionIndex, setSelectedOptionIndex] = useState(index !== -1 ? index : 0);
 	const scheme = useColorScheme()
@@ -35,8 +34,12 @@ const Picker: React.FC<PickerProps> = ({ label, options, selectedOption, onOptio
 					magnification: 1.02
 				}}
       >
-				<Text style={styles.label}>{label}</Text>
-				<Text style={styles.label}>{options[selectedOptionIndex].label}</Text>
+				{({ focused }) => (
+					<>
+						<Text style={[styles.label, focused ? theme.inputTextFocus : theme.text ]}>{label}</Text>
+						<Text style={[styles.option, focused ? theme.inputTextFocus : theme.text ]}>{options[selectedOptionIndex].label}</Text>
+					</>
+				)}
       </Pressable>
     </View>
   );
@@ -51,7 +54,6 @@ const styles = StyleSheet.create({
   label: {
 		fontSize: normalizeSize(38),
     marginRight: normalizeSize(10),
-    color: '#000000',
   },
   button: {
 		flexDirection: 'row',

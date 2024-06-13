@@ -96,7 +96,7 @@ const useAppStore = create<AppState>()((set) => ({
 			}
 			if (apiKey && apiAddress) {
 				const client = instantiateClient(apiConnectionType, apiKey, apiAddress, apiPort)
-				set({ apiKey, apiAddress, apiPort, client })
+				set({ apiConnectionType, apiKey, apiAddress, apiPort, client })
 			}
 		},
 }))
