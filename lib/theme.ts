@@ -19,6 +19,12 @@ const lightTheme = StyleSheet.create({
 	},
 	border: {
 		borderColor: '#000000'
+	},
+	input: {
+		backgroundColor: '#c0c0c0'
+	},
+	inputFocus: {
+		backgroundColor: '#ffffff'
 	}
 })
 
@@ -32,6 +38,12 @@ const darkTheme = StyleSheet.create({
 	},
 	border: {
 		borderColor: '#374151'
+	},
+	input: {
+		backgroundColor: '#c0c0c0'
+	},
+	inputFocus: {
+		backgroundColor: '#ffffff'
 	}
 })
 
