@@ -5,10 +5,12 @@ import useAppStore from '../../lib/store';
 import { getTheme } from "../../lib/theme";
 import { logError, normalizeSize } from '../../lib/utils';
 import { OverseerrClient } from '../../lib/OverseerrClient';
-import TvButton from '../../components/TvButton/TvButton'
+import TvButton, { TvButtonType } from '../../components/TvButton/TvButton'
+import Picker from '../../components/Picker/Picker.tsx';
 import {
 	CONNECTION_FAILD,
 	CONNECTION_SUCCESSFUL,
+	DEFAULT_OVERSEERR_CONNECTION_TYPE,
 	DEFAULT_OVERSEERR_PORT,
 	SETTINGS_ADDRESS,
 	SETTINGS_ADDRESS_PLACEHOLDER,
@@ -18,11 +20,11 @@ import {
 	SETTINGS_PORT,
 	SETTINGS_PORT_PLACEHOLDER
 } from '../../lib/constants';
-import { TvButtonType } from '../../components/TvButton/TvButton';
 
 function SettingsScreen(): JSX.Element {
 	const navigation = useNavigation()
-	const { apiKey, apiAddress, apiPort, setClientConfig, setOverseerClient } = useAppStore()
+	const { apiConnectionType, apiKey, apiAddress, apiPort, setClientConfig, setOverseerClient } = useAppStore()
+	const [connectionType, setConnectionType] = useState<string>(apiConnectionType)
 	const [key, setKey] = useState<string>(apiKey)
 	const [address, setAddress] = useState<string>(apiAddress)
 	const [port, setPort] = useState<string>(apiPort)
@@ -30,10 +32,15 @@ function SettingsScreen(): JSX.Element {
 	const scheme = useColorScheme()
 	const theme = getTheme(scheme)
 
+	const connectionTypeOptions = [
+		{ id: 'http', label: 'HTTP' },
+		{ id: 'https', label: 'HTTPS' },
+	]
+
 	async function test() {
 		// Test the API
 		const overseerrClient = new OverseerrClient({
-			BASE: `http://${address}:${port}/api/v1`,
+			BASE: `${connectionType}://${address}${port ? `:${port}` : ''}/api/v1`,
 			HEADERS: {
 				'X-Api-Key': key
 			}
@@ -49,7 +56,7 @@ function SettingsScreen(): JSX.Element {
 	}
 
 	function save() {
-		setOverseerClient(key, address, port)
+		setOverseerClient(connectionType, key, address, port)
 		if (navigation.canGoBack()) {
 			navigation.goBack()
 		} else {
@@ -66,6 +73,7 @@ function SettingsScreen(): JSX.Element {
 					text: 'Confirm',
 					onPress: async () => {
 						setClientConfig('', '')
+						setConnectionType(DEFAULT_OVERSEERR_CONNECTION_TYPE)
 						setAddress('')
 						setKey('')
 						setPort(DEFAULT_OVERSEERR_PORT)
@@ -83,26 +91,31 @@ function SettingsScreen(): JSX.Element {
 
 	const settingsInputApple = (
 		<View>
+				<Picker
+					label="Connection Type"
+					options={connectionTypeOptions}
+					selectedOption={connectionType}
+					onOptionSelected={setConnectionType}
+				/>
 				<Text style={[theme.title]}>{SETTINGS_KEY}</Text>
 				<TextInput
 					value={key}
 					onChangeText={setKey}
-					style={style.input}
+					style={[style.input, theme.input]}
 					placeholder={SETTINGS_KEY_PLACEHOLDER}
 				/>
 				<Text style={[theme.title]}>{SETTINGS_ADDRESS}</Text>
 				<TextInput
 					value={address}
 					onChangeText={setAddress}
-					style={style.input}
+					style={[style.input, theme.input]}
 					placeholder={SETTINGS_ADDRESS_PLACEHOLDER}
-					keyboardType='numeric'
 				/>
 				<Text style={[theme.title]}>{SETTINGS_PORT}</Text>
 				<TextInput
 					value={port}
 					onChangeText={setPort}
-					style={style.input}
+					style={[style.input, theme.input]}
 					placeholder={SETTINGS_PORT_PLACEHOLDER}
 					keyboardType='numeric'
 				/>
@@ -115,7 +128,7 @@ function SettingsScreen(): JSX.Element {
 					<TextInput
 						value={key}
 						onChangeText={setKey}
-						style={style.input}
+						style={[style.input, theme.input]}
 						placeholder={SETTINGS_KEY_PLACEHOLDER}
 						ref={(input) => { this.keyInput = input; }}
 					/>
@@ -125,9 +138,8 @@ function SettingsScreen(): JSX.Element {
 					<TextInput
 						value={address}
 						onChangeText={setAddress}
-						style={style.input}
+						style={[style.input, theme.input]}
 						placeholder={SETTINGS_ADDRESS_PLACEHOLDER}
-						keyboardType='numeric'
 						ref={(input) => { this.addressInput = input; }}
 					/>
 				</Pressable>
@@ -136,7 +148,7 @@ function SettingsScreen(): JSX.Element {
 					<TextInput
 						value={port}
 						onChangeText={setPort}
-						style={style.input}
+						style={[style.input, theme.input]}
 						placeholder={SETTINGS_PORT_PLACEHOLDER}
 						keyboardType='numeric'
 						ref={(input) => { this.portInput = input; }}
@@ -171,7 +183,6 @@ const style = StyleSheet.create({
 		fontSize: normalizeSize(38),
 		height: normalizeSize(80),
 		borderRadius: normalizeSize(10),
-		backgroundColor: '#DDDDDD'
 	},
 	buttonRow: {
 		marginTop: normalizeSize(40),
