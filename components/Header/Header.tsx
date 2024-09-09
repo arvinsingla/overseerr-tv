@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
-import { StyleSheet, SafeAreaView, Image, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, SafeAreaView, Image, TouchableOpacity, View, Alert } from 'react-native'
+import { useQueryClient } from '@tanstack/react-query';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackHeaderProps } from '@react-navigation/native-stack';
 import useAppStore from '../../lib/store';
@@ -13,6 +14,7 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ header }) => {
 	const navigation = useNavigation()
 	const { client, setUser } = useAppStore()
+	const queryClient = useQueryClient();
 	const { route } = header
 	const isSettingsPage = route.name === "Settings"
 
@@ -27,8 +29,26 @@ const Header: React.FC<HeaderProps> = ({ header }) => {
 		}
 	}, [userData]);
 
-	function onPress() {
-		navigation.navigate('Settings')
+	function onPressRefresh() {
+		Alert.alert(
+			`Refresh data`,
+			`Are you sure you want to get the lastest data from the server?`,
+			[
+				{
+					text: 'Confirm',
+					onPress: async () => {
+						console.log(queryClient)
+						queryClient.invalidateQueries();
+					},
+					style: 'destructive',
+					isPreferred: true
+				},
+				{
+					text: 'Cancel',
+					style: 'cancel'
+				}
+			],
+		)
 	}
 
 	return (
@@ -49,7 +69,7 @@ const Header: React.FC<HeaderProps> = ({ header }) => {
 						<Image style={style.icon} source={require('./img/home.png')} />
 					</TouchableOpacity>
 				}
-				{!isSettingsPage &&
+				{!isSettingsPage && userData &&
 					<TouchableOpacity
 						activeOpacity={1}
 						tvParallaxProperties={{
@@ -61,6 +81,20 @@ const Header: React.FC<HeaderProps> = ({ header }) => {
 						onPress={() => navigation.navigate('Search')}
 					>
 						<Image style={style.icon} source={require('./img/search.png')} />
+					</TouchableOpacity>
+				}
+				{!isSettingsPage && userData && false &&
+					<TouchableOpacity
+						activeOpacity={1}
+						tvParallaxProperties={{
+							enabled: true,
+							magnification: 1.1,
+							tiltAngle: 0
+						}}
+						style={[{ opacity: 0.5 }, style.menuItem]}
+						onPress={onPressRefresh}
+					>
+						<Image style={style.icon} source={require('./img/refresh.png')} />
 					</TouchableOpacity>
 				}
 				{!isSettingsPage &&
