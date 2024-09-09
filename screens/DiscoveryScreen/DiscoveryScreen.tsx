@@ -1,4 +1,4 @@
-import { View, ScrollView, StyleSheet, SafeAreaView, Text, ActivityIndicator, useColorScheme } from "react-native";
+import { View, ScrollView, StyleSheet, Text, ActivityIndicator, useColorScheme } from "react-native";
 import { useQuery } from '@tanstack/react-query'
 import { useNavigation } from "@react-navigation/native";
 import { MovieResult, PersonResult, TvResult } from '../../lib/OverseerrClient'
