@@ -1,79 +1,113 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# OverseerrTV
 
-# Getting Started
+A React Native application for Apple TV that serves as a frontend for Overseerr (or Jellyseerr), built using react-native-tvos.
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+## Overview
 
-## Step 1: Start the Metro Server
+OverseerrTV brings the power of Overseerr (or Jellyseerr) to your Apple TV, allowing you to manage and request media directly from your television. Built with react-native-tvos, this application provides a native tvOS experience while maintaining the functionality you love from Overseerr.
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+## Features
 
-To start Metro, run the following command from the _root_ of your React Native project:
+- Native tvOS interface optimized for television displays
+- Browse and search available media
+- Request new movies and TV shows
 
+## Prerequisites
+
+- Node.js (version 18 or higher)
+- Xcode (latest version recommended)
+- CocoaPods
+- An existing Overseerr or Jellyseerr instance
+
+## Installation
+
+1. Clone the repository:
 ```bash
-# using npm
-npm start
-
-# OR using Yarn
-yarn start
+git clone https://github.com/arvinsingla/overseerr-tv.git
+cd overseerr-tv
 ```
 
-## Step 2: Start your Application
-
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
-
-### For Android
-
+2. Install dependencies:
 ```bash
-# using npm
-npm run android
-
-# OR using Yarn
-yarn android
+npm install
+# or
+yarn install
 ```
 
-### For iOS
-
+3. Install iOS dependencies:
 ```bash
-# using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
+cd ios
+pod install
+cd ..
 ```
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+4. Run the application:
+```bash
+npm run tvos
+# or
+yarn tvos
+```
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+## Development Environment Setup
 
-## Step 3: Modifying your App
+Make sure you have the following tools installed and configured:
+- Xcode with tvOS SDK
+- Apple TV Simulator or physical Apple TV device
+- React Native development environment
 
-Now that you have successfully run the app, let's modify it.
+## Contributing
 
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
+We welcome contributions from the community! Whether it's bug fixes, feature additions, or documentation improvements, your help is appreciated.
 
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
+### How to Contribute
 
-## Congratulations! :tada:
+1. Fork the repository
+2. Create a new branch for your feature or fix:
+```bash
+git checkout -b feature/your-feature-name
+# or
+git checkout -b fix/your-fix-name
+```
 
-You've successfully run and modified your React Native App. :partying_face:
+3. Make your changes
+4. Commit your changes with clear, descriptive commit messages
+5. Push to your fork
+6. Submit a Pull Request
 
-### Now what?
+### Pull Request Guidelines
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
+- Provide a clear description of the changes
+- Include any relevant issue numbers
+- Ensure your code follows the existing style
+- Add tests if applicable
+- Update documentation as needed
 
-# Troubleshooting
+### Code Style
 
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+- Follow the existing code style
+- Use meaningful variable and function names
+- Comment complex logic
+- Keep functions focused and concise
 
-# Learn More
+## License
 
-To learn more about React Native, take a look at the following resources:
+This project is licensed under the GNU Affero General Public License v3.0 (AGPL-3.0).
+This means:
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+- You must disclose your source code when you distribute this software
+- If you modify and use this software in a network service (like a web app), you must make your modified source code available
+- You must state all significant changes made to the software
+- You must include the original copyright and license notices
+- You cannot use this software for commercial purposes without explicit permission
+
+For more details, see the [full license text](https://www.gnu.org/licenses/agpl-3.0.en.html).
+
+## Support
+
+For support, please:
+- Open an issue in the repository
+
+## Acknowledgments
+
+- [react-native-tvos](https://github.com/react-native-tvos/react-native-tvos) team
+- [Overseerr](https://github.com/sct/overseerr) project
