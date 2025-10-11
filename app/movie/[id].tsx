@@ -11,6 +11,7 @@ import { useScale } from '@/hooks/useScale';
 import useAppStore from '@/lib/store';
 import { logError } from '@/lib/utils';
 import { MovieResult } from '@/lib/OverseerrClient';
+import { ThemedScrollView } from '../../components/ThemedScrollView';
 
 export default function SearchScreen() {
   const styles = useSearchScreenStyles();
@@ -77,40 +78,28 @@ export default function SearchScreen() {
 	}
 
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
-      headerImage={
-        <Ionicons
-          size={310 * scale}
-          name="search-outline"
-          style={styles.headerImage}
-        />
-      }
-    >
-			<ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Search</ThemedText>
-      </ThemedView>
+    <ThemedScrollView style={{ overflow: 'visible' }}>
 			{isPending &&
-					<ActivityIndicator size="large" style={{ paddingTop: 30 * scale }} />
-				}
-				{isSuccess && data &&
-					<MovieDetails
-						movie={data}
-						canRequest={canRequest}
-						onRequest={submitRequest}
+				<ActivityIndicator size="large" style={{ paddingTop: 30 * scale }} />
+			}
+			{isSuccess && data &&
+				<MovieDetails
+					movie={data}
+					canRequest={canRequest}
+					onRequest={submitRequest}
+				/>
+			}
+			{similarIsSuccess && similarData?.results &&
+				<ThemedView>
+					<ThemedText style={[styles.title]}>Similar Movies</ThemedText>
+					<MediaList
+						media={similarData.results}
+						isHorizontal={true}
+						onPress={(item) => onMoviePress(item as MovieResult)}
 					/>
-				}
-				{similarIsSuccess && similarData?.results &&
-					<ThemedView>
-						<ThemedText style={[styles.title]}>Similar Movies</ThemedText>
-						<MediaList
-							media={similarData.results}
-							isHorizontal={true}
-							onPress={onMoviePress}
-						/>
-					</ThemedView>
-				}
-    </ParallaxScrollView>
+				</ThemedView>
+			}
+    </ThemedScrollView>
   );
 }
 
@@ -131,13 +120,6 @@ const useSearchScreenStyles = function () {
 			fontSize: 38 * scale,
 			lineHeight: 66 * scale,
 			marginBottom: 20 * scale,
-		},
-		input: {
-			marginTop: 50 * scale,
-			marginBottom: 50 * scale,
-			fontSize: 38 * scale,
-			height: 80 * scale,
-			borderRadius: 10 * scale,
 		}
   });
 };

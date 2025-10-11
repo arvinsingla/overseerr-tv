@@ -1,4 +1,4 @@
-import { ActivityIndicator, Image, StyleSheet, useColorScheme } from 'react-native';
+import { ActivityIndicator, Alert, Image, StyleSheet, useColorScheme } from 'react-native';
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
@@ -77,6 +77,7 @@ export default function DiscoveryScreen() {
 			switch(item.mediaType) {
 				case MediaType.movie:
 					// @ts-ignore
+					// Alert.alert('Test', `The current value for item.id is ${item.id}.	`)
 					router.navigate(`movie/${item.id}`)
 					break
 				case MediaType.tv:
