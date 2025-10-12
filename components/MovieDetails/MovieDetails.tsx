@@ -1,11 +1,11 @@
-import { Image, Text, View, StyleSheet, Pressable, Linking, Alert, useColorScheme } from "react-native"
+import { Image, Text, View, StyleSheet, Pressable, Linking, Alert } from "react-native"
 import TvButton, { TvButtonType } from "../TvButton/TvButton"
 import { MovieDetails as MovieDetailsType } from "@/lib/OverseerrClient"
 import { TMDB_IMAGE_URL } from "@/lib/constants"
 import { formatDollars, getTrailerURLFromRelatedVideos, trunc, normalizeSize } from "@/lib/utils"
 import { languageMap } from "@/lib/maps"
 import StatusPill from "../StatusPill/StatusPill"
-import { getTheme } from "@/lib/theme";
+import { useTheme } from '@react-navigation/native';
 
 const DIRECTOR_KEY = 'Director'
 interface MovieDetailsProps {
@@ -38,9 +38,7 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movie, canRequest = false, 
 	const mediaStatus = mediaInfo?.status
 	const trailerURL = getTrailerURLFromRelatedVideos(relatedVideos ?? [])
 	const plexURL = mediaInfo?.iOSPlexUrl ?? ''
-
-	const scheme = useColorScheme()
-	const theme = getTheme(scheme)
+	const theme = useTheme()
 
 	const play = async (url: string, type: string) => {
 		try {
@@ -67,29 +65,29 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movie, canRequest = false, 
 						{mediaStatus && <StatusPill status={mediaStatus} downloadStatus={mediaInfo.downloadStatus} />}
 						<View style={style.HeaderDetailsTitle}>
 							<Text>
-								<Text style={[style.headerDetailsTitleMain, theme.text]}>{title}</Text>
-								{releaseDate ? <Text style={[style.headerDetailsTitleDate, theme.text]}> ({trunc(releaseDate ?? '', 4)})</Text> : null}
+								<Text style={[style.headerDetailsTitleMain, { color: theme.colors.text }]}>{title}</Text>
+								{releaseDate ? <Text style={[style.headerDetailsTitleDate, { color: theme.colors.text }]}> ({trunc(releaseDate ?? '', 4)})</Text> : null}
 							</Text>
 						</View>
 						{runtime ?
 							<View>
-								<Text style={[style.HeaderDetailsSubtitleText, theme.text]}>{runtime} minutes</Text>
+								<Text style={[style.HeaderDetailsSubtitleText, { color: theme.colors.text }]}>{runtime} minutes</Text>
 							</View>
 							: null
 						}
 						{genres?.length ?
 							<View>
-								<Text style={[style.HeaderDetailsSubtitleText, theme.text]}>{genres?.map((item) => item.name).join(', ')}</Text>
+								<Text style={[style.HeaderDetailsSubtitleText, { color: theme.colors.text }]}>{genres?.map((item) => item.name).join(', ')}</Text>
 							</View>
 							: null
 						}
 					</View>
 				</View>
-				{tagline && <Text style={[style.contentLeftTagline, theme.text]}>{tagline}</Text>}
+				{tagline && <Text style={[style.contentLeftTagline, { color: theme.colors.text }]}>{tagline}</Text>}
 				{overview &&
 					<>
-						<Text style={[{ fontSize: normalizeSize(40), fontWeight: 'bold' }, theme.text]}>Overview</Text>
-						<Text style={[style.contentLeftOverview, theme.text]}>{overview}</Text>
+						<Text style={[{ fontSize: normalizeSize(40), fontWeight: 'bold' }, { color: theme.colors.text }]}>Overview</Text>
+						<Text style={[style.contentLeftOverview, { color: theme.colors.text }]}>{overview}</Text>
 					</>
 				}
 			</View>
@@ -110,13 +108,13 @@ const MovieDetails: React.FC<MovieDetailsProps> = ({ movie, canRequest = false, 
 					</View>
 				}
 				{movieData.length &&
-					<View style={[style.contentRightTable, theme.border]}>
+					<View style={[style.contentRightTable, { borderColor: theme.colors.border }]}>
 						{movieData.map((data, index) => {
 							const isLastItem = index === movieData.length - 1
 							return (
-								<View key={index} style={[style.contentRightItem, { borderBottomWidth: isLastItem ? 0 : 1 }, theme.border]}>
-									<Text style={[style.bold, style.contentRightItemText, theme.text]}>{data.title}:</Text>
-									<Text style={[style.contentRightItemText, theme.text]}>{data.value}</Text>
+								<View key={index} style={[style.contentRightItem, { borderBottomWidth: isLastItem ? 0 : 1 }, { borderColor: theme.colors.border }]}>
+									<Text style={[style.bold, style.contentRightItemText, { color: theme.colors.text }]}>{data.title}:</Text>
+									<Text style={[style.contentRightItemText, { color: theme.colors.text }]}>{data.value}</Text>
 								</View>
 							)
 						})}

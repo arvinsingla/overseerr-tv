@@ -1,6 +1,7 @@
-import { ActivityIndicator, Alert, Image, StyleSheet, useColorScheme } from 'react-native';
+import { ActivityIndicator, StyleSheet } from 'react-native';
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router';
+import { useTheme } from '@react-navigation/native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
@@ -12,17 +13,14 @@ import useAppStore from '@/lib/store';
 import { DEFAULT_REFETCH_INTERVAL } from "@/lib/constants";
 import { MediaType } from '@/lib/types';
 import { MovieResult, PersonResult, TvResult } from '@/lib/OverseerrClient';
-import { getTheme } from '@/lib/theme';
 import { studios, networks } from '@/lib/maps'
 import movieGenres from '@/lib/movieGenres.json'
 import tvGenres from '@/lib/tvGenres.json'
 
 export default function DiscoveryScreen() {
 	const { client } = useAppStore()
-  const styles = useDiscoveryScreenStyles();
-	const scheme = useColorScheme()
-	const router = useRouter();
-	const theme = getTheme(scheme)
+  const styles = useDiscoveryScreenStyles()
+	const router = useRouter()
 
 	// Discovery screen data fetching
   const {isSuccess: trendingSuccess, data: trendingData } = useQuery({
@@ -142,18 +140,10 @@ export default function DiscoveryScreen() {
 
 
 	return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }
-    >
+    <ParallaxScrollView>
 			{trendingSuccess &&
-				<ThemedView style={styles.list}>
-					<ThemedText style={[styles.title, theme.title]}>Trending</ThemedText>
+				<ThemedView>
+					<ThemedText style={[styles.title]}>Trending</ThemedText>
 					<MediaList
 						media={trendingData?.results || []}
 						onPress={handlePressMedia}
@@ -163,8 +153,8 @@ export default function DiscoveryScreen() {
 				</ThemedView>
 			}
 			{popularMoviesSuccess &&
-				<ThemedView style={styles.list}>
-					<ThemedText style={[styles.title, theme.title]}>Popular Movies</ThemedText>
+				<ThemedView>
+					<ThemedText style={[styles.title]}>Popular Movies</ThemedText>
 					<MediaList
 						media={popularMoviesData?.results || []}
 						onPress={handlePressMedia}
@@ -173,13 +163,13 @@ export default function DiscoveryScreen() {
 					/>
 				</ThemedView>
 			}
-			<ThemedView style={styles.list}>
-				<ThemedText style={[styles.title, theme.title]}>Movie Genres</ThemedText>
+			<ThemedView>
+				<ThemedText style={[styles.title]}>Movie Genres</ThemedText>
 				<HorizontalCategoryList categories={movieGenres} onPress={handlePressMovieGenre} />
 			</ThemedView>
 			{upcomingMoviesSuccess &&
-				<ThemedView style={styles.list}>
-					<ThemedText style={[styles.title, theme.title]}>Upcoming Movies</ThemedText>
+				<ThemedView>
+					<ThemedText style={[styles.title]}>Upcoming Movies</ThemedText>
 					<MediaList
 						media={upcomingMoviesData?.results || []}
 						onPress={handlePressMedia}
@@ -188,13 +178,13 @@ export default function DiscoveryScreen() {
 					/>
 				</ThemedView>
 			}
-			<ThemedView style={styles.list}>
-				<ThemedText style={[styles.title, theme.title]}>Studios</ThemedText>
+			<ThemedView>
+				<ThemedText style={[styles.title]}>Studios</ThemedText>
 				<HorizontalCategoryList categories={studios} isLogo={true} onPress={handlePressStudio} />
 			</ThemedView>
 			{popularTvSuccess &&
-				<ThemedView style={styles.list}>
-					<ThemedText style={[styles.title, theme.title]}>Popular Series</ThemedText>
+				<ThemedView>
+					<ThemedText style={[styles.title]}>Popular Series</ThemedText>
 					<MediaList
 						media={popularTvData?.results || []}
 						onPress={handlePressMedia}
@@ -203,13 +193,13 @@ export default function DiscoveryScreen() {
 					/>
 				</ThemedView>
 			}
-			<ThemedView style={styles.list}>
+			<ThemedView>
 				<ThemedText style={styles.title}>Series Genres</ThemedText>
 				<HorizontalCategoryList categories={tvGenres} onPress={handlePressTvGenre} />
 			</ThemedView>
 			{upcomingTvSuccess &&
-				<ThemedView style={styles.list}>
-					<ThemedText style={[styles.title, theme.title]}>Upcoming Series</ThemedText>
+				<ThemedView>
+					<ThemedText style={[styles.title]}>Upcoming Series</ThemedText>
 					<MediaList
 						media={upcomingTvData?.results || []}
 						onPress={handlePressMedia}
@@ -218,8 +208,8 @@ export default function DiscoveryScreen() {
 					/>
 				</ThemedView>
 			}
-			<ThemedView style={styles.list}>
-				<ThemedText style={[styles.title, theme.title]}>Networks</ThemedText>
+			<ThemedView>
+				<ThemedText style={[styles.title]}>Networks</ThemedText>
 				<HorizontalCategoryList categories={networks} isLogo={true} onPress={handlePressNetwork} />
 			</ThemedView>
     </ParallaxScrollView>
@@ -229,28 +219,9 @@ export default function DiscoveryScreen() {
 const useDiscoveryScreenStyles = function () {
   const scale = useScale();
   return StyleSheet.create({
-    titleContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      gap: 8 * scale,
-    },
-    reactLogo: {
-      height: 178 * scale,
-      width: 290 * scale,
-      bottom: 0,
-      left: 0,
-      position: 'absolute',
-    },
-		wrapper: {
-				overflow: 'visible',
-				paddingLeft: 80 * scale,
-				paddingRight: 80 * scale,
-			},
-			list: {
-				marginBottom: 30 * scale
-			},
-			title: {
-				marginBottom: 20 * scale,
-			},
+		title: {
+			marginBottom: 5 * scale,
+			fontWeight: '600',
+		},
   });
 };

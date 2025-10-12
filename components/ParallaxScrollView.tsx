@@ -1,68 +1,22 @@
-import type { PropsWithChildren, ReactElement } from 'react';
-import { StyleSheet, useColorScheme } from 'react-native';
-import Animated, {
-  interpolate,
-  useAnimatedRef,
-  useAnimatedStyle,
-  useScrollViewOffset,
-} from 'react-native-reanimated';
-
+import type { PropsWithChildren } from 'react';
+import { StyleSheet, ImageBackground, View, ScrollView, Image } from 'react-native';
 import { ThemedView } from '@/components/ThemedView';
 import { useScale } from '@/hooks/useScale';
 
-type Props = PropsWithChildren<{
-  headerImage: ReactElement;
-  headerBackgroundColor: { dark: string; light: string };
-}>;
-
-export default function ParallaxScrollView({
-  children,
-  headerImage,
-  headerBackgroundColor,
-}: Props) {
-  const colorScheme = useColorScheme() ?? 'light';
-  const scrollRef = useAnimatedRef<Animated.ScrollView>();
-  const scrollOffset = useScrollViewOffset(scrollRef);
-  const scale = useScale();
+export default function ParallaxScrollView({ children }: PropsWithChildren) {
   const styles = useParallaxScrollViewStyles();
-
-  const HEADER_HEIGHT = 125 * scale;
-
-  const headerAnimatedStyle = useAnimatedStyle(() => {
-    return {
-      transform: [
-        {
-          translateY: interpolate(
-            scrollOffset.value,
-            [-HEADER_HEIGHT, 0, HEADER_HEIGHT],
-            [-HEADER_HEIGHT / 2, 0, HEADER_HEIGHT * 0.75],
-          ),
-        },
-        {
-          scale: interpolate(
-            scrollOffset.value,
-            [-HEADER_HEIGHT, 0, HEADER_HEIGHT],
-            [2, 1, 1],
-          ),
-        },
-      ],
-    };
-  });
 
   return (
     <ThemedView style={styles.container}>
-      <Animated.ScrollView ref={scrollRef} scrollEventThrottle={16}>
-        <Animated.View
-          style={[
-            styles.header,
-            { backgroundColor: headerBackgroundColor[colorScheme] },
-            headerAnimatedStyle,
-          ]}
-        >
-          {headerImage}
-        </Animated.View>
-        <ThemedView style={styles.content}>{children}</ThemedView>
-      </Animated.ScrollView>
+      <ScrollView>
+        <View style={ styles.header }>
+					<ImageBackground source={require('../assets/images/seerrtv-background.png')} style={{ flex: 1 }} resizeMode="cover" />
+					<Image source={require('@/assets/images/seerrtv.png')} style={styles.logo} />
+        </View>
+        <ThemedView style={ styles.content }>
+					{children}
+				</ThemedView>
+      </ScrollView>
     </ThemedView>
   );
 }
@@ -72,9 +26,18 @@ const useParallaxScrollViewStyles = function () {
   return StyleSheet.create({
     container: {
       flex: 1,
+			margin: 0,
+			padding: 0,
+    },
+		logo: {
+      width: 70 * scale,
+      height: 70 * scale,
+      bottom: 15,
+      left: 32 * scale,
+      position: 'absolute',
     },
     header: {
-      height: 125 * scale,
+      height: 85 * scale,
       overflow: 'hidden',
     },
     content: {

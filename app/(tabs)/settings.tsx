@@ -10,7 +10,6 @@ import { useScale } from '@/hooks/useScale';
 import { OverseerrClient } from '@/lib/OverseerrClient';
 import useAppStore from '@/lib/store';
 import { logError, normalizeSize } from '@/lib/utils';
-import { getTheme } from "@/lib/theme";
 
 import {
 	CONNECTION_FAILD,
@@ -36,7 +35,6 @@ export default function SettingScreen() {
 	const [port, setPort] = useState<string>(apiPort)
 	const [isValid, setIsValid] = useState<boolean>(false)
   const scheme = useColorScheme()
-  const theme = getTheme(scheme)
 
 	const connectionTypeOptions = [
 		{ id: 'http', label: 'HTTP' },
@@ -98,19 +96,7 @@ export default function SettingScreen() {
 
 
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
-      headerImage={
-        <Ionicons
-          size={310 * scale}
-          name="settings-sharp"
-          style={styles.headerImage}
-        />
-      }
-    >
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Settings</ThemedText>
-      </ThemedView>
+    <ParallaxScrollView>
       <ThemedText style={[styles.title]}>{SETTINGS_HELP}</ThemedText>
       <Picker
         label="Connection Type"
@@ -118,25 +104,25 @@ export default function SettingScreen() {
         selectedOption={connectionType}
         onOptionSelected={setConnectionType}
       />
-      <ThemedText style={[theme.title]}>{SETTINGS_KEY}</ThemedText>
+      <ThemedText style={[]}>{SETTINGS_KEY}</ThemedText>
       <TextInput
         value={key}
         onChangeText={setKey}
-        style={[styles.input, theme.input]}
+        style={[styles.input]}
         placeholder={SETTINGS_KEY_PLACEHOLDER}
       />
-      <ThemedText style={[theme.title]}>{SETTINGS_ADDRESS}</ThemedText>
+      <ThemedText style={[]}>{SETTINGS_ADDRESS}</ThemedText>
       <TextInput
         value={address}
         onChangeText={setAddress}
-        style={[styles.input, theme.input]}
+        style={[styles.input]}
         placeholder={SETTINGS_ADDRESS_PLACEHOLDER}
       />
-      <ThemedText style={[theme.title]}>{SETTINGS_PORT}</ThemedText>
+      <ThemedText style={[]}>{SETTINGS_PORT}</ThemedText>
       <TextInput
         value={port}
         onChangeText={setPort}
-        style={[styles.input, theme.input]}
+        style={[styles.input]}
         placeholder={SETTINGS_PORT_PLACEHOLDER}
         keyboardType='numeric'
       />
@@ -152,16 +138,6 @@ export default function SettingScreen() {
 const useSettingScreenStyles = function () {
   const scale = useScale();
   return StyleSheet.create({
-    headerImage: {
-      color: '#808080',
-      bottom: -45 * scale,
-      left: 0,
-      position: 'absolute',
-    },
-    titleContainer: {
-      flexDirection: 'row',
-      gap: 8 * scale,
-    },
     wrapper: {
       paddingTop: normalizeSize(40),
       paddingLeft: normalizeSize(80),

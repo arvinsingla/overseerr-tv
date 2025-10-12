@@ -1,9 +1,6 @@
-import { Dimensions, PixelRatio } from 'react-native';
+import { PixelRatio } from 'react-native';
 import { RelatedVideo } from "./OverseerrClient";
 import { ERROR_URL } from "./constants";
-
-const { width } = Dimensions.get('window');
-const scale = width / 1920
 
 export function trunc(str: string, length: number, elipses: boolean = false): string {
     if (str.length > length) {
@@ -60,7 +57,7 @@ export const logError = (type: string, error: any) => {
 	});
 }
 
-export const normalizeSize = (size: number) => {
-  const newSize = size * scale;
+export const normalizeSize = (size: number, scale?: number) => {
+  const newSize = scale ? size * scale : size;
   return Math.round(PixelRatio.roundToNearestPixel(newSize));
 }

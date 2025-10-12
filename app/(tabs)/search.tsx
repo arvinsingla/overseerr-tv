@@ -1,11 +1,10 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useEffect, useState } from 'react';
 import { StyleSheet, TextInput, ActivityIndicator } from 'react-native';
+import { useRouter } from 'expo-router';
 import { useDebounce } from 'use-debounce';
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query"
 import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
 import MediaList from '@/components/MediaList/MediaList';
 import { useScale } from '@/hooks/useScale';
 import useAppStore from '@/lib/store';
@@ -18,6 +17,7 @@ export default function SearchScreen() {
 	const [searchString, setSearchString] = useState('')
 	const [searchValue] = useDebounce(searchString, 1000)
 	const { client } = useAppStore()
+	const router = useRouter();
 
 	const queryClient = useQueryClient()
 	const {
@@ -47,7 +47,7 @@ export default function SearchScreen() {
 		switch (item.mediaType) {
 			case MediaType.movie:
 				// @ts-ignore
-				// navigation.navigate('Movie', { item })
+				router.navigate(`/movie/${item.id}`)
 				break
 			case MediaType.tv:
 				// @ts-ignore
@@ -80,19 +80,7 @@ export default function SearchScreen() {
 
 
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
-      headerImage={
-        <Ionicons
-          size={310 * scale}
-          name="search-outline"
-          style={styles.headerImage}
-        />
-      }
-    >
-			<ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Search</ThemedText>
-      </ThemedView>
+    <ParallaxScrollView>
 			<MediaList
 				header={header}
 				media={media}
@@ -120,8 +108,7 @@ const useSearchScreenStyles = function () {
       gap: 8 * scale,
     },
 		input: {
-				marginTop: 50 * scale,
-				marginBottom: 50 * scale,
+				marginBottom: 25 * scale,
 				fontSize: 38 * scale,
 				height: 80 * scale,
 				borderRadius: 10 * scale,

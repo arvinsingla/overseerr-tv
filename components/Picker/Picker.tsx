@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { View, Pressable, Text, StyleSheet, useColorScheme } from 'react-native';
+import { View, Pressable, Text, StyleSheet } from 'react-native';
+import { useTheme } from '@react-navigation/native';
 import { normalizeSize } from '../../lib/utils';
-import { getTheme } from "../../lib/theme";
 
 interface PickerProps {
   label: string;
@@ -13,8 +13,7 @@ interface PickerProps {
 const Picker: React.FC<PickerProps> = ({ label, options, selectedOption, onOptionSelected }) => {
 	const index = options.findIndex((option) => option.id === selectedOption);
 	const [selectedOptionIndex, setSelectedOptionIndex] = useState(index !== -1 ? index : 0);
-	const scheme = useColorScheme()
-	const theme = getTheme(scheme)
+	const theme = useTheme()
   const handlePress = () => {
     const nextIndex = (selectedOptionIndex + 1) % options.length;
     setSelectedOptionIndex(nextIndex);
@@ -27,7 +26,7 @@ const Picker: React.FC<PickerProps> = ({ label, options, selectedOption, onOptio
         onPress={handlePress}
         style={({ focused }) => [
           styles.button,
-					focused ? theme.inputFocus : theme.input,
+					{ backgroundColor: theme.colors.card },
         ]}
         tvParallaxProperties={{
 					enabled: true,
@@ -36,8 +35,8 @@ const Picker: React.FC<PickerProps> = ({ label, options, selectedOption, onOptio
       >
 				{({ focused }) => (
 					<>
-						<Text style={[styles.label, focused ? theme.inputTextFocus : theme.text ]}>{label}</Text>
-						<Text style={[styles.option, focused ? theme.inputTextFocus : theme.text ]}>{options[selectedOptionIndex].label}</Text>
+						<Text style={[styles.label, { backgroundColor: theme.colors.card }]}>{label}</Text>
+						<Text style={[styles.option, { color: theme.colors.text }]}>{options[selectedOptionIndex].label}</Text>
 					</>
 				)}
       </Pressable>

@@ -1,17 +1,18 @@
 {
   "expo": {
     "scheme": "routertv",
+		"userInterfaceStyle": "automatic",
     "plugins": [
       [
         "@react-native-tvos/config-tv",
         {
-          "androidTVBanner": "./assets/tv_icons/icon-400x240.png",
+          "androidTVBanner": "./assets/tv_icons/seerrtv-icon-small-1x.png",
           "appleTVImages": {
-            "icon": "./assets/tv_icons/icon-1280x768.png",
-            "iconSmall": "./assets/tv_icons/icon-400x240.png",
-            "iconSmall2x": "./assets/tv_icons/icon-800x480.png",
-            "topShelf": "./assets/tv_icons/icon-1920x720.png",
-            "topShelf2x": "./assets/tv_icons/icon-3840x1440.png",
+            "icon": "./assets/tv_icons/seerrtv-icon.png",
+            "iconSmall": "./assets/tv_icons/seerrtv-icon-small-1x.png",
+            "iconSmall2x": "./assets/tv_icons/seerrtv-icon-small-2x.png",
+            "topShelf": "./assets/tv_icons/seerrtv-shelf-1x.png",
+            "topShelf2x": "./assets/tv_icons/seerrtv-shelf-2x.png",
             "topShelfWide": "./assets/tv_icons/icon-2320x720.png",
             "topShelfWide2x": "./assets/tv_icons/icon-4640x1440.png"
           }
@@ -25,14 +26,14 @@
     "android": {
       "edgeToEdgeEnabled": true,
       "splash": {
-        "image": "./assets/images/splash.png"
+        "image": "./assets/tv_icons/seerrtv-launch.png"
       }
     },
     "ios": {
       "splash": {
-        "image": "./assets/images/splash.png"
+        "image": "./assets/tv_icons/seerrtv-launch.png"
       },
-      "bundleIdentifier": "com.arvinsingla.overseerr-tv"
+      "bundleIdentifier": "com.anonymous.overseerr-tv"
     },
     "web": {
       "bundler": "metro",
@@ -43,7 +44,7 @@
       "typedRoutes": true
     },
     "newArchEnabled": true,
-    "name": "overseerr-tv",
-    "slug": "overseerr-tv"
+    "name": "seerr-tv",
+    "slug": "seerr-tv"
   }
 }

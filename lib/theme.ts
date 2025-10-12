@@ -1,17 +1,119 @@
 import { Theme } from "@react-navigation/native";
-import { StyleSheet, ColorSchemeName } from "react-native";
-import { normalizeSize }from './utils';
+import { ColorSchemeName, Platform, StyleSheet } from "react-native";
+import { useScale } from "../hooks/useScale";
 
-const baseTheme = StyleSheet.create({
+const scale = useScale();
+
+export const DarkNavigationTheme: Theme = {
+  dark: true,
+  colors: {
+		primary: 'rgb(10, 132, 255)',
+    background: '#171E2E',
+    card: 'rgb(18, 18, 18)',
+    text: 'rgb(229, 229, 231)',
+    border: 'rgb(39, 39, 41)',
+    notification: 'rgb(255, 69, 58)',
+  },
+  fonts: Platform.select({
+    ios: {
+      regular: {
+        fontFamily: 'System',
+        fontWeight: '400',
+      },
+      medium: {
+        fontFamily: 'System',
+        fontWeight: '500',
+      },
+      bold: {
+        fontFamily: 'System',
+        fontWeight: '600',
+      },
+      heavy: {
+        fontFamily: 'System',
+        fontWeight: '700',
+      },
+    },
+    default: {
+      regular: {
+        fontFamily: 'sans-serif',
+        fontWeight: 'normal',
+      },
+      medium: {
+        fontFamily: 'sans-serif-medium',
+        fontWeight: 'normal',
+      },
+      bold: {
+        fontFamily: 'sans-serif',
+        fontWeight: '600',
+      },
+      heavy: {
+        fontFamily: 'sans-serif',
+        fontWeight: '700',
+      },
+    },
+  }),
+};
+
+export const DefaultNavigationTheme: Theme = {
+  dark: false,
+  colors: {
+    primary: 'rgb(0, 122, 255)',
+    background: 'rgb(242, 242, 242)',
+    card: 'rgb(255, 255, 255)',
+    text: 'rgb(28, 28, 30)',
+    border: 'rgb(216, 216, 216)',
+    notification: 'rgb(255, 59, 48)',
+  },
+  fonts: Platform.select({
+    ios: {
+      regular: {
+        fontFamily: 'System',
+        fontWeight: '400',
+      },
+      medium: {
+        fontFamily: 'System',
+        fontWeight: '500',
+      },
+      bold: {
+        fontFamily: 'System',
+        fontWeight: '600',
+      },
+      heavy: {
+        fontFamily: 'System',
+        fontWeight: '700',
+      },
+    },
+    default: {
+      regular: {
+        fontFamily: 'sans-serif',
+        fontWeight: 'normal',
+      },
+      medium: {
+        fontFamily: 'sans-serif-medium',
+        fontWeight: 'normal',
+      },
+      bold: {
+        fontFamily: 'sans-serif',
+        fontWeight: '600',
+      },
+      heavy: {
+        fontFamily: 'sans-serif',
+        fontWeight: '700',
+      },
+    },
+  }),
+};
+
+const baseStylesheetTheme = StyleSheet.create({
 	title: {
-		fontSize: normalizeSize(38),
-    lineHeight: normalizeSize(66),
+		fontSize: 38 * scale,
+    lineHeight: 66 * scale,
 	}
 })
 
-const lightTheme = StyleSheet.create({
+const lightStylesheetTheme = StyleSheet.create({
 	title: {
-    ...baseTheme.title,
+    ...baseStylesheetTheme.title,
 		color: '#000000'
   },
 	text: {
@@ -31,9 +133,9 @@ const lightTheme = StyleSheet.create({
 	}
 })
 
-const darkTheme = StyleSheet.create({
+const darkStylesheetTheme = StyleSheet.create({
 	title: {
-		...baseTheme.title,
+		...baseStylesheetTheme.title,
 		color: 'rgb(209, 213, 219)'
 	},
 	text: {
@@ -53,18 +155,6 @@ const darkTheme = StyleSheet.create({
 	}
 })
 
-export const getTheme = (scheme: ColorSchemeName) => {
-	return scheme === 'dark' ? darkTheme : lightTheme;
-}
-
-export const navigationDarkTheme : Theme = {
-  dark: true,
-  colors: {
-    primary: 'rgb(10, 132, 255)',
-    background: '#171E2E',
-    card: 'rgb(18, 18, 18)',
-    text: 'rgb(229, 229, 231)',
-    border: 'rgb(39, 39, 41)',
-    notification: 'rgb(255, 69, 58)',
-  },
+export const getStylesheetTheme = (scheme: ColorSchemeName) => {
+	return scheme === 'dark' ? darkStylesheetTheme : lightStylesheetTheme;
 }
