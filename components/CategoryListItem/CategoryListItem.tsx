@@ -11,7 +11,7 @@ interface CategoryListItemProps {
 }
 
 const CategoryListItem: React.FC<CategoryListItemProps> = ({ category, onPress, isLogo = false }) => {
-  const { id, name, backdrops } = category
+  const { name, backdrops } = category
   const randomIndex = Math.floor(Math.random() * backdrops.length);
 
   return (
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
   },
   nameText: {
     color: '#ffffff',
-    fontSize: normalizeSize(50),
+    fontSize: normalizeSize(40),
     fontWeight: 'bold',
   }
 })

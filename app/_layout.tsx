@@ -52,15 +52,13 @@ export default function RootLayout() {
 					<Stack.Screen name="(tabs)" options={{ headerShown: false }}/>
 					<Stack.Screen name="movie/[id]" options={{ headerShown: false }} />
 					<Stack.Screen name="tv/[id]" options={{ headerShown: false }} />
-					<Stack.Screen name="trending" options={{ headerShown: false }} />
-					<Stack.Screen name="popular-movies" options={{ headerShown: false }} />
-					<Stack.Screen name="popular-tv" options={{ headerShown: false }} />
-					<Stack.Screen name="upcoming-movies" options={{ headerShown: false }} />
-					<Stack.Screen name="upcoming-tv" options={{ headerShown: false }} />
-					<Stack.Screen name="genre-movie/[id]" options={{ headerShown: false }} />
-					<Stack.Screen name="genre-tv/[id]" options={{ headerShown: false }} />
-					<Stack.Screen name="studio/[id]" options={{ headerShown: false }} />
-					<Stack.Screen name="network/[id]" options={{ headerShown: false }} />
+					<Stack.Screen name="person/[id]" options={{ headerShown: false }} />
+					<Stack.Screen name="media-list" options={{ headerShown: false }} />
+					<Stack.Screen name="movie-genre" options={{ headerShown: false }} />
+					<Stack.Screen name="tv-genre" options={{ headerShown: false }} />
+					<Stack.Screen name="movie-studio" options={{ headerShown: false }} />
+					<Stack.Screen name="tv-network" options={{ headerShown: false }} />
+					<Stack.Screen name="service" options={{ headerShown: false }} />
 					<Stack.Screen name="+not-found" />
 				</Stack>
 			</ThemeProvider>

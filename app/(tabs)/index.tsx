@@ -52,89 +52,106 @@ export default function DiscoveryScreen() {
 		return <ActivityIndicator size="large" style={{ paddingTop: 30 }} />
 	}
 
-	// Query functions to pass to media list screens
-	const trendingScreenQueryFn = (page: number) => {
-		return client?.search.getDiscoverTrending(page)
-	}
-	const moviePopularScreenQueryFn = (page: number) => {
-		return client?.search.getDiscoverMovies(page)
-	}
-	const movieUpcomingScreenQueryFn = (page: number) => {
-		return client?.search.getDiscoverMoviesUpcoming(page)
-	}
-	const tvPopularScreenQueryFn = (page: number) => {
-		return client?.search.getDiscoverTv(page)
-	}
-	const tvUpcomingScreenQueryFn = (page: number) => {
-		return client?.search.getDiscoverTvUpcoming(page)
-	}
-
 	// onPress handlers
 	const handlePressMedia = (item: MovieResult | TvResult | PersonResult) => {
 		switch(item.mediaType) {
 			case MediaType.movie:
 				// @ts-ignore
 				// Alert.alert('Test', `The current value for item.id is ${item.id}.	`)
-				router.navigate(`movie/${item.id}`)
+				router.push(`movie/${item.id}`)
 				break
 			case MediaType.tv:
 				// @ts-ignore
-				router.navigate(`tv/${item.id}`)
+				router.push(`tv/${item.id}`)
 				break
 			case MediaType.person:
 				// @ts-ignore
-				router.navigate(`person/${item.id}`)
+				router.push(`person/${item.id}`)
 				break
 			default:
 				break
 		}
 	}
 	const handlePressTvGenre = (category: Category) => {
-		// router.navigate(`tv-genre/${category.id}`)
+		router.push({
+			pathname: '/tv-genre',
+			params: {
+				id: category.id,
+				name: category.name
+			}
+		})
 	}
 	const handlePressNetwork = (category: Category) => {
-		// router.navigate('Network', { category })
+		router.push({
+			pathname: '/tv-network',
+			params: {
+				id: category.id,
+				backdrops: category.backdrops
+			}
+		})
 	}
 	const handlePressMovieGenre = (category: Category) => {
-		// router.navigate('MovieGenre', { category })
+		router.push({
+			pathname: '/movie-genre',
+			params: {
+				id: category.id,
+				name: category.name
+			}
+		})
 	}
 	const handlePressStudio = (category: Category) => {
-		// router.navigate('Studio', { category })
+		router.push({
+			pathname: '/movie-studio',
+			params: {
+				id: category.id,
+				backdrops: category.backdrops
+			}
+		})
 	}
 	const handlePressTrending = () => {
-		// return router.navigate('MediaList', {
-		// 	title: 'Trending',
-		// 	cacheKey: 'trending-screen',
-		// 	fetchFn: trendingScreenQueryFn
-		// })
+		router.push({
+			pathname: '/media-list',
+			params: {
+				title: 'Trending',
+				cacheKey: 'trending-screen',
+			}
+		})
 	}
 	const handlePressMoviePopular = () => {
-		// return router.navigate('MediaList', {
-		// 	title: 'Popular Movies',
-		// 	cacheKey: 'popular-movies-screen',
-		// 	fetchFn: moviePopularScreenQueryFn
-		// })
+		router.push({
+			pathname: '/media-list',
+			params: {
+				title: 'Popular Movies',
+				cacheKey: 'popular-movies-screen',
+			}
+		})
 	}
 	const handlePressMovieUpcoming = () => {
-		// return router.navigate('MediaList', {
-		// 	title: 'Upcoming Movies',
-		// 	cacheKey: 'upcoming-movies-screen',
-		// 	fetchFn: movieUpcomingScreenQueryFn
-		// })
+		router.push({
+			pathname: '/media-list',
+			params: {
+				title: 'Upcoming Movies',
+				cacheKey: 'upcoming-movies-screen',
+			}
+		})
 	}
 	const handlePressTvPopular = () => {
-		// return router.navigate('MediaList', {
-		// 	title: 'Popular Series',
-		// 	cacheKey: 'popular-tv-screen',
-		// 	fetchFn: tvPopularScreenQueryFn
-		// })
+		router.push({
+			pathname: '/media-list',
+			params: {
+				title: 'Popular Series',
+				cacheKey: 'popular-tv-screen',
+			}
+		})
 	}
 	const handlePressTvUpcoming = () => {
-		// return router.navigate('MediaList', {
-		// 	title: 'Upcoming Series',
-		// 	cacheKey: 'upcoming-tv-screen',
-		// 	fetchFn: tvUpcomingScreenQueryFn
-		// })
+		router.push({
+			pathname: '/media-list',
+			params: {
+				title: 'Upcoming Series',
+				cacheKey: 'upcoming-tv-screen',
+			}
+		})
 	}
 
 	return (

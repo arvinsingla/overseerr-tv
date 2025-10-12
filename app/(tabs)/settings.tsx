@@ -60,14 +60,12 @@ export default function SettingScreen() {
 
   function save() {
     setOverseerClient(connectionType, key, address, port)
-    // if (navigation.canGoBack()) {
-    //   navigation.goBack()
-    // } else {
-    //   navigation.navigate('Discovery')
-    // }
-		router.navigate('/(tabs)/index')
+		if(router.canGoBack()) {
+			router.back()
+		} else {
+			router.navigate('/')
+		}
   }
-
 
   function clear() {
     Alert.alert(
