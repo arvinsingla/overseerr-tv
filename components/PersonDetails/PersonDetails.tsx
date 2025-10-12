@@ -74,6 +74,7 @@ const style = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		marginTop: normalizeSize(50),
+		marginBottom: normalizeSize(50),
 	},
 	contentLeft: {
 		maxWidth: normalizeSize(1200),

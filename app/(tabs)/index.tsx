@@ -49,7 +49,11 @@ export default function DiscoveryScreen() {
   })
 
  	if (!client) {
-		return <ActivityIndicator size="large" style={{ paddingTop: 30 }} />
+		return (
+			<ParallaxScrollView>
+				<ActivityIndicator size="large" />
+			</ParallaxScrollView>
+		)
 	}
 
 	// onPress handlers

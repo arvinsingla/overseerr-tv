@@ -1,7 +1,7 @@
 {
   "expo": {
     "scheme": "routertv",
-		"userInterfaceStyle": "automatic",
+    "userInterfaceStyle": "automatic",
     "plugins": [
       [
         "@react-native-tvos/config-tv",
@@ -13,8 +13,8 @@
             "iconSmall2x": "./assets/tv_icons/seerrtv-icon-small-2x.png",
             "topShelf": "./assets/tv_icons/seerrtv-shelf-1x.png",
             "topShelf2x": "./assets/tv_icons/seerrtv-shelf-2x.png",
-            "topShelfWide": "./assets/tv_icons/icon-2320x720.png",
-            "topShelfWide2x": "./assets/tv_icons/icon-4640x1440.png"
+            "topShelfWide": "./assets/tv_icons/seerrtv-shelf-2x.png",
+            "topShelfWide2x": "./assets/tv_icons/seerrtv-shelf-2x.png"
           }
         }
       ],
@@ -27,13 +27,15 @@
       "edgeToEdgeEnabled": true,
       "splash": {
         "image": "./assets/tv_icons/seerrtv-launch.png"
-      }
+      },
+      "package": "com.arvinsingla.seerrtv"
     },
     "ios": {
       "splash": {
         "image": "./assets/tv_icons/seerrtv-launch.png"
       },
-      "bundleIdentifier": "com.arvinsingla.seerrTV"
+      "bundleIdentifier": "com.arvinsingla.OverseerrTV",
+			"buildNumber": "1.1.0"
     },
     "web": {
       "bundler": "metro",
@@ -45,6 +47,7 @@
     },
     "newArchEnabled": true,
     "name": "seerrTV",
-    "slug": "seerr-tv"
+    "slug": "seerr-tv",
+		"version": "1.1.0"
   }
 }

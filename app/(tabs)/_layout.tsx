@@ -1,5 +1,36 @@
-import PlatformTabLayout from '@/layouts/TabLayout';
+import { NativeTabs, Label, Icon } from 'expo-router/unstable-native-tabs';
+import { useRouter } from 'expo-router';
+import useAppStore from '@/lib/store';
 
 export default function TabLayout() {
-  return <PlatformTabLayout />;
+	const router = useRouter()
+	const { apiKey, apiAddress } = useAppStore()
+	const hasServerSettings = apiKey && apiAddress
+
+	if (!hasServerSettings) {
+		router.replace('/(tabs)/settings')
+	}
+
+  return (
+		<NativeTabs>
+			<NativeTabs.Trigger
+				name="index"
+				hidden={!hasServerSettings}
+			>
+				<Label>Discovery</Label>
+				<Icon sf="tv.fill" />
+			</NativeTabs.Trigger>
+			<NativeTabs.Trigger
+				name="search"
+				hidden={!hasServerSettings}
+			>
+				<Label>Search</Label>
+				<Icon sf="magnifyingglass" />
+			</NativeTabs.Trigger>
+			<NativeTabs.Trigger name="settings">
+				<Label>Settings</Label>
+				<Icon sf="gear" />
+			</NativeTabs.Trigger>
+		</NativeTabs>
+	);
 }

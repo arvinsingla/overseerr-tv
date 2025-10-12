@@ -88,7 +88,7 @@ export default function MovieScreen() {
 				/>
 			}
 			{similarIsSuccess && similarData?.results &&
-				<ThemedView>
+				<ThemedView style={{ marginBottom: 30 * scale }}>
 					<ThemedText style={[styles.title]}>Similar Movies</ThemedText>
 					<MediaList
 						media={similarData.results}

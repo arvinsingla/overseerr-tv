@@ -1,0 +1,18 @@
+{
+  "images": [
+    {
+      "filename": "seerrtv-icon-small-1x.png",
+      "idiom": "tv",
+      "scale": "1x"
+    },
+    {
+      "filename": "seerrtv-icon-small-2x.png",
+      "idiom": "tv",
+      "scale": "2x"
+    }
+  ],
+  "info": {
+    "version": 1,
+    "author": "expo"
+  }
+}

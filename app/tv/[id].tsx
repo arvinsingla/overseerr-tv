@@ -85,7 +85,7 @@ export default function MovieScreen() {
 				<TvDetails tv={data} canRequest={canRequest} onRequest={submitRequest} />
 			}
 			{similarIsSuccess && similarData?.results &&
-				<ThemedView>
+				<ThemedView style={{ marginBottom: 30 * scale }}>
 					<ThemedText style={[styles.title]}>Similar Series</ThemedText>
 					<MediaList media={similarData.results} isHorizontal={true} onPress={onTvPress} />
 				</ThemedView>
