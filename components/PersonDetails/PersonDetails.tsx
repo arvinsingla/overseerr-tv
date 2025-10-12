@@ -1,4 +1,4 @@
-import { Image, Text, View, StyleSheet, Pressable, useColorScheme } from "react-native"
+import { Image, Text, View, StyleSheet, Pressable } from "react-native"
 import { PersonDetails as PersonDetailsType } from "@/lib/OverseerrClient"
 import { TMDB_IMAGE_URL } from "@/lib/constants"
 import { normalizeSize } from "@/lib/utils";

@@ -33,7 +33,7 @@
       "splash": {
         "image": "./assets/tv_icons/seerrtv-launch.png"
       },
-      "bundleIdentifier": "com.anonymous.overseerr-tv"
+      "bundleIdentifier": "com.arvinsingla.seerrTV"
     },
     "web": {
       "bundler": "metro",
@@ -44,7 +44,7 @@
       "typedRoutes": true
     },
     "newArchEnabled": true,
-    "name": "seerr-tv",
+    "name": "seerrTV",
     "slug": "seerr-tv"
   }
 }
