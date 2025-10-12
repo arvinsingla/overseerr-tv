@@ -12,10 +12,9 @@ import {
 import { useColorScheme } from '@/hooks/useColorScheme';
 import useAppStore from '@/lib/store';
 import { DarkNavigationTheme, DefaultNavigationTheme } from '@/lib/theme';
-import Header from '../components/Header';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
+// SplashScreen.preventAutoHideAsync();
 
 // Disable reanimated warnings
 configureReanimatedLogger({
@@ -29,22 +28,22 @@ export default function RootLayout() {
   const { apiKey, apiAddress } = useAppStore()
   const hasServerSettings = apiKey && apiAddress
   const colorScheme = useColorScheme();
-  const [loaded, error] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  });
+  // const [loaded, error] = useFonts({
+  //   SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+  // });
 
-  useEffect(() => {
-    if (loaded || error) {
-      SplashScreen.hideAsync();
-      if (error) {
-        console.warn(`Error in loading fonts: ${error}`);
-      }
-    }
-  }, [loaded, error]);
+  // useEffect(() => {
+  //   if (loaded || error) {
+  //     SplashScreen.hideAsync();
+  //     if (error) {
+  //       console.warn(`Error in loading fonts: ${error}`);
+  //     }
+  //   }
+  // }, [loaded, error]);
 
-  if (!loaded && !error) {
-    return null;
-  }
+  // if (!loaded && !error) {
+  //   return null;
+  // }
 
   return (
 	  <QueryClientProvider client={queryClient}>
@@ -52,6 +51,16 @@ export default function RootLayout() {
 				<Stack>
 					<Stack.Screen name="(tabs)" options={{ headerShown: false }}/>
 					<Stack.Screen name="movie/[id]" options={{ headerShown: false }} />
+					<Stack.Screen name="tv/[id]" options={{ headerShown: false }} />
+					<Stack.Screen name="trending" options={{ headerShown: false }} />
+					<Stack.Screen name="popular-movies" options={{ headerShown: false }} />
+					<Stack.Screen name="popular-tv" options={{ headerShown: false }} />
+					<Stack.Screen name="upcoming-movies" options={{ headerShown: false }} />
+					<Stack.Screen name="upcoming-tv" options={{ headerShown: false }} />
+					<Stack.Screen name="genre-movie/[id]" options={{ headerShown: false }} />
+					<Stack.Screen name="genre-tv/[id]" options={{ headerShown: false }} />
+					<Stack.Screen name="studio/[id]" options={{ headerShown: false }} />
+					<Stack.Screen name="network/[id]" options={{ headerShown: false }} />
 					<Stack.Screen name="+not-found" />
 				</Stack>
 			</ThemeProvider>

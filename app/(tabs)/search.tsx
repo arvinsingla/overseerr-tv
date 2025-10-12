@@ -51,10 +51,11 @@ export default function SearchScreen() {
 				break
 			case MediaType.tv:
 				// @ts-ignore
-				// navigation.navigate('Tv', { item })
+				router.navigate(`/tv/${item.id}`)
 				break
 			case MediaType.person:
-				// navigation.navigate('Person', { item })
+				// @ts-ignore
+				router.navigate(`/person/${item.id}`)
 				break
 		}
 	}
@@ -108,10 +109,10 @@ const useSearchScreenStyles = function () {
       gap: 8 * scale,
     },
 		input: {
-				marginBottom: 25 * scale,
-				fontSize: 38 * scale,
-				height: 80 * scale,
-				borderRadius: 10 * scale,
-			}
+			marginBottom: 25 * scale,
+			fontSize: 38 * scale,
+			height: 80 * scale,
+			borderRadius: 10 * scale,
+		}
   });
 };

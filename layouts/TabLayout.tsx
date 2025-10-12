@@ -2,7 +2,6 @@ import { NativeTabs, Label, Icon } from 'expo-router/unstable-native-tabs';
 import { Platform } from 'react-native';
 
 import WebTabLayout from './TabLayout.web';
-import Header from '@/components/Header';
 
 export default function TabLayout() {
   if (Platform.OS === 'android' && Platform.isTV) {

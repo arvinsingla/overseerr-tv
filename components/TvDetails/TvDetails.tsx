@@ -5,7 +5,7 @@ import { TMDB_IMAGE_URL } from "@/lib/constants"
 import { languageMap } from "@/lib/maps"
 import StatusPill from "../StatusPill/StatusPill"
 import { getTrailerURLFromRelatedVideos, normalizeSize } from "@/lib/utils"
-import { getTheme } from "@/lib/theme";
+import { useTheme } from "@react-navigation/core"
 
 const DIRECTOR_KEY = 'Director'
 interface TvDetailsProps {
@@ -37,8 +37,7 @@ const TvDetails: React.FC<TvDetailsProps> = ({ tv, canRequest = false, onRequest
 	const trailerURL = getTrailerURLFromRelatedVideos(relatedVideos ?? [])
 	const plexURL = mediaInfo?.iOSPlexUrl ?? ''
 
-	const scheme = useColorScheme()
-	const theme = getTheme(scheme)
+	const theme = useTheme()
 
 	if (directors?.length) tvData.push({ title: 'Director(s)', value: directors.join(', ') })
 	if (cast?.length) tvData.push({ title: 'Cast', value: cast.join('\n') })
@@ -64,22 +63,22 @@ const TvDetails: React.FC<TvDetailsProps> = ({ tv, canRequest = false, onRequest
 						{mediaStatus && <StatusPill status={mediaStatus} downloadStatus={mediaInfo.downloadStatus} />}
 						<View style={style.HeaderDetailsTitle}>
 							<Text>
-								<Text style={[style.headerDetailsTitleMain, theme.text]}>{name}</Text>
+								<Text style={[style.headerDetailsTitleMain, { color: theme.colors.text }]}>{name}</Text>
 							</Text>
 						</View>
 						{genres?.length ?
 							<View>
-								<Text style={[style.HeaderDetailsSubtitleText, theme.text]}>{genres?.map((item) => item.name).join(', ')}</Text>
+								<Text style={[style.HeaderDetailsSubtitleText, { color: theme.colors.text }]}>{genres?.map((item) => item.name).join(', ')}</Text>
 							</View>
 							: null
 						}
 					</View>
 				</View>
-				{tagline && <Text style={[style.contentLeftTagline, theme.text]}>{tagline}</Text>}
+				{tagline && <Text style={[style.contentLeftTagline, { color: theme.colors.text }]}>{tagline}</Text>}
 				{overview &&
 					<>
-						<Text style={[{ fontSize: normalizeSize(40), fontWeight: 'bold' }, theme.text]}>Overview</Text>
-						<Text style={[style.contentLeftOverview, theme.text]}>{overview}</Text>
+						<Text style={[{ fontSize: normalizeSize(40), fontWeight: 'bold' }, { color: theme.colors.text }]}>{`Overview`}</Text>
+						<Text style={[style.contentLeftOverview, { color: theme.colors.text }]}>{overview}</Text>
 					</>
 				}
 			</View>
@@ -100,13 +99,13 @@ const TvDetails: React.FC<TvDetailsProps> = ({ tv, canRequest = false, onRequest
 					</View>
 				}
 				{tvData.length &&
-					<View style={[style.contentRightTable, theme.border]}>
+					<View style={[style.contentRightTable, { borderColor: theme.colors.border }]}>
 						{tvData.map((data, index) => {
 							const isLastItem = index === tvData.length - 1
 							return (
-								<View key={index} style={[style.contentRightItem, { borderBottomWidth: isLastItem ? 0 : 1 }, theme.border]}>
-									<Text style={[style.bold, style.contentRightItemText, theme.text]}>{data.title}:</Text>
-									<Text style={[style.contentRightItemText, theme.text]}>{data.value}</Text>
+								<View key={index} style={[style.contentRightItem, { borderBottomWidth: isLastItem ? 0 : 1 }, { borderColor: theme.colors.border }]}>
+									<Text style={[style.bold, style.contentRightItemText, { color: theme.colors.text }]}>{data.title}:</Text>
+									<Text style={[style.contentRightItemText, { color: theme.colors.text }]}>{data.value}</Text>
 								</View>
 							)
 						})}

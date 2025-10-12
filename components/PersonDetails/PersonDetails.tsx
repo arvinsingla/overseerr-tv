@@ -1,8 +1,8 @@
 import { Image, Text, View, StyleSheet, Pressable, useColorScheme } from "react-native"
 import { PersonDetails as PersonDetailsType } from "@/lib/OverseerrClient"
 import { TMDB_IMAGE_URL } from "@/lib/constants"
-import { getTheme } from "@/lib/theme";
 import { normalizeSize } from "@/lib/utils";
+import { useTheme } from '@react-navigation/native';
 
 interface PersonDetailsProps {
 	person: PersonDetailsType
@@ -18,8 +18,7 @@ const PersonDetails: React.FC<PersonDetailsProps> = ({ person }) => {
 		profilePath,
 	} = person
 	const personData = []
-	const scheme = useColorScheme()
-	const theme = getTheme(scheme)
+	const theme = useTheme()
 
 	if (birthday) personData.push({ title: 'Birthday', value: birthday })
 	if (deathday) personData.push({ title: 'Died', value: deathday })
@@ -33,27 +32,26 @@ const PersonDetails: React.FC<PersonDetailsProps> = ({ person }) => {
 					<View style={style.headerDetails}>
 						<View style={style.HeaderDetailsTitle}>
 							<Text>
-								<Text style={[style.headerDetailsTitleMain, theme.text]}>{name}</Text>
+								<Text style={[style.headerDetailsTitleMain, { color: theme.colors.text }]}>{name}</Text>
 							</Text>
 						</View>
 					</View>
 				</View>
 				{biography &&
 					<>
-						<Text style={[{ fontSize: normalizeSize(40), fontWeight: 'bold' }, theme.text]}>Biography</Text>
-						<Text style={[style.contentLeftOverview, theme.text]}>{biography}</Text>
+						<Text style={[style.contentLeftOverview, { color: theme.colors.text }]}>{biography}</Text>
 					</>
 				}
 			</View>
 			<View style={style.contentRight}>
 				{personData.length &&
-					<View style={[style.contentRightTable, theme.border]}>
+					<View style={[style.contentRightTable, { borderColor: theme.colors.border }]}>
 						{personData.map((data, index) => {
 							const isLastItem = index === personData.length - 1
 							return (
-								<View key={index} style={[style.contentRightItem, { borderBottomWidth: isLastItem ? 0 : 1 }, theme.border]}>
-									<Text style={[style.bold, style.contentRightItemText, theme.text]}>{data.title}:</Text>
-									<Text style={[style.contentRightItemText, theme.text]}>{data.value}</Text>
+								<View key={index} style={[style.contentRightItem, { borderBottomWidth: isLastItem ? 0 : 1 }, { borderColor: theme.colors.border }]}>
+									<Text style={[style.bold, style.contentRightItemText, { color: theme.colors.text }]}>{data.title}:</Text>
+									<Text style={[style.contentRightItemText, { color: theme.colors.text }]}>{data.value}</Text>
 								</View>
 							)
 						})}

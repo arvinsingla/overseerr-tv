@@ -4,12 +4,11 @@ import { useQuery } from '@tanstack/react-query';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import MediaList from '@/components/MediaList/MediaList';
-import MovieDetails from '@/components/MovieDetails/MovieDetails';
+import TvDetails from "@/components/TvDetails/TvDetails";
 import { ThemedScrollView } from '@/components/ThemedScrollView';
 import { useScale } from '@/hooks/useScale';
 import useAppStore from '@/lib/store';
 import { logError } from '@/lib/utils';
-import { MovieResult } from '@/lib/OverseerrClient';
 
 export default function MovieScreen() {
   const styles = useMovieScreenStyles();
@@ -17,46 +16,48 @@ export default function MovieScreen() {
 	const { client } = useAppStore()
 	const { id } = useLocalSearchParams();
 	const router = useRouter();
-	const movieId = Number(id);
-	const { isPending, isSuccess, data, refetch } = useQuery({
-		queryKey: ['movie', movieId],
-		queryFn: () => client?.movies.getMovie(movieId),
-		refetchInterval: 10000,
-	});
+	const tvId = Number(id);
+
 	let canRequest = false
 
-	const { isSuccess: similarIsSuccess, data: similarData } = useQuery({
-		queryKey: ['movieSimilar', movieId],
-		queryFn: () => client?.movies.getMovieSimilar(movieId)
-	})
+	const { isPending, isSuccess, data, refetch } = useQuery({
+    queryKey: ['tv', tvId],
+    queryFn: () => client?.tv.getTv(tvId)
+  })
 
-	const { data: radarrData } = useQuery({
-		queryKey: ['radarr'],
-		queryFn: () => client?.service.getServiceRadarr(),
+  const { isSuccess: similarIsSuccess, data: similarData } = useQuery({
+    queryKey: ['tvSimilar', tvId],
+    queryFn: () => client?.tv.getTvSimilar(tvId)
+  })
+
+	const { data: sonarrData } = useQuery({
+		queryKey: ['sonarr'],
+		queryFn: () => client?.service.getServiceSonarr(),
 	})
 
 	if (data?.mediaInfo?.status === 1 || data?.mediaInfo?.status === undefined) {
-		if (radarrData?.length) {
+		if (sonarrData?.length) {
 			canRequest = true
 		}
 	}
 
-	const submitRequest = () => {
+  const submitRequest = () => {
 		Alert.alert(
 			`Submit request`,
-			`Do you want to submit a request for "${data?.title}"`,
+			`Do you want to submit a request for all seasons of the series "${data?.name}"`,
 			[
 				{
 					text: 'Request',
 					onPress: async () => {
 						try {
 							await client?.request.postRequest({
-								mediaType: 'movie',
-								mediaId: movieId,
+								mediaType: 'tv',
+								mediaId: tvId,
+								seasons: 'all'
 							})
 							await refetch()
 						} catch (e: any) {
-							logError('Movie Request', e)
+							logError('TV Request', e)
 							Alert.alert(`Error`, `There was an error submitting your request`)
 						}
 					},
@@ -71,9 +72,9 @@ export default function MovieScreen() {
 		)
 	}
 
-	const onMoviePress = (item: MovieResult) => {
-		router.navigate(`/movie/${item.id}`)
-	}
+  const onTvPress = (item: any) => {
+		router.navigate(`/tv/${item.id}`)
+  }
 
   return (
     <ThemedScrollView style={{ overflow: 'visible' }}>
@@ -81,20 +82,12 @@ export default function MovieScreen() {
 				<ActivityIndicator size="large" style={{ paddingTop: 30 * scale }} />
 			}
 			{isSuccess && data &&
-				<MovieDetails
-					movie={data}
-					canRequest={canRequest}
-					onRequest={submitRequest}
-				/>
+				<TvDetails tv={data} canRequest={canRequest} onRequest={submitRequest} />
 			}
 			{similarIsSuccess && similarData?.results &&
 				<ThemedView>
-					<ThemedText style={[styles.title]}>Similar Movies</ThemedText>
-					<MediaList
-						media={similarData.results}
-						isHorizontal={true}
-						onPress={(item) => onMoviePress(item as MovieResult)}
-					/>
+					<ThemedText style={[styles.title]}>Similar Series</ThemedText>
+					<MediaList media={similarData.results} isHorizontal={true} onPress={onTvPress} />
 				</ThemedView>
 			}
     </ThemedScrollView>

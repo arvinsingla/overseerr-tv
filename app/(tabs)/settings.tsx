@@ -1,5 +1,5 @@
-import Ionicons from '@expo/vector-icons/Ionicons';
-import { StyleSheet, Alert, TextInput, useColorScheme } from 'react-native';
+import { useRouter } from 'expo-router';
+import { StyleSheet, Alert, TextInput } from 'react-native';
 import { useState } from 'react'
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
@@ -27,14 +27,13 @@ import {
 
 export default function SettingScreen() {
   const styles = useSettingScreenStyles();
-  const scale = useScale();
   const { apiConnectionType, apiKey, apiAddress, apiPort, setClientConfig, setOverseerClient } = useAppStore()
   const [connectionType, setConnectionType] = useState<string>(apiConnectionType)
 	const [key, setKey] = useState<string>(apiKey)
 	const [address, setAddress] = useState<string>(apiAddress)
 	const [port, setPort] = useState<string>(apiPort)
 	const [isValid, setIsValid] = useState<boolean>(false)
-  const scheme = useColorScheme()
+	const router = useRouter();
 
 	const connectionTypeOptions = [
 		{ id: 'http', label: 'HTTP' },
@@ -66,6 +65,7 @@ export default function SettingScreen() {
     // } else {
     //   navigation.navigate('Discovery')
     // }
+		router.navigate('/(tabs)/index')
   }
 
 
@@ -153,7 +153,8 @@ const useSettingScreenStyles = function () {
       marginTop: normalizeSize(40),
       display: 'flex',
       flexDirection: 'row',
-      justifyContent: 'space-around'
+      justifyContent: 'center',
+			gap: normalizeSize(40),
     },
     title: {
       padding: normalizeSize(30),

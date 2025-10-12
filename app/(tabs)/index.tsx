@@ -1,7 +1,6 @@
 import { ActivityIndicator, StyleSheet } from 'react-native';
 import { useQuery } from '@tanstack/react-query'
 import { useRouter } from 'expo-router';
-import { useTheme } from '@react-navigation/native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
@@ -71,73 +70,72 @@ export default function DiscoveryScreen() {
 	}
 
 	// onPress handlers
-		const handlePressMedia = (item: MovieResult | TvResult | PersonResult) => {
-			switch(item.mediaType) {
-				case MediaType.movie:
-					// @ts-ignore
-					// Alert.alert('Test', `The current value for item.id is ${item.id}.	`)
-					router.navigate(`movie/${item.id}`)
-					break
-				case MediaType.tv:
-					// @ts-ignore
-					router.navigate(`tv/${item.id}`)
-					break
-				case MediaType.person:
-					// @ts-ignore
-					router.navigate(`person/${item.id}`)
-					break
-				default:
-					break
-			}
+	const handlePressMedia = (item: MovieResult | TvResult | PersonResult) => {
+		switch(item.mediaType) {
+			case MediaType.movie:
+				// @ts-ignore
+				// Alert.alert('Test', `The current value for item.id is ${item.id}.	`)
+				router.navigate(`movie/${item.id}`)
+				break
+			case MediaType.tv:
+				// @ts-ignore
+				router.navigate(`tv/${item.id}`)
+				break
+			case MediaType.person:
+				// @ts-ignore
+				router.navigate(`person/${item.id}`)
+				break
+			default:
+				break
 		}
-		const handlePressTvGenre = (category: Category) => {
-			// router.navigate(`tv-genre/${category.id}`)
-		}
-		const handlePressNetwork = (category: Category) => {
-			// router.navigate('Network', { category })
-		}
-		const handlePressMovieGenre = (category: Category) => {
-			// router.navigate('MovieGenre', { category })
-		}
-		const handlePressStudio = (category: Category) => {
-			// router.navigate('Studio', { category })
-		}
-		const handlePressTrending = () => {
-			// return router.navigate('MediaList', {
-			// 	title: 'Trending',
-			// 	cacheKey: 'trending-screen',
-			// 	fetchFn: trendingScreenQueryFn
-			// })
-		}
-		const handlePressMoviePopular = () => {
-			// return router.navigate('MediaList', {
-			// 	title: 'Popular Movies',
-			// 	cacheKey: 'popular-movies-screen',
-			// 	fetchFn: moviePopularScreenQueryFn
-			// })
-		}
-		const handlePressMovieUpcoming = () => {
-			// return router.navigate('MediaList', {
-			// 	title: 'Upcoming Movies',
-			// 	cacheKey: 'upcoming-movies-screen',
-			// 	fetchFn: movieUpcomingScreenQueryFn
-			// })
-		}
-		const handlePressTvPopular = () => {
-			// return router.navigate('MediaList', {
-			// 	title: 'Popular Series',
-			// 	cacheKey: 'popular-tv-screen',
-			// 	fetchFn: tvPopularScreenQueryFn
-			// })
-		}
-		const handlePressTvUpcoming = () => {
-			// return router.navigate('MediaList', {
-			// 	title: 'Upcoming Series',
-			// 	cacheKey: 'upcoming-tv-screen',
-			// 	fetchFn: tvUpcomingScreenQueryFn
-			// })
-		}
-
+	}
+	const handlePressTvGenre = (category: Category) => {
+		// router.navigate(`tv-genre/${category.id}`)
+	}
+	const handlePressNetwork = (category: Category) => {
+		// router.navigate('Network', { category })
+	}
+	const handlePressMovieGenre = (category: Category) => {
+		// router.navigate('MovieGenre', { category })
+	}
+	const handlePressStudio = (category: Category) => {
+		// router.navigate('Studio', { category })
+	}
+	const handlePressTrending = () => {
+		// return router.navigate('MediaList', {
+		// 	title: 'Trending',
+		// 	cacheKey: 'trending-screen',
+		// 	fetchFn: trendingScreenQueryFn
+		// })
+	}
+	const handlePressMoviePopular = () => {
+		// return router.navigate('MediaList', {
+		// 	title: 'Popular Movies',
+		// 	cacheKey: 'popular-movies-screen',
+		// 	fetchFn: moviePopularScreenQueryFn
+		// })
+	}
+	const handlePressMovieUpcoming = () => {
+		// return router.navigate('MediaList', {
+		// 	title: 'Upcoming Movies',
+		// 	cacheKey: 'upcoming-movies-screen',
+		// 	fetchFn: movieUpcomingScreenQueryFn
+		// })
+	}
+	const handlePressTvPopular = () => {
+		// return router.navigate('MediaList', {
+		// 	title: 'Popular Series',
+		// 	cacheKey: 'popular-tv-screen',
+		// 	fetchFn: tvPopularScreenQueryFn
+		// })
+	}
+	const handlePressTvUpcoming = () => {
+		// return router.navigate('MediaList', {
+		// 	title: 'Upcoming Series',
+		// 	cacheKey: 'upcoming-tv-screen',
+		// 	fetchFn: tvUpcomingScreenQueryFn
+		// })
+	}
 
 	return (
     <ParallaxScrollView>
