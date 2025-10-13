@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, Pressable, Text, StyleSheet } from 'react-native';
+import { ThemedText } from '@/components/ThemedText';
 import { useTheme } from '@react-navigation/native';
-import { normalizeSize } from '../../lib/utils';
-
+import { useScale } from '@/hooks/useScale';
 interface PickerProps {
   label: string;
   options: { id: string, label: string }[];
@@ -13,7 +13,9 @@ interface PickerProps {
 const Picker: React.FC<PickerProps> = ({ label, options, selectedOption, onOptionSelected }) => {
 	const index = options.findIndex((option) => option.id === selectedOption);
 	const [selectedOptionIndex, setSelectedOptionIndex] = useState(index !== -1 ? index : 0);
-	const theme = useTheme()
+	const scale = useScale();
+	const styles = usePickerStyles(scale);
+	const theme = useTheme();
   const handlePress = () => {
     const nextIndex = (selectedOptionIndex + 1) % options.length;
     setSelectedOptionIndex(nextIndex);
@@ -35,8 +37,8 @@ const Picker: React.FC<PickerProps> = ({ label, options, selectedOption, onOptio
       >
 				{({ focused }) => (
 					<>
-						<Text style={[styles.label, { backgroundColor: theme.colors.card }]}>{label}</Text>
-						<Text style={[styles.option, { color: theme.colors.text }]}>{options[selectedOptionIndex].label}</Text>
+						<ThemedText style={[styles.label, { backgroundColor: theme.colors.card }]}>{label}</ThemedText>
+						<ThemedText style={[styles.option, { color: theme.colors.text }]}>{options[selectedOptionIndex].label}</ThemedText>
 					</>
 				)}
       </Pressable>
@@ -44,30 +46,32 @@ const Picker: React.FC<PickerProps> = ({ label, options, selectedOption, onOptio
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  label: {
-		fontSize: normalizeSize(38),
-    marginRight: normalizeSize(10),
-  },
-  button: {
-		flexDirection: 'row',
-		flexGrow: 1,
-		justifyContent: 'space-between',
-		alignItems: 'center',
-		paddingHorizontal: normalizeSize(20),
-    borderRadius: normalizeSize(10),
-		fontSize: normalizeSize(38),
-		height: normalizeSize(80),
-  },
-  option: {
-		fontSize: normalizeSize(38),
-    color: '#000000',
-  },
-});
+const usePickerStyles = function (scale: number) {
+	return StyleSheet.create({
+		container: {
+			flexDirection: 'row',
+			justifyContent: 'center',
+			alignItems: 'center',
+		},
+		label: {
+			fontSize: 23 * scale,
+			marginRight: 10 * scale,
+		},
+		button: {
+			flexDirection: 'row',
+			flexGrow: 1,
+			justifyContent: 'space-between',
+			alignItems: 'center',
+			fontSize: 23 * scale,
+			height: 45 * scale,
+			borderRadius: 10 * scale,
+			paddingHorizontal: 20 * scale,
+		},
+		option: {
+			fontSize: 23 * scale,
+			color: '#000000',
+		}
+	});
+};
 
 export default Picker;

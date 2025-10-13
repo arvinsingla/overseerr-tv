@@ -3,6 +3,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import MediaList from '@/components/MediaList/MediaList';
 import { ThemedScrollView } from '@/components/ThemedScrollView';
+import { ThemedText }	 from '@/components/ThemedText';
 import { useScale } from '@/hooks/useScale';
 import useAppStore from '@/lib/store';
 import { useEffect } from 'react';
@@ -13,7 +14,8 @@ export default function MediaListScreen() {
 	const { client } = useAppStore()
   const router = useRouter()
 	const { title, cacheKey } = useLocalSearchParams();
-	const styles = useMediaListScreenStyles();
+  const scale = useScale();
+	const styles = useMediaListScreenStyles(scale);
 
 	const trendingScreenQueryFn = (page: number) => {
 		return client?.search.getDiscoverTrending(page)
@@ -86,7 +88,7 @@ export default function MediaListScreen() {
         <MediaList
           media={data?.pages.map((page) => page?.results).flat()}
           onPress={onPress}
-          header={<Text style={[styles.title]}>{title}</Text>}
+          header={<ThemedText style={[styles.title]}>{title}</ThemedText>}
 					onEndReached={fetchNextPage}
         />
       }
@@ -97,8 +99,7 @@ export default function MediaListScreen() {
   )
 }
 
-const useMediaListScreenStyles = function () {
-  const scale = useScale();
+const useMediaListScreenStyles = function (scale: number) {
   return StyleSheet.create({
 		title: {
 			fontSize: 38 * scale,

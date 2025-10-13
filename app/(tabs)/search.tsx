@@ -1,11 +1,12 @@
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { useEffect, useState } from 'react';
-import { StyleSheet, TextInput, ActivityIndicator } from 'react-native';
+import { StyleSheet, ActivityIndicator } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useDebounce } from 'use-debounce';
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query"
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import MediaList from '@/components/MediaList/MediaList';
+import { ThemedTextInput } from '@/components/ThemedTextInput';
 import { useScale } from '@/hooks/useScale';
 import useAppStore from '@/lib/store';
 import { MediaType } from '@/lib/types';
@@ -61,13 +62,11 @@ export default function SearchScreen() {
 	}
 
 	const header = (
-		<TextInput
+		<ThemedTextInput
 			value={searchString}
 			onChangeText={setSearchString}
-			style={styles.input}
 			placeholder={'Enter search term'}
 			inputMode="search"
-			placeholderTextColor="#000000"
 		/>
 	)
 
@@ -108,11 +107,5 @@ const useSearchScreenStyles = function () {
       flexDirection: 'row',
       gap: 8 * scale,
     },
-		input: {
-			marginBottom: 25 * scale,
-			fontSize: 38 * scale,
-			height: 80 * scale,
-			borderRadius: 10 * scale,
-		}
   });
 };

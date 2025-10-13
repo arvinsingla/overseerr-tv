@@ -12,7 +12,8 @@ import { ThemedText } from '../components/ThemedText';
 export default function TvGenreScreen() {
 	const { client } = useAppStore()
   const router = useRouter()
-	const styles = useTvGenreScreenStyles();
+	const scale = useScale();
+	const styles = useTvGenreScreenStyles(scale);
 
 	const { id, name } = useLocalSearchParams();
 	const idString = Array.isArray(id) ? id[0] : id as string
@@ -62,8 +63,7 @@ export default function TvGenreScreen() {
   )
 }
 
-const useTvGenreScreenStyles = function () {
-  const scale = useScale();
+const useTvGenreScreenStyles = function (scale: number) {
   return StyleSheet.create({
 		title: {
 			fontSize: 38 * scale,

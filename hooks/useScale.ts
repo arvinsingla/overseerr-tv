@@ -1,6 +1,7 @@
-import { Platform, useWindowDimensions } from 'react-native';
+import { Platform, Dimensions } from 'react-native';
 
+// Get dimensions
 export function useScale(): number {
-  const { width } = useWindowDimensions();
+	const width = Dimensions.get('window').width;
   return Platform.isTV ? width / 1000 : 1;
 }

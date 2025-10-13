@@ -1,9 +1,10 @@
 import { useRouter } from 'expo-router';
-import { StyleSheet, Alert, TextInput } from 'react-native';
+import { StyleSheet, Alert } from 'react-native';
 import { useState } from 'react'
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { ThemedTextInput } from '@/components/ThemedTextInput';
 import Picker from '@/components/Picker/Picker';
 import TvButton, { TvButtonType } from '@/components/TvButton/TvButton';
 import { useScale } from '@/hooks/useScale';
@@ -124,34 +125,30 @@ export default function SettingScreen() {
         selectedOption={connectionType}
         onOptionSelected={setConnectionType}
       />
-			<ThemedText style={[]}>{SETTINGS_ADDRESS}</ThemedText>
-      <TextInput
+			<ThemedText>{SETTINGS_ADDRESS}</ThemedText>
+      <ThemedTextInput
         value={address}
         onChangeText={setAddress}
-        style={[styles.input]}
         placeholder={SETTINGS_ADDRESS_PLACEHOLDER}
       />
-      <ThemedText style={[]}>{SETTINGS_PORT}</ThemedText>
-      <TextInput
+      <ThemedText>{SETTINGS_PORT}</ThemedText>
+      <ThemedTextInput
         value={port}
         onChangeText={setPort}
-        style={[styles.input]}
         placeholder={SETTINGS_PORT_PLACEHOLDER}
         keyboardType='numeric'
       />
-      <ThemedText style={[]}>{SETTINGS_USERNAME}</ThemedText>
-      <TextInput
+      <ThemedText>{SETTINGS_USERNAME}</ThemedText>
+      <ThemedTextInput
         value={username}
         onChangeText={setUsername}
-        style={[styles.input]}
         placeholder={SETTINGS_USERNAME_PLACEHOLDER}
       />
-      <ThemedText style={[]}>{SETTINGS_PASSWORD}</ThemedText>
-      <TextInput
+      <ThemedText>{SETTINGS_PASSWORD}</ThemedText>
+      <ThemedTextInput
         value={password}
 				secureTextEntry={true}
         onChangeText={setPassword}
-        style={[styles.input]}
         placeholder={SETTINGS_PASSWORD_PLACEHOLDER}
       />
       <ThemedView style={styles.buttonRow}>
@@ -166,17 +163,6 @@ export default function SettingScreen() {
 const useSettingScreenStyles = function () {
   const scale = useScale();
   return StyleSheet.create({
-    wrapper: {
-      paddingTop: normalizeSize(40),
-      paddingLeft: normalizeSize(80),
-      paddingRight: normalizeSize(80),
-    },
-    input: {
-      marginBottom: normalizeSize(20),
-      fontSize: normalizeSize(38),
-      height: normalizeSize(80),
-      borderRadius: normalizeSize(10),
-    },
     buttonRow: {
       marginTop: normalizeSize(40),
       display: 'flex',
@@ -184,13 +170,5 @@ const useSettingScreenStyles = function () {
       justifyContent: 'center',
 			gap: normalizeSize(40),
     },
-    title: {
-      padding: normalizeSize(30),
-      backgroundColor: '#1E2836',
-      color: '#ffffff',
-      fontSize: normalizeSize(38),
-      alignContent: 'center',
-      marginBottom: normalizeSize(30),
-    }
   });
 };

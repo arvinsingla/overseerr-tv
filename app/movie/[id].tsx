@@ -12,8 +12,8 @@ import { logError } from '@/lib/utils';
 import { MovieResult } from '@/lib/OverseerrClient';
 
 export default function MovieScreen() {
-  const styles = useMovieScreenStyles();
-  const scale = useScale();
+	const scale = useScale();
+  const styles = useMovieScreenStyles(scale);
 	const { client } = useAppStore()
 	const { id } = useLocalSearchParams();
 	const router = useRouter();
@@ -101,13 +101,11 @@ export default function MovieScreen() {
   );
 }
 
-const useMovieScreenStyles = function () {
-  const scale = useScale();
+const useMovieScreenStyles = function (scale: number) {
   return StyleSheet.create({
 		title: {
-			fontSize: 38 * scale,
-			lineHeight: 66 * scale,
-			marginBottom: 20 * scale,
+			fontSize: 28 * scale,
+			lineHeight: 60 * scale,
 		}
   });
 };

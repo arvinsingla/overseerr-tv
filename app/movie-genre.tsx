@@ -12,7 +12,8 @@ import { ThemedText } from '../components/ThemedText';
 export default function MovieGenreScreen() {
 	const { client } = useAppStore()
   const router = useRouter()
-	const styles = useMovieGenreScreenStyles();
+	const scale = useScale();
+	const styles = useMovieGenreScreenStyles(scale);
 
 	const { id, name } = useLocalSearchParams();
 	const idString = Array.isArray(id) ? id[0] : id as string
@@ -62,8 +63,7 @@ export default function MovieGenreScreen() {
   )
 }
 
-const useMovieGenreScreenStyles = function () {
-  const scale = useScale();
+const useMovieGenreScreenStyles = function (scale: number) {
   return StyleSheet.create({
 		title: {
 			fontSize: 38 * scale,

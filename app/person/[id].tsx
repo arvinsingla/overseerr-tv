@@ -1,9 +1,6 @@
-import { StyleSheet, ActivityIndicator, Alert } from 'react-native';
+import { StyleSheet, ActivityIndicator } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useQuery } from '@tanstack/react-query';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
-import MediaList from '@/components/MediaList/MediaList';
 import PersonDetails from "@/components/PersonDetails/PersonDetails";
 import { ThemedScrollView } from '@/components/ThemedScrollView';
 import { useScale } from '@/hooks/useScale';
@@ -12,8 +9,8 @@ import { MediaType } from "@/lib/types";
 import { MovieResult, TvResult } from '@/lib/OverseerrClient';
 
 export default function PersonScreen() {
-  const styles = usePersonScreenStyles();
   const scale = useScale();
+  const styles = usePersonScreenStyles(scale);
 	const { client } = useAppStore()
 	const { id } = useLocalSearchParams();
 	const router = useRouter();
@@ -56,13 +53,11 @@ export default function PersonScreen() {
   );
 }
 
-const usePersonScreenStyles = function () {
-  const scale = useScale();
+const usePersonScreenStyles = function (scale: number) {
   return StyleSheet.create({
 		title: {
-			fontSize: 38 * scale,
-			lineHeight: 66 * scale,
-			marginBottom: 20 * scale,
+			fontSize: 28 * scale,
+			lineHeight: 60 * scale,
 		}
   });
 };

@@ -9,9 +9,9 @@ export const DarkNavigationTheme: Theme = {
   colors: {
 		primary: 'rgb(10, 132, 255)',
     background: '#171E2E',
-    card: 'rgb(18, 18, 18)',
+    card: '#232c3f',
     text: 'rgb(229, 229, 231)',
-    border: 'rgb(39, 39, 41)',
+    border: 'rgba(81, 81, 83, 1)',
     notification: 'rgb(255, 69, 58)',
   },
   fonts: Platform.select({
@@ -61,7 +61,7 @@ export const DefaultNavigationTheme: Theme = {
     background: 'rgb(242, 242, 242)',
     card: 'rgb(255, 255, 255)',
     text: 'rgb(28, 28, 30)',
-    border: 'rgb(216, 216, 216)',
+    border: 'rgba(188, 188, 188, 1)',
     notification: 'rgb(255, 59, 48)',
   },
   fonts: Platform.select({

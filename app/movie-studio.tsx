@@ -1,9 +1,8 @@
-import { StyleSheet, ActivityIndicator, Image, View, useColorScheme } from 'react-native';
+import { ActivityIndicator, Image, View, useColorScheme } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query";
 import MediaList from '@/components/MediaList/MediaList';
 import { ThemedScrollView } from '@/components/ThemedScrollView';
-import { useScale } from '@/hooks/useScale';
 import useAppStore from '@/lib/store';
 import { useEffect } from 'react';
 import { normalizeSize } from '@/lib/utils';
@@ -12,7 +11,6 @@ import { TMDB_IMAGE_URL, TMDB_IMAGE_URL_FILTER} from "@/lib/constants";
 export default function MovieStudioScreen() {
 	const { client } = useAppStore()
   const router = useRouter()
-	const styles = useMovieStudioScreenStyles();
 	const scheme = useColorScheme()
 	const imgBaseURL = scheme === 'dark' ? TMDB_IMAGE_URL_FILTER : TMDB_IMAGE_URL
 
@@ -77,14 +75,3 @@ export default function MovieStudioScreen() {
     </ThemedScrollView>
   )
 }
-
-const useMovieStudioScreenStyles = function () {
-  const scale = useScale();
-  return StyleSheet.create({
-		title: {
-			fontSize: 38 * scale,
-			lineHeight: 40 * scale,
-			marginBottom: 20 * scale,
-		}
-  });
-};
