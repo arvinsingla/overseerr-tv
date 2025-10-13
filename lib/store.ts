@@ -10,24 +10,22 @@ interface AppState {
 	radarr: RadarrSettings[]
 	sonarr: SonarrSettings[]
 	apiConnectionType: string
-	apiKey: string
 	apiAddress: string
 	apiPort: string
+	apiUsername: string
+	apiPassword: string
 	client: OverseerrClient | null
 	setUser: (user: User) => void
 	setRadarr: (settings: RadarrSettings[]) => void
 	setSonarr: (settings: SonarrSettings[]) => void
 	setClientConfig: (key: string, address: string) => Promise<void>
-	setOverseerClient: (connectionType: string, key: string, address: string, port: string) => Promise<void>
+	setOverseerClient: (connectionType: string, address: string, port: string, username: string, password: string) => Promise<void>
 	fetchInitialData: () => Promise<void>
 }
 
-const instantiateClient = (apiConnectionType: string, apiKey: string, apiAddress: string, apiPort: string): OverseerrClient => {
+const instantiateClient = (apiConnectionType: string, apiAddress: string, apiPort: string): OverseerrClient => {
 	return new OverseerrClient({
 		BASE: `${apiConnectionType}://${apiAddress}${apiPort ? `:${apiPort}` : ''}/api/v1`,
-		HEADERS: {
-			'X-Api-Key': apiKey
-		}
 	})
 }
 
@@ -36,9 +34,10 @@ const useAppStore = create<AppState>()((set) => ({
 	radarr: [],
 	sonarr: [],
 	apiConnectionType: DEFAULT_OVERSEERR_CONNECTION_TYPE,
-	apiKey: 'MTY3OTk0NDc3NDcxOWM1YWQyOWE0LWY3MDItNGRiYi1hOTliLWI0ZjNjZTM0MDVlOCk=',
-	apiAddress: '192.168.10.15',
+	apiAddress: '',
 	apiPort: DEFAULT_OVERSEERR_PORT,
+	apiUsername: '',
+	apiPassword: '',
 	client: null,
 	setUser: (user) => {
 		set(() => ({ user }))
@@ -52,51 +51,54 @@ const useAppStore = create<AppState>()((set) => ({
 	setClientConfig: async (apiKey: string, apiAddress: string) => {
 		if (Platform.OS === 'ios') {
 			Settings.set({ apiConnectionType: DEFAULT_OVERSEERR_CONNECTION_TYPE })
-			Settings.set({ apiKey })
 			Settings.set({ apiAddress })
 			Settings.set({ apiPort: DEFAULT_OVERSEERR_PORT })
 		} else {
 			await AsyncStorage.setItem('apiConnectionType', DEFAULT_OVERSEERR_CONNECTION_TYPE)
-			await AsyncStorage.setItem('apiKey', apiKey)
 			await AsyncStorage.setItem('apiAddress', apiAddress)
 			await AsyncStorage.setItem('apiPort', DEFAULT_OVERSEERR_PORT)
 		}
 		set(() => ({ apiAddress, apiKey, apiPort: DEFAULT_OVERSEERR_PORT }))
 	},
-	setOverseerClient: async (apiConnectionType: string, apiKey: string, apiAddress: string, apiPort: string) => {
+	setOverseerClient: async (apiConnectionType: string, apiAddress: string, apiPort: string, apiUsername: string, apiPassword: string) => {
 		if (Platform.OS === 'ios') {
 			Settings.set({ apiConnectionType })
-			Settings.set({ apiKey })
 			Settings.set({ apiAddress })
 			Settings.set({ apiPort })
+			Settings.set({ apiUsername })
+			Settings.set({ apiPassword })
 		} else {
 			await AsyncStorage.setItem('apiConnectionType', apiConnectionType)
-			await AsyncStorage.setItem('apiKey', apiAddress)
 			await AsyncStorage.setItem('apiAddress', apiAddress)
 			await AsyncStorage.setItem('apiPort', apiPort)
+			AsyncStorage.setItem('apiUsername', apiUsername)
+			AsyncStorage.setItem('apiPassword', apiPassword)
 		}
-		const client = instantiateClient(apiConnectionType, apiKey, apiAddress, apiPort)
-		set(() => ({ apiConnectionType, apiKey, apiAddress, apiPort, client }))
+		const client = instantiateClient(apiConnectionType, apiAddress, apiPort)
+		set(() => ({ apiConnectionType, apiAddress, apiPort, apiUsername, apiPassword, client }))
 	},
 	fetchInitialData: async () => {
 		let apiConnectionType = ''
-		let apiKey = ''
 		let apiAddress = ''
 		let apiPort = ''
+		let apiUsername = ''
+		let apiPassword = ''
 		if (Platform.OS === 'ios') {
 			apiConnectionType = Settings.get('apiConnectionType') ?? DEFAULT_OVERSEERR_CONNECTION_TYPE
-			apiKey = Settings.get('apiKey') ?? ''
 			apiAddress = Settings.get('apiAddress') ?? ''
 			apiPort = Settings.get('apiPort') ?? DEFAULT_OVERSEERR_PORT
+			apiUsername = Settings.get('apiUsername') ?? ''
+			apiPassword = Settings.get('apiPassword') ?? ''
 		} else {
 			apiConnectionType = await AsyncStorage.getItem('apiConnectionType') ?? DEFAULT_OVERSEERR_CONNECTION_TYPE
-			apiKey = await AsyncStorage.getItem('apiKey') ?? ''
 			apiAddress = await AsyncStorage.getItem('apiAddress') ?? ''
 			apiPort = await AsyncStorage.getItem('apiPort') ?? DEFAULT_OVERSEERR_PORT
+			apiUsername = await AsyncStorage.getItem('apiUsername') ?? ''
+			apiPassword = await AsyncStorage.getItem('apiPassword') ?? ''
 		}
-		if (apiKey && apiAddress) {
-			const client = instantiateClient(apiConnectionType, apiKey, apiAddress, apiPort)
-			set({ apiConnectionType, apiKey, apiAddress, apiPort, client })
+		if (apiAddress && apiUsername && apiPassword) {
+			const client = instantiateClient(apiConnectionType, apiAddress, apiPort)
+			set({ apiConnectionType, apiAddress, apiPort, apiUsername, apiPassword, client })
 		}
 	},
 }))

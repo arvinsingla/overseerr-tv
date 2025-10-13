@@ -18,20 +18,30 @@ import {
 	DEFAULT_OVERSEERR_PORT,
 	SETTINGS_ADDRESS,
 	SETTINGS_ADDRESS_PLACEHOLDER,
-	SETTINGS_HELP,
-	SETTINGS_KEY,
-	SETTINGS_KEY_PLACEHOLDER,
 	SETTINGS_PORT,
-	SETTINGS_PORT_PLACEHOLDER
+	SETTINGS_PORT_PLACEHOLDER,
+	SETTINGS_PASSWORD,
+	SETTINGS_PASSWORD_PLACEHOLDER,
+	SETTINGS_USERNAME,
+	SETTINGS_USERNAME_PLACEHOLDER
 } from '@/lib/constants';
 
 export default function SettingScreen() {
   const styles = useSettingScreenStyles();
-  const { apiConnectionType, apiKey, apiAddress, apiPort, setClientConfig, setOverseerClient } = useAppStore()
+  const {
+		apiConnectionType,
+		apiAddress,
+		apiPort,
+		apiUsername,
+		apiPassword,
+		setClientConfig,
+		setOverseerClient
+	} = useAppStore()
   const [connectionType, setConnectionType] = useState<string>(apiConnectionType)
-	const [key, setKey] = useState<string>(apiKey)
 	const [address, setAddress] = useState<string>(apiAddress)
 	const [port, setPort] = useState<string>(apiPort)
+	const [username, setUsername] = useState<string>(apiUsername)
+	const [password, setPassword] = useState<string>(apiPassword)
 	const [isValid, setIsValid] = useState<boolean>(false)
 	const router = useRouter();
 
@@ -44,12 +54,12 @@ export default function SettingScreen() {
     // Test the API
     const overseerrClient = new OverseerrClient({
       BASE: `${connectionType}://${address}${port ? `:${port}` : ''}/api/v1`,
-      HEADERS: {
-        'X-Api-Key': key
-      }
     })
     try {
-      await overseerrClient.settings.getSettingsAbout()
+      const response = await overseerrClient.auth.postAuthLocal({
+				email: username,
+				password: password
+			})
       setIsValid(true)
       Alert.alert(CONNECTION_SUCCESSFUL)
     } catch (e: any) {
@@ -58,8 +68,20 @@ export default function SettingScreen() {
     }
   }
 
-  function save() {
-    setOverseerClient(connectionType, key, address, port)
+  async function save() {
+    await setOverseerClient(connectionType, address, port, username, password)
+    try {
+      // Attempt to login with stored credentials
+      const overseerrClient = new OverseerrClient({
+        BASE: `${connectionType}://${address}${port ? `:${port}` : ''}/api/v1`,
+      })
+      await overseerrClient.auth.postAuthLocal({
+        email: username,
+        password: password
+      })
+    } catch (e) {
+      logError('Settings Save Auth', e)
+    }
 		if(router.canGoBack()) {
 			router.back()
 		} else {
@@ -78,8 +100,9 @@ export default function SettingScreen() {
             setClientConfig('', '')
             setConnectionType(DEFAULT_OVERSEERR_CONNECTION_TYPE)
             setAddress('')
-            setKey('')
             setPort(DEFAULT_OVERSEERR_PORT)
+						setUsername('')
+						setPassword('')
           },
           style: 'destructive',
           isPreferred: true
@@ -95,21 +118,13 @@ export default function SettingScreen() {
 
   return (
     <ParallaxScrollView>
-      <ThemedText style={[styles.title]}>{SETTINGS_HELP}</ThemedText>
       <Picker
         label="Connection Type"
         options={connectionTypeOptions}
         selectedOption={connectionType}
         onOptionSelected={setConnectionType}
       />
-      <ThemedText style={[]}>{SETTINGS_KEY}</ThemedText>
-      <TextInput
-        value={key}
-        onChangeText={setKey}
-        style={[styles.input]}
-        placeholder={SETTINGS_KEY_PLACEHOLDER}
-      />
-      <ThemedText style={[]}>{SETTINGS_ADDRESS}</ThemedText>
+			<ThemedText style={[]}>{SETTINGS_ADDRESS}</ThemedText>
       <TextInput
         value={address}
         onChangeText={setAddress}
@@ -124,9 +139,24 @@ export default function SettingScreen() {
         placeholder={SETTINGS_PORT_PLACEHOLDER}
         keyboardType='numeric'
       />
+      <ThemedText style={[]}>{SETTINGS_USERNAME}</ThemedText>
+      <TextInput
+        value={username}
+        onChangeText={setUsername}
+        style={[styles.input]}
+        placeholder={SETTINGS_USERNAME_PLACEHOLDER}
+      />
+      <ThemedText style={[]}>{SETTINGS_PASSWORD}</ThemedText>
+      <TextInput
+        value={password}
+				secureTextEntry={true}
+        onChangeText={setPassword}
+        style={[styles.input]}
+        placeholder={SETTINGS_PASSWORD_PLACEHOLDER}
+      />
       <ThemedView style={styles.buttonRow}>
-				<TvButton disabled={!key && !address && !port} onPress={clear} type={TvButtonType.destructive} title="Clear" />
-				<TvButton disabled={!key && !address && !port} onPress={test} title="Test" />
+				<TvButton disabled={!address && !port} onPress={clear} type={TvButtonType.destructive} title="Clear" />
+				<TvButton disabled={!address && !port && !username && !password} onPress={test} title="Test" />
 				<TvButton disabled={!isValid} onPress={save} type={TvButtonType.cancel} title="Save" />
 			</ThemedView>
     </ParallaxScrollView>

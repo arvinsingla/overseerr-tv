@@ -65,7 +65,7 @@ export default function SearchScreen() {
 			value={searchString}
 			onChangeText={setSearchString}
 			style={styles.input}
-			placeholder={'Search'}
+			placeholder={'Enter search term'}
 			inputMode="search"
 			placeholderTextColor="#000000"
 		/>

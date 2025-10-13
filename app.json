@@ -13,8 +13,8 @@
             "iconSmall2x": "./assets/tv_icons/seerrtv-icon-small-2x.png",
             "topShelf": "./assets/tv_icons/seerrtv-shelf-1x.png",
             "topShelf2x": "./assets/tv_icons/seerrtv-shelf-2x.png",
-            "topShelfWide": "./assets/tv_icons/seerrtv-shelf-2x.png",
-            "topShelfWide2x": "./assets/tv_icons/seerrtv-shelf-2x.png"
+            "topShelfWide": "./assets/tv_icons/seerrtv-shelf-wide-1x.png",
+            "topShelfWide2x": "./assets/tv_icons/seerrtv-shelf-wide-2x.png"
           }
         }
       ],

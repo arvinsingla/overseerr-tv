@@ -4,12 +4,12 @@ import useAppStore from '@/lib/store';
 
 export default function TabLayout() {
 	const router = useRouter()
-	const { apiKey, apiAddress } = useAppStore()
-	const hasServerSettings = apiKey && apiAddress
+	const { apiAddress } = useAppStore()
+	const hasServerSettings = apiAddress
 
-	if (!hasServerSettings) {
-		router.replace('/(tabs)/settings')
-	}
+	// if (!hasServerSettings) {
+	// 	router.replace('/(tabs)/settings')
+	// }
 
   return (
 		<NativeTabs>
