@@ -35,7 +35,7 @@
         "image": "./assets/tv_icons/seerrtv-launch.png"
       },
       "bundleIdentifier": "com.arvinsingla.OverseerrTV",
-			"buildNumber": "1.1.0"
+      "buildNumber": "1.1.0"
     },
     "web": {
       "bundler": "metro",
@@ -48,6 +48,12 @@
     "newArchEnabled": true,
     "name": "seerrTV",
     "slug": "seerr-tv",
-		"version": "1.1.0"
+    "version": "1.1.0",
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "53e8920e-a2f4-40b9-b06d-d2767f5907f6"
+      }
+    }
   }
 }

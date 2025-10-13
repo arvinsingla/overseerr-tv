@@ -1,12 +1,12 @@
 {
   "images": [
     {
-      "filename": "seerrtv-shelf-2x.png",
+      "filename": "seerrtv-shelf-wide-1x.png",
       "idiom": "tv",
       "scale": "1x"
     },
     {
-      "filename": "seerrtv-shelf-2x.png",
+      "filename": "seerrtv-shelf-wide-2x.png",
       "idiom": "tv",
       "scale": "2x"
     }

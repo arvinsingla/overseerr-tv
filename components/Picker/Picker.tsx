@@ -28,19 +28,24 @@ const Picker: React.FC<PickerProps> = ({ label, options, selectedOption, onOptio
         onPress={handlePress}
         style={({ focused }) => [
           styles.button,
-					{ backgroundColor: theme.colors.card },
+					{
+            backgroundColor: theme.colors.card,
+            shadowColor: theme.colors.text,
+            shadowOffset: focused ? { width: 0, height: 8 } : undefined,
+            shadowOpacity: focused ? 0.25 : 0,
+            shadowRadius: focused ? 16 : 0,
+            transform: [{ scale: focused ? 1.02 : 1 }]
+          },
         ]}
         tvParallaxProperties={{
 					enabled: true,
 					magnification: 1.02
 				}}
       >
-				{({ focused }) => (
-					<>
-						<ThemedText style={[styles.label, { backgroundColor: theme.colors.card }]}>{label}</ThemedText>
-						<ThemedText style={[styles.option, { color: theme.colors.text }]}>{options[selectedOptionIndex].label}</ThemedText>
-					</>
-				)}
+				<>
+					<ThemedText style={[styles.label]}>{label}</ThemedText>
+					<ThemedText style={styles.option}>{options[selectedOptionIndex].label}</ThemedText>
+				</>
       </Pressable>
     </View>
   );
@@ -69,7 +74,6 @@ const usePickerStyles = function (scale: number) {
 		},
 		option: {
 			fontSize: 23 * scale,
-			color: '#000000',
 		}
 	});
 };
