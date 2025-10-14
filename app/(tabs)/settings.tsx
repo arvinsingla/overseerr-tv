@@ -15,8 +15,6 @@ import { logError, normalizeSize } from '@/lib/utils';
 import {
 	CONNECTION_FAILD,
 	CONNECTION_SUCCESSFUL,
-	DEFAULT_OVERSEERR_CONNECTION_TYPE,
-	DEFAULT_OVERSEERR_PORT,
 	SETTINGS_ADDRESS,
 	SETTINGS_ADDRESS_PLACEHOLDER,
 	SETTINGS_PORT,
@@ -24,7 +22,9 @@ import {
 	SETTINGS_PASSWORD,
 	SETTINGS_PASSWORD_PLACEHOLDER,
 	SETTINGS_USERNAME,
-	SETTINGS_USERNAME_PLACEHOLDER
+	SETTINGS_USERNAME_PLACEHOLDER,
+	DEFAULT_OVERSEERR_CONNECTION_TYPE,
+	DEFAULT_OVERSEERR_PORT
 } from '@/lib/constants';
 
 export default function SettingScreen() {
@@ -35,7 +35,8 @@ export default function SettingScreen() {
 		apiPort,
 		apiUsername,
 		apiPassword,
-		setClientConfig,
+		hasValidSettings,
+		unsetClientConfig,
 		setOverseerClient
 	} = useAppStore()
   const [connectionType, setConnectionType] = useState<string>(apiConnectionType)
@@ -43,7 +44,7 @@ export default function SettingScreen() {
 	const [port, setPort] = useState<string>(apiPort)
 	const [username, setUsername] = useState<string>(apiUsername)
 	const [password, setPassword] = useState<string>(apiPassword)
-	const [isValid, setIsValid] = useState<boolean>(false)
+	const [isValid, setIsValid] = useState<boolean>(hasValidSettings)
 	const router = useRouter();
 
 	const connectionTypeOptions = [
@@ -57,7 +58,7 @@ export default function SettingScreen() {
       BASE: `${connectionType}://${address}${port ? `:${port}` : ''}/api/v1`,
     })
     try {
-      const response = await overseerrClient.auth.postAuthLocal({
+      await overseerrClient.auth.postAuthLocal({
 				email: username,
 				password: password
 			})
@@ -98,12 +99,14 @@ export default function SettingScreen() {
         {
           text: 'Confirm',
           onPress: async () => {
-            setClientConfig('', '')
-            setConnectionType(DEFAULT_OVERSEERR_CONNECTION_TYPE)
+						setConnectionType(DEFAULT_OVERSEERR_CONNECTION_TYPE)
             setAddress('')
             setPort(DEFAULT_OVERSEERR_PORT)
 						setUsername('')
 						setPassword('')
+						setTimeout(() => {
+							unsetClientConfig() // or whatever your clear function is called
+						}, 1000);
           },
           style: 'destructive',
           isPreferred: true

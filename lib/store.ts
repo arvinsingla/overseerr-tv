@@ -6,20 +6,21 @@ import { OverseerrClient, RadarrSettings, SonarrSettings, User } from './Oversee
 import { DEFAULT_OVERSEERR_CONNECTION_TYPE, DEFAULT_OVERSEERR_PORT } from './constants'
 
 interface AppState {
-	user: User | null
-	radarr: RadarrSettings[]
-	sonarr: SonarrSettings[]
 	apiConnectionType: string
 	apiAddress: string
 	apiPort: string
 	apiUsername: string
 	apiPassword: string
+	hasValidSettings: boolean
 	client: OverseerrClient | null
-	setUser: (user: User) => void
-	setRadarr: (settings: RadarrSettings[]) => void
-	setSonarr: (settings: SonarrSettings[]) => void
-	setClientConfig: (key: string, address: string) => Promise<void>
-	setOverseerClient: (connectionType: string, address: string, port: string, username: string, password: string) => Promise<void>
+	unsetClientConfig: () => Promise<void>
+	setOverseerClient: (
+		connectionType: string,
+		address: string,
+		port: string,
+		username: string,
+		password: string
+	) => Promise<void>
 	fetchInitialData: () => Promise<void>
 }
 
@@ -30,35 +31,36 @@ const instantiateClient = (apiConnectionType: string, apiAddress: string, apiPor
 }
 
 const useAppStore = create<AppState>()((set) => ({
-	user: null,
-	radarr: [],
-	sonarr: [],
 	apiConnectionType: DEFAULT_OVERSEERR_CONNECTION_TYPE,
 	apiAddress: '',
 	apiPort: DEFAULT_OVERSEERR_PORT,
 	apiUsername: '',
 	apiPassword: '',
+	hasValidSettings: false,
 	client: null,
-	setUser: (user) => {
-		set(() => ({ user }))
-	},
-	setRadarr: (settings) => {
-		set(() => ({ radarr: settings }))
-	},
-	setSonarr: (settings) => {
-		set(() => ({ sonarr: settings }))
-	},
-	setClientConfig: async (apiKey: string, apiAddress: string) => {
+	unsetClientConfig: async () => {
 		if (Platform.OS === 'ios') {
 			Settings.set({ apiConnectionType: DEFAULT_OVERSEERR_CONNECTION_TYPE })
-			Settings.set({ apiAddress })
+			Settings.set({ apiAddress: '' })
 			Settings.set({ apiPort: DEFAULT_OVERSEERR_PORT })
+			Settings.set({ apiUsername: '' })
+			Settings.set({ apiPassword: '' })
 		} else {
 			await AsyncStorage.setItem('apiConnectionType', DEFAULT_OVERSEERR_CONNECTION_TYPE)
-			await AsyncStorage.setItem('apiAddress', apiAddress)
+			await AsyncStorage.setItem('apiAddress', '')
 			await AsyncStorage.setItem('apiPort', DEFAULT_OVERSEERR_PORT)
+			await AsyncStorage.setItem('apiUsername', '')
+			await AsyncStorage.setItem('apiPassword', '')
 		}
-		set(() => ({ apiAddress, apiKey, apiPort: DEFAULT_OVERSEERR_PORT }))
+		set(() => ({
+			apiConnectionType: DEFAULT_OVERSEERR_CONNECTION_TYPE,
+			apiAddress: '',
+			apiPort: DEFAULT_OVERSEERR_PORT,
+			apiUsername: '',
+			apiPassword: '',
+			client: null,
+			hasValidSettings: false
+		}))
 	},
 	setOverseerClient: async (apiConnectionType: string, apiAddress: string, apiPort: string, apiUsername: string, apiPassword: string) => {
 		if (Platform.OS === 'ios') {
@@ -75,7 +77,7 @@ const useAppStore = create<AppState>()((set) => ({
 			AsyncStorage.setItem('apiPassword', apiPassword)
 		}
 		const client = instantiateClient(apiConnectionType, apiAddress, apiPort)
-		set(() => ({ apiConnectionType, apiAddress, apiPort, apiUsername, apiPassword, client }))
+		set(() => ({ apiConnectionType, apiAddress, apiPort, apiUsername, apiPassword, client, hasValidSettings: true }))
 	},
 	fetchInitialData: async () => {
 		let apiConnectionType = ''
@@ -98,7 +100,7 @@ const useAppStore = create<AppState>()((set) => ({
 		}
 		if (apiAddress && apiUsername && apiPassword) {
 			const client = instantiateClient(apiConnectionType, apiAddress, apiPort)
-			set({ apiConnectionType, apiAddress, apiPort, apiUsername, apiPassword, client })
+			set({ apiConnectionType, apiAddress, apiPort, apiUsername, apiPassword, client, hasValidSettings: true })
 		}
 	},
 }))

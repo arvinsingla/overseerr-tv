@@ -17,7 +17,7 @@ import movieGenres from '@/lib/movieGenres.json'
 import tvGenres from '@/lib/tvGenres.json'
 
 export default function DiscoveryScreen() {
-	const { client } = useAppStore()
+	const { client, hasValidSettings } = useAppStore()
   const styles = useDiscoveryScreenStyles()
 	const router = useRouter()
 
@@ -47,6 +47,14 @@ export default function DiscoveryScreen() {
     queryFn: () => client?.search.getDiscoverTvUpcoming(),
 		refetchInterval: DEFAULT_REFETCH_INTERVAL
   })
+
+	if (!hasValidSettings) {
+		return (
+			<ParallaxScrollView>
+				<ThemedText>Please visit the settings tab to configure your settings and view this content.</ThemedText>
+			</ParallaxScrollView>
+		)
+	}
 
  	if (!client) {
 		return (

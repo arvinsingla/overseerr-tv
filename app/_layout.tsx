@@ -23,7 +23,6 @@ export default function RootLayout() {
 					<Stack.Screen name="tv-genre" options={{ headerShown: false }} />
 					<Stack.Screen name="movie-studio" options={{ headerShown: false }} />
 					<Stack.Screen name="tv-network" options={{ headerShown: false }} />
-					<Stack.Screen name="service" options={{ headerShown: false }} />
 					<Stack.Screen name="+not-found" />
 				</Stack>
 			</ThemeProvider>

@@ -30,7 +30,7 @@ const Picker: React.FC<PickerProps> = ({ label, options, selectedOption, onOptio
           styles.button,
 					{
             backgroundColor: theme.colors.card,
-            shadowColor: theme.colors.text,
+            shadowColor: '#000000',
             shadowOffset: focused ? { width: 0, height: 8 } : undefined,
             shadowOpacity: focused ? 0.25 : 0,
             shadowRadius: focused ? 16 : 0,
