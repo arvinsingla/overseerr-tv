@@ -2,9 +2,10 @@
 export const DEFAULT_REFETCH_INTERVAL = 30000
 export const DEFAULT_OVERSEERR_CONNECTION_TYPE = 'http'
 export const DEFAULT_OVERSEERR_PORT = '5055'
+export const MAX_FETCH_PAGES = 10
 
 // URLS
-export const TMDB_IMAGE_URL = 'https://image.tmdb.org/t/p/w500/'
+export const TMDB_IMAGE_URL = 'https://image.tmdb.org/t/p/w300_and_h450_bestv2/'
 export const TMDB_IMAGE_URL_FILTER = 'https://image.tmdb.org/t/p/w780_filter(duotone,ffffff,bababa)/'
 export const ERROR_URL = 'https://us-central1-overseerr-tv.cloudfunctions.net/errorLog'
 

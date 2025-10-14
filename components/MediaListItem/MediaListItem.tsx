@@ -87,12 +87,12 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'space-between',
     width: normalizeSize(300),
-    height: normalizeSize(400),
+    height: normalizeSize(450),
   },
   poster: {
     position: 'absolute',
     width: normalizeSize(300),
-    height: normalizeSize(400),
+    height: normalizeSize(450),
     borderRadius: normalizeSize(15),
   },
   header: {

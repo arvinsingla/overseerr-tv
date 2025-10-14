@@ -7,7 +7,8 @@ import { useScale } from '@/hooks/useScale';
 import useAppStore from '@/lib/store';
 import { useEffect } from 'react';
 import { normalizeSize } from '@/lib/utils';
-import { ThemedText } from '../components/ThemedText';
+import { ThemedText } from '@/components/ThemedText';
+import { MAX_FETCH_PAGES } from '@/lib/constants';
 
 export default function TvGenreScreen() {
 	const { client } = useAppStore()
@@ -29,7 +30,7 @@ export default function TvGenreScreen() {
 		queryFn: ({ pageParam }) => client?.search.getDiscoverTvGenre(idString, pageParam),
 		initialPageParam: 1,
 		getNextPageParam: (lastPage) => {
-			if (lastPage?.page && lastPage?.totalPages && lastPage.page < lastPage.totalPages) {
+			if (lastPage?.page && lastPage?.totalPages && lastPage.page < MAX_FETCH_PAGES) {
 				return lastPage.page + 1
 			}
 			return undefined

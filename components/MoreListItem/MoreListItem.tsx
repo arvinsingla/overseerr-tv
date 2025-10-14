@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
 		alignItems: 'center',
     width: normalizeSize(300),
-    height: normalizeSize(400),
+    height: normalizeSize(450),
   },
 	text: {
 		marginTop: normalizeSize(20),

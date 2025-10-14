@@ -154,7 +154,7 @@ const style = StyleSheet.create({
 	},
 	headerPoster: {
 		width: normalizeSize(300),
-		height: normalizeSize(400),
+		height: normalizeSize(450),
 		borderRadius: normalizeSize(20),
 		marginRight: normalizeSize(30),
 	},

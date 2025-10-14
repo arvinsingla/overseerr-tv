@@ -122,6 +122,7 @@ export default function SettingScreen() {
 
   return (
     <ParallaxScrollView>
+			<ThemedText>Please enter all the server information and test your connection. You can only save the settings after a successful test.</ThemedText>
       <Picker
         label="Connection Type"
         options={connectionTypeOptions}
