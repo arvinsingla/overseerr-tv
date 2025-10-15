@@ -1,6 +1,6 @@
 {
   "name": "overseerr-tv",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "scripts": {
     "android": "expo run:android --device Television_1080p_API_31",
