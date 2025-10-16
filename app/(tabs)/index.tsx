@@ -25,27 +25,32 @@ export default function DiscoveryScreen() {
   const {isSuccess: trendingSuccess, data: trendingData } = useQuery({
     queryKey: ['trending'],
     queryFn: () => client?.search.getDiscoverTrending(),
-		refetchInterval: DEFAULT_REFETCH_INTERVAL
+		refetchInterval: DEFAULT_REFETCH_INTERVAL,
+		enabled: !!client && hasValidSettings
   })
   const {isSuccess: popularMoviesSuccess, data: popularMoviesData } = useQuery({
     queryKey: ['popular-movies'],
     queryFn: () => client?.search.getDiscoverMovies(),
-		refetchInterval: DEFAULT_REFETCH_INTERVAL
+		refetchInterval: DEFAULT_REFETCH_INTERVAL,
+		enabled: !!client && hasValidSettings
   })
   const {isSuccess: popularTvSuccess, data: popularTvData } = useQuery({
     queryKey: ['popular-tv'],
     queryFn: () => client?.search.getDiscoverTv(),
-		refetchInterval: DEFAULT_REFETCH_INTERVAL
+		refetchInterval: DEFAULT_REFETCH_INTERVAL,
+		enabled: !!client && hasValidSettings
   })
   const {isSuccess: upcomingMoviesSuccess, data: upcomingMoviesData } = useQuery({
     queryKey: ['upcoming-movies'],
     queryFn: () => client?.search.getDiscoverMoviesUpcoming(),
-		refetchInterval: DEFAULT_REFETCH_INTERVAL
+		refetchInterval: DEFAULT_REFETCH_INTERVAL,
+		enabled: !!client && hasValidSettings
   })
   const {isSuccess: upcomingTvSuccess, data: upcomingTvData } = useQuery({
     queryKey: ['upcoming-tv'],
     queryFn: () => client?.search.getDiscoverTvUpcoming(),
-		refetchInterval: DEFAULT_REFETCH_INTERVAL
+		refetchInterval: DEFAULT_REFETCH_INTERVAL,
+		enabled: !!client && hasValidSettings
   })
 
 	if (!hasValidSettings) {
@@ -69,7 +74,6 @@ export default function DiscoveryScreen() {
 		switch(item.mediaType) {
 			case MediaType.movie:
 				// @ts-ignore
-				// Alert.alert('Test', `The current value for item.id is ${item.id}.	`)
 				router.push(`movie/${item.id}`)
 				break
 			case MediaType.tv:

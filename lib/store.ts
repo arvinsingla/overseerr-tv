@@ -2,7 +2,7 @@ import { Platform } from 'react-native'
 import { create } from 'zustand'
 import { Settings } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { OverseerrClient, RadarrSettings, SonarrSettings, User } from './OverseerrClient'
+import { OverseerrClient } from './OverseerrClient'
 import { DEFAULT_OVERSEERR_CONNECTION_TYPE, DEFAULT_OVERSEERR_PORT } from './constants'
 
 interface AppState {
@@ -24,9 +24,17 @@ interface AppState {
 	fetchInitialData: () => Promise<void>
 }
 
-const instantiateClient = (apiConnectionType: string, apiAddress: string, apiPort: string): OverseerrClient => {
+const instantiateClient = (
+	apiConnectionType: string,
+	apiAddress: string,
+	apiPort: string,
+	apiUsername: string,
+	apiPassword: string
+): OverseerrClient => {
 	return new OverseerrClient({
 		BASE: `${apiConnectionType}://${apiAddress}${apiPort ? `:${apiPort}` : ''}/api/v1`,
+		USERNAME: apiUsername,
+		PASSWORD: apiPassword
 	})
 }
 
@@ -73,10 +81,10 @@ const useAppStore = create<AppState>()((set) => ({
 			await AsyncStorage.setItem('apiConnectionType', apiConnectionType)
 			await AsyncStorage.setItem('apiAddress', apiAddress)
 			await AsyncStorage.setItem('apiPort', apiPort)
-			AsyncStorage.setItem('apiUsername', apiUsername)
-			AsyncStorage.setItem('apiPassword', apiPassword)
+			await AsyncStorage.setItem('apiUsername', apiUsername)
+			await AsyncStorage.setItem('apiPassword', apiPassword)
 		}
-		const client = instantiateClient(apiConnectionType, apiAddress, apiPort)
+		const client = instantiateClient(apiConnectionType, apiAddress, apiPort, apiUsername, apiPassword)
 		set(() => ({ apiConnectionType, apiAddress, apiPort, apiUsername, apiPassword, client, hasValidSettings: true }))
 	},
 	fetchInitialData: async () => {
@@ -99,7 +107,7 @@ const useAppStore = create<AppState>()((set) => ({
 			apiPassword = await AsyncStorage.getItem('apiPassword') ?? ''
 		}
 		if (apiAddress && apiUsername && apiPassword) {
-			const client = instantiateClient(apiConnectionType, apiAddress, apiPort)
+			const client = instantiateClient(apiConnectionType, apiAddress, apiPort, apiUsername, apiPassword)
 			set({ apiConnectionType, apiAddress, apiPort, apiUsername, apiPassword, client, hasValidSettings: true })
 		}
 	},

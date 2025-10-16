@@ -71,16 +71,8 @@ export default function SettingScreen() {
   }
 
   async function save() {
-    await setOverseerClient(connectionType, address, port, username, password)
-    try {
-      // Attempt to login with stored credentials
-      const overseerrClient = new OverseerrClient({
-        BASE: `${connectionType}://${address}${port ? `:${port}` : ''}/api/v1`,
-      })
-      await overseerrClient.auth.postAuthLocal({
-        email: username,
-        password: password
-      })
+		try {
+			await setOverseerClient(connectionType, address, port, username, password)
     } catch (e) {
       logError('Settings Save Auth', e)
     }
