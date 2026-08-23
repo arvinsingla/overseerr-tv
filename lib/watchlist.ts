@@ -8,11 +8,8 @@ export interface WatchlistPage {
 	results: (MovieResult | TvResult)[]
 }
 
-// The watchlist endpoint returns thin items ({ tmdbId, ratingKey, mediaType, title })
-// with no poster, overview, or mediaInfo. This module hydrates each item from the
-// movie/tv detail endpoints so it can render in a MediaList.
-// Note: the generated client types this response with a `type` field, but the
-// server actually sends `mediaType`. The OpenAPI spec is stale on this endpoint.
+// watchlist returns ({ tmdbId, ratingKey, mediaType, title }), 
+// and hydrates each item from the movie/tv detail endpoints so it can render in a MediaList.
 export async function fetchWatchlistPage(client: OverseerrClient, page: number = 1): Promise<WatchlistPage> {
 	const watchlist = await client.search.getDiscoverWatchlist(page)
 	const items = watchlist.results ?? []
