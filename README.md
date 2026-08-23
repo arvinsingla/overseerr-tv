@@ -11,6 +11,7 @@ seerrTV brings the power of seerr (formerly Overseerr and Jellyseerr) to your Ap
 - Native tvOS interface optimized for television displays
 - Browse and search available media
 - Request new movies and TV shows
+- Browse and request titles from your Plex Watchlist
 
 ## Prerequisites
 
