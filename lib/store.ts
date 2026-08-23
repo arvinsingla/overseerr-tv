@@ -44,15 +44,15 @@ const instantiateClient = (
 	if (apiAuthType === 'user') {
 		return new OverseerrClient({
 			BASE: `${apiConnectionType}://${apiAddress}${apiPort ? `:${apiPort}` : ''}/api/v1`,
-			HEADERS: {
-				'X-Api-Key': apiKey
-			}
+			USERNAME: apiUsername,
+			PASSWORD: apiPassword
 		})
 	}
 	return new OverseerrClient({
 		BASE: `${apiConnectionType}://${apiAddress}${apiPort ? `:${apiPort}` : ''}/api/v1`,
-		USERNAME: apiUsername,
-		PASSWORD: apiPassword
+		HEADERS: {
+			'X-Api-Key': apiKey
+		}
 	})
 }
 
