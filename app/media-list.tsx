@@ -10,6 +10,7 @@ import { useEffect } from 'react';
 import { MediaType } from '@/lib/types';
 import { normalizeSize } from '@/lib/utils';
 import { MAX_FETCH_PAGES } from '@/lib/constants';
+import { fetchWatchlistPage } from '@/lib/watchlist';
 
 export default function MediaListScreen() {
 	const { client } = useAppStore()
@@ -33,6 +34,9 @@ export default function MediaListScreen() {
 	const tvUpcomingScreenQueryFn = (page: number) => {
 		return client?.search.getDiscoverTvUpcoming(page)
 	}
+	const watchlistScreenQueryFn = (page: number) => {
+		return client ? fetchWatchlistPage(client, page) : undefined
+	}
 
 	//Define allowed cache keys
 	type CacheKey =
@@ -40,7 +44,8 @@ export default function MediaListScreen() {
 	  | 'popular-movies-screen'
 	  | 'upcoming-movies-screen'
 	  | 'popular-tv-screen'
-	  | 'upcoming-tv-screen';
+	  | 'upcoming-tv-screen'
+	  | 'watchlist-screen';
 
 	const fetchFn: Record<CacheKey, (page: number) => Promise<any> | undefined> = {
 	  'trending-screen': trendingScreenQueryFn,
@@ -48,6 +53,7 @@ export default function MediaListScreen() {
 	  'upcoming-movies-screen': movieUpcomingScreenQueryFn,
 	  'popular-tv-screen': tvPopularScreenQueryFn,
 	  'upcoming-tv-screen': tvUpcomingScreenQueryFn,
+	  'watchlist-screen': watchlistScreenQueryFn,
 	};
 
 	const cacheKeyString = Array.isArray(cacheKey) ? cacheKey[0] : cacheKey as CacheKey;

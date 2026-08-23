@@ -13,6 +13,7 @@ import { DEFAULT_REFETCH_INTERVAL, EMPTY_SETTINGS_TEXT } from "@/lib/constants";
 import { MediaType } from '@/lib/types';
 import { MovieResult, PersonResult, TvResult } from '@/lib/OverseerrClient';
 import { studios, networks } from '@/lib/maps'
+import { fetchWatchlistPage } from '@/lib/watchlist'
 import movieGenres from '@/lib/movieGenres.json'
 import tvGenres from '@/lib/tvGenres.json'
 
@@ -22,6 +23,12 @@ export default function DiscoveryScreen() {
 	const router = useRouter()
 
 	// Discovery screen data fetching
+  const {isSuccess: watchlistSuccess, data: watchlistData } = useQuery({
+    queryKey: ['watchlist'],
+    queryFn: () => client ? fetchWatchlistPage(client) : undefined,
+		refetchInterval: DEFAULT_REFETCH_INTERVAL,
+		enabled: !!client && hasValidSettings
+  })
   const {isSuccess: trendingSuccess, data: trendingData } = useQuery({
     queryKey: ['trending'],
     queryFn: () => client?.search.getDiscoverTrending(),
@@ -124,6 +131,15 @@ export default function DiscoveryScreen() {
 			}
 		})
 	}
+	const handlePressWatchlist = () => {
+		router.push({
+			pathname: '/media-list',
+			params: {
+				title: 'Watchlist',
+				cacheKey: 'watchlist-screen',
+			}
+		})
+	}
 	const handlePressTrending = () => {
 		router.push({
 			pathname: '/media-list',
@@ -172,6 +188,17 @@ export default function DiscoveryScreen() {
 
 	return (
     <ParallaxScrollView>
+			{watchlistSuccess && !!watchlistData?.results.length &&
+				<ThemedView>
+					<ThemedText style={[styles.title]}>Watchlist</ThemedText>
+					<MediaList
+						media={watchlistData?.results || []}
+						onPress={handlePressMedia}
+						isHorizontal={true}
+						footer={<MoreListItem onPress={handlePressWatchlist} />}
+					/>
+				</ThemedView>
+			}
 			{trendingSuccess &&
 				<ThemedView>
 					<ThemedText style={[styles.title]}>Trending</ThemedText>
